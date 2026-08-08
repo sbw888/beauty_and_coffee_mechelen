@@ -304,14 +304,17 @@
   }
 
   function showPhotoPreview(){
-    preview().src = state.photoDataUrl;
-    preview().hidden = false;
-    placeholder().hidden = true;
-    $("#photoActionsCamera").hidden = true;
-    $("#photoActionsIdle").hidden = true;
-    $("#photoActionsRetake").hidden = false;
-    $("#generateBtn").disabled = false;
-    applyGlowPreview();
+  preview().src = state.photoDataUrl;
+  preview().hidden = false;
+  placeholder().hidden = true;
+  $("#photoActionsCamera").hidden = true;
+  $("#photoActionsIdle").hidden = true;
+  $("#photoActionsRetake").hidden = false;
+  $("#generateBtn").disabled = false;
+  applyGlowPreview();
+
+  // Scroll automatisch naar de Genereer-knop:
+  $("#generateBtn").scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   function retakePhoto(){
