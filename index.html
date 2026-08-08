@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Beauty &amp; Coffee — Your Match</title>
+<meta name="description" content="Where Beauty Meets Coffee — find your personal beverage &amp; treatment match.">
+<meta name="theme-color" content="#D1C7BD">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- ===== TOP BAR ===== -->
+<header class="topbar">
+  <div class="brand-mark">
+    <img src="assets/icon-192.png" alt="Beauty & Coffee logo" class="brand-mark__logo">
+    <span class="brand-mark__text">Beauty <span class="amp">&amp;</span> Coffee</span>
+  </div>
+  <div class="lang-toggle" role="group" aria-label="Language / Taal">
+    <button type="button" class="lang-btn is-active" data-lang="nl" aria-pressed="true">NL</button>
+    <span class="lang-toggle__divider" aria-hidden="true"></span>
+    <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</header>
+
+<!-- ===== PROGRESS ===== -->
+<nav class="progress" aria-label="Progress">
+  <div class="progress__track"><div class="progress__fill" id="progressFill"></div></div>
+</nav>
+
+<main class="app" id="app">
+
+  <!-- WELCOME -->
+  <section class="step is-active" data-step="welcome">
+    <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
+    <h1 class="step__eyebrow" data-i18n="welcome_eyebrow">Welkom</h1>
+    <h2 class="step__title step__title--hero" data-i18n="welcome_title">Waar schoonheid koffie ontmoet</h2>
+    <p class="step__lede" data-i18n="welcome_lede">Beantwoord een paar korte vragen.</p>
+    <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
+  </section>
+
+  <!-- PROFILE / AGE -->
+  <section class="step" data-step="profile">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step_profile_eyebrow">Stap 1 · Profiel</span>
+      <h2 class="step__title" data-i18n="step_profile_title">Voor wie is deze match?</h2>
+    </div>
+    <div class="options options--mood" id="profileOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- SUN CHECK (man/vrouw only) -->
+  <section class="step" data-step="sunCheck">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step_sun_eyebrow">Stap 2 · Zon-check</span>
+      <h2 class="step__title" data-i18n="step_sun_title">Zon-check</h2>
+      <p class="step__hint" data-i18n="step_sun_hint">Zo houden we het veilig voor je huid.</p>
+    </div>
+    <div class="options options--row" id="sunOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- KIDS DRINK (kind only) -->
+  <section class="step" data-step="kidsDrink">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step_kidsdrink_eyebrow">Stap 2 · Drankje</span>
+      <h2 class="step__title" data-i18n="step_kidsdrink_title">Welk drankje erbij?</h2>
+    </div>
+    <div class="options options--row" id="kidsDrinkOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- MOOD -->
+  <section class="step" data-step="mood">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step1_eyebrow">Stap 3 · Stemming</span>
+      <h2 class="step__title" data-i18n="step1_title">Waar heb je vandaag zin in?</h2>
+    </div>
+    <div class="options options--mood" id="moodOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- BEVERAGE CATEGORY -->
+  <section class="step" data-step="category">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step2_eyebrow">Stap 4 · Drankcategorie</span>
+      <h2 class="step__title" data-i18n="step2_title">Kies je richting</h2>
+    </div>
+    <div class="options options--row" id="categoryOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- CAFFEINE -->
+  <section class="step" data-step="caffeine">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step3_eyebrow">Stap 5 · Cafeïne</span>
+      <h2 class="step__title" data-i18n="step3_title">Met of zonder pit?</h2>
+    </div>
+    <div class="options options--row" id="caffeineOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- TOPPINGS -->
+  <section class="step" data-step="toppings">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step4_eyebrow">Stap 6 · Verfijning</span>
+      <h2 class="step__title" data-i18n="step4_title">Maak 'm helemaal van jou</h2>
+      <p class="step__hint" data-i18n="step4_hint">Optioneel.</p>
+    </div>
+    <div class="refine-group">
+      <h3 class="refine-group__title" data-i18n="milk_title">Melk</h3>
+      <div class="options options--chip" id="milkOptions"></div>
+    </div>
+    <div class="refine-group">
+      <h3 class="refine-group__title" data-i18n="extras_title">Zoetstoffen &amp; extra's</h3>
+      <div class="options options--chip options--chip-multi" id="extrasOptions"></div>
+    </div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+      <button type="button" class="btn btn--primary" data-action="to-context" data-i18n="continue_button">Volgende</button>
+    </div>
+  </section>
+
+  <!-- CONTEXT: SALON VS THUIS -->
+  <section class="step" data-step="context">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step_context_eyebrow">Bijna klaar</span>
+      <h2 class="step__title" data-i18n="step_context_title">Waar ben je nu?</h2>
+    </div>
+    <div class="options options--mood" id="contextOptions"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
+  <!-- PHOTO (salon flow only) -->
+  <section class="step" data-step="photo">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step5_eyebrow">Stap 7 · Foto</span>
+      <h2 class="step__title" data-i18n="step5_title">Zet jezelf in beeld</h2>
+      <p class="step__hint" data-i18n="step5_hint">Maak een foto of upload er een. Alles blijft op jouw toestel.</p>
+    </div>
+
+    <div class="photo-stage">
+      <video id="cameraVideo" class="photo-stage__video" playsinline autoplay muted hidden></video>
+      <canvas id="captureCanvas" class="photo-stage__canvas" hidden></canvas>
+      <img id="photoPreview" class="photo-stage__preview" alt="" hidden>
+      <div class="photo-stage__placeholder" id="photoPlaceholder">
+        <span class="bean bean--lg" aria-hidden="true"></span>
+        <p data-i18n="photo_placeholder">Nog geen foto gekozen</p>
+      </div>
+    </div>
+
+    <label class="toggle-row glow-toggle">
+      <input type="checkbox" id="glowToggle">
+      <span class="toggle-row__switch" aria-hidden="true"></span>
+      <span data-i18n="glow_toggle">Glow-filter</span>
+    </label>
+
+    <div class="photo-actions" id="photoActionsIdle">
+      <button type="button" class="btn btn--primary" data-action="open-camera" data-i18n="camera_button">Maak foto</button>
+      <button type="button" class="btn btn--outline" data-action="upload-photo" data-i18n="upload_button">Upload foto</button>
+      <input type="file" id="fileInput" accept="image/*" hidden>
+    </div>
+
+    <div class="photo-actions" id="photoActionsCamera" hidden>
+      <button type="button" class="btn btn--primary" data-action="snap-photo" data-i18n="snap_button">Klik</button>
+      <button type="button" class="btn btn--ghost" data-action="cancel-camera" data-i18n="cancel_button">Annuleren</button>
+    </div>
+
+    <div class="photo-actions" id="photoActionsRetake" hidden>
+      <button type="button" class="btn btn--outline" data-action="retake" data-i18n="retake_button">Andere foto</button>
+    </div>
+
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+      <button type="button" class="btn btn--primary" data-action="generate" id="generateBtn" data-i18n="generate_button" disabled>Genereer mijn match</button>
+    </div>
+  </section>
+
+  <!-- LOADING -->
+  <section class="step" data-step="loading">
+    <div class="brewing">
+      <div class="brewing__cup" aria-hidden="true">
+        <span class="steam s1"></span><span class="steam s2"></span><span class="steam s3"></span>
+      </div>
+      <p class="brewing__text" data-i18n="brewing_text">Jouw persoonlijke match wordt gezet…</p>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="step" data-step="result">
+    <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
+    <h2 class="step__title" id="resultTitle" data-i18n="result_title">Jouw Beauty &amp; Coffee match</h2>
+
+    <div class="result-card" id="resultCardWrap">
+      <canvas id="resultCanvas" class="result-card__canvas"></canvas>
+    </div>
+
+    <div class="result-details" id="resultDetails"></div>
+    <div class="result-blocks" id="resultBlocks"></div>
+
+    <div class="result-actions" id="resultActionsSalon">
+      <button type="button" class="btn btn--primary btn--wide" data-action="share" data-i18n="share_button">Deel jouw match</button>
+      <button type="button" class="btn btn--outline btn--wide" data-action="download" data-i18n="download_button">Download afbeelding</button>
+      <a class="btn btn--gold-outline btn--wide" id="menuCta" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee" target="_blank" rel="noopener" data-i18n="menu_cta">Bekijk menu &amp; prijzen</a>
+      <button type="button" class="btn btn--text" data-action="restart" data-i18n="restart_button">Opnieuw beginnen</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
+  <p data-i18n="footer_privacy">Jouw foto's blijven altijd op je eigen toestel — 100% privé.</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="i18n.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
