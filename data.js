@@ -515,7 +515,11 @@ function matchTreatment(mood, gender, sunExposed){
   const genderOk = (item) => item.genders.includes(gender);
   const sunOk = (item) => !sunExposed || !item.sunSensitive;
 
-  let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && genderOk(item) && sunOk(item));
+  const currentHour = new Date().getHours();
+  const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
+
+  let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && genderOk(item) && sunOk(item) && timeOk(item));
+  
   if (!pool.length){
     pool = TREATMENTS_CATALOG.filter(item => genderOk(item) && sunOk(item) && SAFE_FALLBACK_IDS.includes(item.id));
   }
