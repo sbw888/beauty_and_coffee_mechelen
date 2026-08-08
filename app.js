@@ -423,6 +423,16 @@
       ? `<p class="result-block__product">${m.homecare.productName}</p><p>${m.homecare.usage}</p>`
       : `<p>${t("homecare_generic_tip", lang)}</p>`;
 
+    // --- VOEG DE ZONADVIES-CHECK HIER TOE ---
+    let aftercareText = m.treatment.aftercare[lang];
+    const tId = m.treatment.id || "";
+    if (tId.includes("wax") || tId.includes("epil") || m.treatment.category === "hair-removal") {
+      const sunTip = lang === "nl" 
+        ? "<br><br>⚠️ <strong>Zonadvies:</strong> Vermijd directe zon gedurende 24 uur na het ontharen. Gebruik een zonnebrandcrème met hoge SPF om roodheid en pigmentvlekken te voorkomen."
+        : "<br><br>⚠️ <strong>Sun advice:</strong> Avoid direct sun for 24 hours after hair removal. Always apply high SPF sunscreen to protect your skin.";
+      aftercareText += sunTip;
+    }
+     
     wrap.innerHTML = `
       <div class="result-block">
         <div class="result-block__head"><span class="result-block__icon">🌟</span><span class="result-block__title">${t("block_benefits", lang)}</span></div>
