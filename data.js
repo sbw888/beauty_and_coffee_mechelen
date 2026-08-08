@@ -299,7 +299,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Houd de wimpers de eerste 24 uur volledig droog en vermijd olie-based make-up remover gedurende 48 uur.",
                 en:"Keep the lashes completely dry for the first 24 hours and avoid oil-based makeup remover for 48 hours." } },
 
-  { id:"glammakeup", name:"Evening / Party Glam Makeup", moods:["energetic","luxury"], genders:["vrouw"], sunSensitive:false,
+  { id:"glammakeup", timeOfDay: "pm", name:"Evening / Party Glam Makeup", moods:["energetic","luxury"], genders:["vrouw"], sunSensitive:false,
     homecare:{ category:"facial" },
     benefits:{ nl:"Een foto- en feestklare look, afgestemd op jouw gelegenheid en huidtype.",
                en:"A photo- and party-ready look, tailored to your occasion and skin type." },
