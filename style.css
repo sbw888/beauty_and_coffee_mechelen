@@ -327,3 +327,7 @@ body{
   .app{ padding-top:44px; }
   .step__title--hero{ font-size:40px; }
 }
+/* Zorg dat hidden elementen ook echt onzichtbaar zijn */
+[hidden] {
+  display: none !important;
+}
