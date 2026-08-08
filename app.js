@@ -228,6 +228,54 @@
       });
       wrap.appendChild(chip);
     });
+
+     function renderRefinementStep() {
+  const selectedCategory = state.category; // 'coffee', 'tea', 'iced'
+  const selectedDrink = state.drink;       // bijv: 'matcha_latte', 'earl_grey', 'americano'
+
+  // 1. Bepaal de logica voor zichtbaarheid
+  const isLatteOrCoffee = 
+      selectedCategory === 'coffee' || 
+      (selectedDrink && selectedDrink.includes('latte')) ||
+      selectedDrink === 'matcha_latte';
+      
+  // 2. Selecteer de DOM elementen
+  const milkSection = document.querySelector("#milkSection");
+  const creamChip = document.querySelector('[data-value="cream"]');
+  const biscoffChip = document.querySelector('[data-value="biscoff"]');
+  const pumpkinChip = document.querySelector('[data-value="pumpkin"]');
+
+  // 3. Pas logica toe met [hidden] attribuut (dankzij jouw CSS)
+  
+  // Melk sectie
+  if (milkSection) {
+    if (!isLatteOrCoffee) {
+      milkSection.setAttribute("hidden", "");
+      state.milk = "none"; // Reset in data
+    } else {
+      milkSection.removeAttribute("hidden");
+    }
+  }
+
+  // Extra's (Slagroom, Biscoff, Pumpkin)
+  const toggleExtra = (el) => {
+    if (!el) return;
+    if (!isLatteOrCoffee) {
+      el.setAttribute("hidden", "");
+      // Verwijder uit state als het verborgen is
+      if (state.extras && state.extras.includes(el.dataset.value)) {
+        state.extras = state.extras.filter(e => e !== el.dataset.value);
+      }
+    } else {
+      el.removeAttribute("hidden");
+    }
+  };
+
+  toggleExtra(creamChip);
+  toggleExtra(biscoffChip);
+  toggleExtra(pumpkinChip);
+     }
+     
   }
 
   function renderContextOptions(){
