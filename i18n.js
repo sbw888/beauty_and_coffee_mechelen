@@ -4,7 +4,7 @@
 const I18N = {
   nl: {
     welcome_eyebrow: "Welkom",
-    welcome_title: "Waar schoonheid koffie ontmoet",
+    welcome_title: "Where Beauty Meets Coffee",
     welcome_lede: "Beantwoord een paar korte vragen. Wij zetten er een drankje tegenover — samen met de behandeling of workshop die er perfect bij past.",
     start_button: "Begin je match",
 
