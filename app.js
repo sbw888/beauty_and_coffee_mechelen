@@ -386,34 +386,6 @@
     state.match = { isKid:false, treatment: treatmentObj, drink, milkLabel, extrasLabel, homecare };
   }
 
-  function renderResultDetails(){
-    const wrap = $("#resultDetails");
-    const m = state.match;
-    if (!m) { wrap.innerHTML = ""; return; }
-    const drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
-    const customLine = [m.milkLabel, ...m.extrasLabel].filter(Boolean).join(" · ");
-
-    wrap.innerHTML = `
-      <div class="result-row">
-        <span class="result-row__icon">☕</span>
-        <div>
-          <div class="result-row__label">${t("drink_label", state.lang)}</div>
-          <div class="result-row__value">${drinkFull}</div>
-          ${m.drink.notes ? `<div class="result-row__notes">${m.drink.notes}</div>` : ""}
-          ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}: ${customLine}</div>` : ""}
-        </div>
-      </div>
-      <div class="result-row">
-        <span class="result-row__icon">✨</span>
-        <div>
-          <div class="result-row__label">${t("treatment_label", state.lang)}</div>
-          <div class="result-row__value">${m.treatment.name}</div>
-        </div>
-      </div>`;
-
-    $("#resultTitle").textContent = t(state.context === "thuis" ? "result_saved_title" : "result_title", state.lang);
-  }
-
   function renderResultBlocks(){
     const wrap = $("#resultBlocks");
     const m = state.match;
@@ -444,13 +416,14 @@
       </div>
       <div class="result-block">
         <div class="result-block__head"><span class="result-block__icon">📋</span><span class="result-block__title">${t("block_aftercare", lang)}</span></div>
-        <div class="result-block__body"><p>${m.treatment.aftercare[lang]}</p></div>
+        <div class="result-block__body"><p>${aftercareText}</p></div>
       </div>
       <div class="result-block${m.homecare ? "" : " result-block--muted"}">
         <div class="result-block__head"><span class="result-block__icon">🛍️</span><span class="result-block__title">${t("block_homecare", lang)}</span></div>
         <div class="result-block__body">${homecareBody}</div>
       </div>`;
   }
+
 
   /* ---------------- canvas composite ---------------- */
   let logoImg = null;
