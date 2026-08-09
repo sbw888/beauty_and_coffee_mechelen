@@ -236,7 +236,8 @@
     }
      function renderRefinementStep() {
   const selectedCategory = state.category; // 'coffee', 'tea', 'iced'
-  const selectedDrink = state.drink;       // bijv: 'matcha_latte', 'earl_grey', 'americano'
+  const selectedDrink = state.match ? state.match.drink.name : null;
+       // bijv: 'matcha_latte', 'earl_grey', 'americano'
 
   // 1. Bepaal de logica voor zichtbaarheid
   const isLatteOrCoffee = 
