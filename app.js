@@ -671,7 +671,6 @@
     generateMatch();
     await new Promise(r => setTimeout(r, 1600));
     await drawResultCanvas();
-    renderResultDetails();
     renderResultBlocks();
     goTo("result");
     if (state.context === "thuis") showToast(t("toast_saved_home", state.lang));
