@@ -583,8 +583,11 @@
       y += 50;
 
       ctx.font = "500 30px Jost, Arial, sans-serif";
-      const treatLine = t("overlay_treatment_prefix", state.lang) + m.treatment.name;
-      wrapText(ctx, treatLine, pad, y, W-pad*2, 38);
+       const treatName = typeof m.treatment.name === "object" 
+  ? (m.treatment.name[state.lang] || m.treatment.name.nl) 
+  : m.treatment.name;
+       const treatLine = t("overlay_treatment_prefix", state.lang) + treatName;
+       wrapText(ctx, treatLine, pad, y, W-pad*2, 38);
     }
 
     ctx.fillStyle = "rgba(246,240,230,0.7)";
