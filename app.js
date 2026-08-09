@@ -61,7 +61,7 @@
     renderMilkOptions();
     renderExtrasOptions();
     renderContextOptions();
-    if (state.match) { renderResultDetails(); renderResultBlocks(); }
+    if (state.match) { renderResultBlocks(); }
   }
 
   function setLang(lang){
@@ -391,8 +391,8 @@
 
   /* ---------------- matching engine ---------------- */
   const KID_CONTENT = {
-    benefits: { nl:"Een veilige, kindvriendelijke verzorging van kleine handjes met een vrolijk drankje erbij.",
-                en:"Safe, kid-friendly care for little hands, paired with a fun drink." },
+    benefits: { nl:"Een veilige, kindvriendelijke verzorging van kleine handjes met een drankje erbij.",
+                en:"Safe, kid-friendly care for little hands, paired with a drink." },
     funfact: { nl:"Bij Beauty & Coffee gebruiken we voor kinderen altijd milde, niet-prikkende lakjes en producten.",
                en:"At Beauty & Coffee we always use mild, non-stinging polishes and products for children." },
     aftercare: { nl:"Geen specifieke nazorg nodig — laat het lakje gewoon lekker drogen voor het spelen.",
