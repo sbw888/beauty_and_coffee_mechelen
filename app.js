@@ -233,7 +233,7 @@
       });
       wrap.appendChild(chip);
     });
-
+    }
      function renderRefinementStep() {
   const selectedCategory = state.category; // 'coffee', 'tea', 'iced'
   const selectedDrink = state.drink;       // bijv: 'matcha_latte', 'earl_grey', 'americano'
