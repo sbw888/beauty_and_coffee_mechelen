@@ -54,6 +54,15 @@ const I18N = {
     generate_button: "Genereer mijn match",
     glow_toggle: "Glow-filter",
     photo_placeholder: "Nog geen foto gekozen",
+    camera_starting: "Camera wordt gestart…",
+    camera_denied_text: "Camera niet beschikbaar. Kies hieronder een foto.",
+    upload_instead_button: "Of upload liever een foto",
+    rotate_button: "Draaien",
+    edit_photo_button: "Bijsnijden",
+    editor_hint: "Sleep om te verplaatsen, gebruik de schuif om in of uit te zoomen.",
+    editor_confirm_button: "Gebruik deze foto",
+    editor_cancel_button: "Annuleren",
+    home_no_photo_text: "Geen foto nodig — we bewaren je match voor je volgende salonbezoek.",
 
     brewing_text: "Jouw persoonlijke match wordt gezet…",
 
@@ -180,6 +189,15 @@ const I18N = {
     generate_button: "Generate my match",
     glow_toggle: "Glow filter",
     photo_placeholder: "No photo selected yet",
+    camera_starting: "Starting camera…",
+    camera_denied_text: "Camera unavailable. Choose a photo below.",
+    upload_instead_button: "Or upload a photo instead",
+    rotate_button: "Rotate",
+    edit_photo_button: "Crop",
+    editor_hint: "Drag to reposition, use the slider to zoom in or out.",
+    editor_confirm_button: "Use this photo",
+    editor_cancel_button: "Cancel",
+    home_no_photo_text: "No photo needed — we'll save your match for your next salon visit.",
 
     brewing_text: "Brewing your personal match…",
 

@@ -61,7 +61,7 @@
     renderMilkOptions();
     renderExtrasOptions();
     renderContextOptions();
-    if (state.match) { renderResultBlocks(); }
+    if (state.match) { renderResultDetails(); renderResultBlocks(); }
   }
 
   function setLang(lang){
@@ -79,11 +79,16 @@
   function showStep(name){
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
     updateProgress(name);
-    
+
     if (name === "toppings") {
       renderRefinementStep();
     }
-    
+    if (name === "photo") {
+      enterPhotoStep();
+    } else if (state.cameraStream) {
+      stopCamera();
+    }
+
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
@@ -147,7 +152,7 @@
     KIDS_DRINKS.forEach(d => {
       const tile = document.createElement("button");
       tile.type = "button";
-      tile.className = "option-tile" + (state.kidsDrink===d.id ? " is-selected" : "");
+      tile.className = "option-tile option-tile--kid" + (state.kidsDrink===d.id ? " is-selected" : "");
       tile.innerHTML = `<span class="option-tile__icon">${d.icon}</span>
         <span class="option-tile__title">${d.name[state.lang]}</span>`;
       tile.addEventListener("click", () => { state.kidsDrink = d.id; renderKidsDrinkOptions(); setTimeout(()=>goTo("context"), 200); });
@@ -299,7 +304,7 @@
         </span>`;
       card.addEventListener("click", () => {
         state.context = opt.id; renderContextOptions();
-        setTimeout(() => { opt.id === "salon" ? goTo("photo") : runGeneration(); }, 200);
+        setTimeout(() => { goTo("photo"); }, 200);
       });
       wrap.appendChild(card);
     });
@@ -310,21 +315,84 @@
   const canvas = () => $("#captureCanvas");
   const preview = () => $("#photoPreview");
   const placeholder = () => $("#photoPlaceholder");
+  let cameraFacing = "user";
 
-  async function openCamera(){
+  /* Called every time the photo step becomes active. Branches between the
+     salon flow (live camera, auto-started — one tap to shoot) and the
+     thuis flow (no photo required, Generate is enabled straight away). */
+  function enterPhotoStep(){
+    if (state.context === "thuis"){
+      stopCamera();
+      $("#photoStage").hidden = true;
+      $("#photoEditor").hidden = true;
+      $("#glowToggleRow").hidden = true;
+      $("#photoActionsCamera").hidden = true;
+      $("#photoActionsIdle").hidden = true;
+      $("#photoActionsRetake").hidden = true;
+      $("#uploadInsteadBtn").hidden = true;
+      $("#photoHomeBlock").hidden = false;
+      $("#generateBtn").disabled = false;
+      return;
+    }
+
+    $("#photoEditor").hidden = true;
+    $("#photoStage").hidden = false;
+    $("#glowToggleRow").hidden = false;
+    $("#photoHomeBlock").hidden = true;
+
+    if (state.photoDataUrl){
+      showPhotoPreview();
+    } else {
+      $("#generateBtn").disabled = true;
+      openCamera();
+    }
+  }
+
+  async function openCamera(facing){
+    if (facing) cameraFacing = facing;
+    stopCamera();
+    $("#photoEditor").hidden = true;
+    $("#photoStage").hidden = false;
+    placeholder().hidden = false;
+    placeholder().querySelector("p").textContent = t("camera_starting", state.lang);
+    video().hidden = true;
+    preview().hidden = true;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:"user" }, audio:false });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: cameraFacing } }, audio:false });
       state.cameraStream = stream;
-      video().srcObject = stream;
-      video().hidden = false;
-      preview().hidden = true;
+      const v = video();
+      v.srcObject = stream;
+      v.hidden = false;
       placeholder().hidden = true;
+      try { await v.play(); } catch(e){ /* some browsers auto-play once metadata loads */ }
       $("#photoActionsIdle").hidden = true;
       $("#photoActionsCamera").hidden = false;
       $("#photoActionsRetake").hidden = true;
+      $("#uploadInsteadBtn").hidden = false;
+      updateSwitchCameraVisibility();
     } catch(err){
+      placeholder().hidden = false;
+      placeholder().querySelector("p").textContent = t("camera_denied_text", state.lang);
+      $("#photoActionsCamera").hidden = true;
+      $("#uploadInsteadBtn").hidden = true;
+      $("#photoActionsIdle").hidden = false;
+      $("#switchCameraBtn").hidden = true;
       showToast(t("toast_camera_denied", state.lang));
     }
+  }
+
+  async function updateSwitchCameraVisibility(){
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cams = devices.filter(d => d.kind === "videoinput");
+      $("#switchCameraBtn").hidden = cams.length < 2;
+    } catch(e){
+      $("#switchCameraBtn").hidden = false; // let the user try regardless if we can't enumerate
+    }
+  }
+
+  function switchCamera(){
+    openCamera(cameraFacing === "user" ? "environment" : "user");
   }
 
   function stopCamera(){
@@ -333,6 +401,7 @@
       state.cameraStream = null;
     }
     video().hidden = true;
+    $("#switchCameraBtn").hidden = true;
   }
 
   function snapPhoto(){
@@ -340,33 +409,35 @@
     const c = canvas();
     c.width = v.videoWidth; c.height = v.videoHeight;
     const ctx = c.getContext("2d");
-    ctx.translate(c.width, 0); ctx.scale(-1,1);
+    // mirror only the front camera — the back camera should not be flipped
+    if (cameraFacing === "user"){ ctx.translate(c.width, 0); ctx.scale(-1,1); }
     ctx.drawImage(v, 0, 0, c.width, c.height);
-    state.photoDataUrl = c.toDataURL("image/jpeg", 0.92);
+    const dataUrl = c.toDataURL("image/jpeg", 0.92);
     stopCamera();
-    showPhotoPreview();
+    openEditor(dataUrl, { previousUrl: state.photoDataUrl });
   }
 
   function cancelCamera(){
     stopCamera();
     $("#photoActionsCamera").hidden = true;
+    $("#uploadInsteadBtn").hidden = true;
     $("#photoActionsIdle").hidden = false;
     placeholder().hidden = !!state.photoDataUrl;
     preview().hidden = !state.photoDataUrl;
   }
 
   function showPhotoPreview(){
-  preview().src = state.photoDataUrl;
-  preview().hidden = false;
-  placeholder().hidden = true;
-  $("#photoActionsCamera").hidden = true;
-  $("#photoActionsIdle").hidden = true;
-  $("#photoActionsRetake").hidden = false;
-  $("#generateBtn").disabled = false;
-  applyGlowPreview();
-
-  // Scroll automatisch naar de Genereer-knop:
-  $("#generateBtn").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("#photoEditor").hidden = true;
+    $("#photoStage").hidden = false;
+    preview().src = state.photoDataUrl;
+    preview().hidden = false;
+    placeholder().hidden = true;
+    $("#photoActionsCamera").hidden = true;
+    $("#uploadInsteadBtn").hidden = true;
+    $("#photoActionsIdle").hidden = true;
+    $("#photoActionsRetake").hidden = false;
+    $("#generateBtn").disabled = false;
+    applyGlowPreview();
   }
 
   function retakePhoto(){
@@ -380,9 +451,130 @@
 
   function handleFileUpload(file){
     if (!file) return;
+    stopCamera();
     const reader = new FileReader();
-    reader.onload = e => { state.photoDataUrl = e.target.result; showPhotoPreview(); };
+    reader.onload = e => openEditor(e.target.result, { previousUrl: state.photoDataUrl });
     reader.readAsDataURL(file);
+  }
+
+  /* ---------------- photo editor: crop, zoom & rotate ---------------- */
+  const editor = {
+    img: null, rotation: 0, scale: 1, offsetX: 0, offsetY: 0,
+    dragging: false, lastX: 0, lastY: 0, previousUrl: null
+  };
+  const editorCanvasEl = () => $("#editorCanvas");
+
+  function openEditor(dataUrl, opts){
+    opts = opts || {};
+    editor.previousUrl = opts.previousUrl || null;
+    editor.rotation = 0; editor.scale = 1; editor.offsetX = 0; editor.offsetY = 0;
+    $("#editorZoom").value = 1;
+
+    const img = new Image();
+    img.onload = () => {
+      editor.img = img;
+      $("#photoStage").hidden = true;
+      $("#glowToggleRow").hidden = true;
+      $("#photoActionsCamera").hidden = true;
+      $("#uploadInsteadBtn").hidden = true;
+      $("#photoActionsIdle").hidden = true;
+      $("#photoActionsRetake").hidden = true;
+      $("#photoEditor").hidden = false;
+      drawEditor();
+    };
+    img.src = dataUrl;
+  }
+
+  function editorBaseScale(){
+    const c = editorCanvasEl();
+    const swapped = editor.rotation % 180 !== 0;
+    const iw = swapped ? editor.img.height : editor.img.width;
+    const ih = swapped ? editor.img.width : editor.img.height;
+    return Math.max(c.width / iw, c.height / ih);
+  }
+
+  function clampEditorOffset(){
+    const c = editorCanvasEl();
+    const scale = editorBaseScale() * editor.scale;
+    const swapped = editor.rotation % 180 !== 0;
+    const dw = (swapped ? editor.img.height : editor.img.width) * scale;
+    const dh = (swapped ? editor.img.width : editor.img.height) * scale;
+    const maxX = Math.max(0, (dw - c.width) / 2);
+    const maxY = Math.max(0, (dh - c.height) / 2);
+    editor.offsetX = Math.min(maxX, Math.max(-maxX, editor.offsetX));
+    editor.offsetY = Math.min(maxY, Math.max(-maxY, editor.offsetY));
+  }
+
+  function drawEditor(){
+    if (!editor.img) return;
+    clampEditorOffset();
+    const c = editorCanvasEl();
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.fillStyle = "#241A14";
+    ctx.fillRect(0, 0, c.width, c.height);
+    const scale = editorBaseScale() * editor.scale;
+    ctx.save();
+    ctx.translate(c.width/2 + editor.offsetX, c.height/2 + editor.offsetY);
+    ctx.rotate(editor.rotation * Math.PI / 180);
+    ctx.scale(scale, scale);
+    ctx.drawImage(editor.img, -editor.img.width/2, -editor.img.height/2);
+    ctx.restore();
+  }
+
+  function editorRotate(){
+    editor.rotation = (editor.rotation + 90) % 360;
+    editor.offsetX = 0; editor.offsetY = 0;
+    drawEditor();
+  }
+
+  function editorConfirm(){
+    state.photoDataUrl = editorCanvasEl().toDataURL("image/jpeg", 0.92);
+    showPhotoPreview();
+  }
+
+  function editorCancel(){
+    $("#photoEditor").hidden = true;
+    if (editor.previousUrl){
+      state.photoDataUrl = editor.previousUrl;
+      showPhotoPreview();
+    } else {
+      state.photoDataUrl = null;
+      openCamera();
+    }
+  }
+
+  function editExistingPhoto(){
+    if (!state.photoDataUrl) return;
+    openEditor(state.photoDataUrl, { previousUrl: state.photoDataUrl });
+  }
+
+  function setupEditorDrag(){
+    const c = editorCanvasEl();
+    const ratio = () => c.width / c.getBoundingClientRect().width;
+
+    c.addEventListener("pointerdown", e => {
+      editor.dragging = true;
+      editor.lastX = e.clientX; editor.lastY = e.clientY;
+      c.setPointerCapture(e.pointerId);
+    });
+    c.addEventListener("pointermove", e => {
+      if (!editor.dragging) return;
+      const r = ratio();
+      editor.offsetX += (e.clientX - editor.lastX) * r;
+      editor.offsetY += (e.clientY - editor.lastY) * r;
+      editor.lastX = e.clientX; editor.lastY = e.clientY;
+      drawEditor();
+    });
+    const endDrag = () => { editor.dragging = false; };
+    c.addEventListener("pointerup", endDrag);
+    c.addEventListener("pointercancel", endDrag);
+    c.addEventListener("pointerleave", endDrag);
+
+    $("#editorZoom").addEventListener("input", e => {
+      editor.scale = parseFloat(e.target.value);
+      drawEditor();
+    });
   }
 
   function applyGlowPreview(){
@@ -439,6 +631,36 @@
     const homecare = getHomecareRecommendation(treatmentObj.homecare.category, state.lang, treatmentObj.homecare.soapHint);
 
     state.match = { isKid:false, treatment: treatmentObj, drink, milkLabel, extrasLabel, homecare };
+  }
+
+  function renderResultDetails(){
+    const wrap = $("#resultDetails");
+    const m = state.match;
+    if (!wrap) return;
+    if (!m) { wrap.innerHTML = ""; return; }
+    const drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
+    const customLine = [m.milkLabel, ...m.extrasLabel].filter(Boolean).join(" · ");
+
+    wrap.innerHTML = `
+      <div class="result-row">
+        <span class="result-row__icon">☕</span>
+        <div>
+          <div class="result-row__label">${t("drink_label", state.lang)}</div>
+          <div class="result-row__value">${drinkFull}</div>
+          ${m.drink.notes ? `<div class="result-row__notes">${m.drink.notes}</div>` : ""}
+          ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}: ${customLine}</div>` : ""}
+        </div>
+      </div>
+      <div class="result-row">
+        <span class="result-row__icon">✨</span>
+        <div>
+          <div class="result-row__label">${t("treatment_label", state.lang)}</div>
+          <div class="result-row__value">${m.treatment.name}</div>
+        </div>
+      </div>`;
+
+    const titleEl = $("#resultTitle");
+    if (titleEl) titleEl.textContent = t(state.context === "thuis" ? "result_saved_title" : "result_title", state.lang);
   }
 
   function renderResultBlocks(){
@@ -626,6 +848,7 @@
   /* ---------------- reset ---------------- */
   function resetApp(){
     stopCamera();
+    cameraFacing = "user";
     state.profile = null; state.sunExposed = null; state.kidsDrink = null;
     state.mood = null; state.category = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
@@ -641,6 +864,7 @@
   function init(){
     applyI18n();
     showStep("welcome");
+    setupEditorDrag();
 
     $$(".lang-btn").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
@@ -652,9 +876,14 @@
       if (action === "back") back();
       if (action === "to-context") goTo("context");
       if (action === "open-camera") openCamera();
+      if (action === "switch-camera") switchCamera();
       if (action === "snap-photo") snapPhoto();
       if (action === "cancel-camera") cancelCamera();
       if (action === "retake") retakePhoto();
+      if (action === "edit-photo") editExistingPhoto();
+      if (action === "editor-rotate") editorRotate();
+      if (action === "editor-confirm") editorConfirm();
+      if (action === "editor-cancel") editorCancel();
       if (action === "upload-photo") $("#fileInput").click();
       if (action === "generate") runGeneration();
       if (action === "share") shareImage();
@@ -671,6 +900,7 @@
     generateMatch();
     await new Promise(r => setTimeout(r, 1600));
     await drawResultCanvas();
+    renderResultDetails();
     renderResultBlocks();
     goTo("result");
     if (state.context === "thuis") showToast(t("toast_saved_home", state.lang));

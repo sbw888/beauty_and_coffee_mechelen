@@ -1,5 +1,5 @@
 /* Beauty & Coffee — minimal offline-first service worker */
-const CACHE_NAME = "beauty-coffee-v2";
+const CACHE_NAME = "beauty-coffee-v4";
 const ASSETS = [
   "./",
   "./index.html",

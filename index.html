@@ -161,41 +161,56 @@
       <p class="step__hint" data-i18n="step5_hint">Maak een foto of upload er een. Alles blijft op jouw toestel.</p>
     </div>
 
-    <div class="photo-stage">
+    <div class="photo-stage" id="photoStage">
       <video id="cameraVideo" class="photo-stage__video" playsinline autoplay muted hidden></video>
       <canvas id="captureCanvas" class="photo-stage__canvas" hidden></canvas>
       <img id="photoPreview" class="photo-stage__preview" alt="" hidden>
       <div class="photo-stage__placeholder" id="photoPlaceholder">
-        <span class="bean bean--lg" aria-hidden="true"></span>
-        <p data-i18n="photo_placeholder">Nog geen foto gekozen</p>
+        <p data-i18n="camera_starting">Camera wordt gestart…</p>
+      </div>
+      <button type="button" class="camera-switch-btn" id="switchCameraBtn" data-action="switch-camera" hidden aria-label="Switch camera">🔄</button>
+    </div>
+
+    <!-- crop / zoom / rotate editor -->
+    <div class="photo-editor" id="photoEditor" hidden>
+      <canvas id="editorCanvas" class="photo-editor__canvas" width="1080" height="1350"></canvas>
+      <p class="photo-editor__hint" data-i18n="editor_hint">Sleep om te verplaatsen, gebruik de schuif om in of uit te zoomen.</p>
+      <div class="photo-editor__controls">
+        <button type="button" class="btn btn--outline btn--sm" data-action="editor-rotate">↻ <span data-i18n="rotate_button">Draaien</span></button>
+        <span class="photo-editor__zoom-icon" aria-hidden="true">🔍</span>
+        <input type="range" id="editorZoom" class="photo-editor__zoom" min="1" max="3" step="0.01" value="1">
+      </div>
+      <div class="photo-actions">
+        <button type="button" class="btn btn--primary" data-action="editor-confirm" data-i18n="editor_confirm_button">Gebruik deze foto</button>
+        <button type="button" class="btn btn--ghost" data-action="editor-cancel" data-i18n="editor_cancel_button">Annuleren</button>
       </div>
     </div>
 
-    <label class="toggle-row glow-toggle">
+    <div class="home-noticecard" id="photoHomeBlock" hidden>
+      <span class="bean bean--lg" aria-hidden="true"></span>
+      <p data-i18n="home_no_photo_text">Geen foto nodig — we bewaren je match voor je volgende salonbezoek.</p>
+    </div>
+
+    <label class="toggle-row glow-toggle" id="glowToggleRow">
       <input type="checkbox" id="glowToggle">
       <span class="toggle-row__switch" aria-hidden="true"></span>
       <span data-i18n="glow_toggle">Glow-filter</span>
     </label>
 
-   <!-- Fotobewerker tools -->
-<div class="photo-editor-tools" id="photoEditorTools" hidden style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
-  <button type="button" class="btn btn--outline btn--sm" data-action="rotate-photo">🔄 Draaien</button>
-  <button type="button" class="btn btn--outline btn--sm" data-action="flip-photo">↔️ Spiegelen</button>
-</div>
-    
-    <div class="photo-actions" id="photoActionsIdle">
+    <div class="photo-actions" id="photoActionsCamera" hidden>
+      <button type="button" class="btn btn--primary btn--shutter" data-action="snap-photo" data-i18n="snap_button">Klik</button>
+      <button type="button" class="btn btn--ghost" data-action="cancel-camera" data-i18n="cancel_button">Annuleren</button>
+    </div>
+    <button type="button" class="btn btn--text" id="uploadInsteadBtn" data-action="upload-photo" data-i18n="upload_instead_button" hidden>Of upload liever een foto</button>
+
+    <div class="photo-actions" id="photoActionsIdle" hidden>
       <button type="button" class="btn btn--primary" data-action="open-camera" data-i18n="camera_button">Maak foto</button>
       <button type="button" class="btn btn--outline" data-action="upload-photo" data-i18n="upload_button">Upload foto</button>
       <input type="file" id="fileInput" accept="image/*" hidden>
     </div>
 
-    <div class="photo-actions" id="photoActionsCamera" hidden>
-      <button type="button" class="btn btn--primary" data-action="snap-photo" data-i18n="snap_button"></button>
-      <button type="button" class="btn btn--ghost" data-action="cancel-camera" data-i18n="cancel_button"></button>
-      <button type="button" class="btn btn--outline" data-action="switch-camera" id="switchCameraBtn">📷 Wissel Camera</button>
-    </div>
-
     <div class="photo-actions" id="photoActionsRetake" hidden>
+      <button type="button" class="btn btn--outline" data-action="edit-photo" data-i18n="edit_photo_button">Bijsnijden</button>
       <button type="button" class="btn btn--outline" data-action="retake" data-i18n="retake_button">Andere foto</button>
     </div>
 
