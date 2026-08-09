@@ -243,7 +243,7 @@
   const isLatteOrCoffee = 
       selectedCategory === 'coffee' || 
       (selectedDrink && selectedDrink.includes('latte')) ||
-      selectedDrink === 'matcha_latte';
+      (selectedCategory === 'tea' && state.caffeine === 'caff');
       
   // 2. Selecteer de DOM elementen
   const milkSection = document.querySelector("#milkSection");
