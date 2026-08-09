@@ -79,6 +79,11 @@
   function showStep(name){
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
     updateProgress(name);
+    
+    if (name === "toppings") {
+      renderRefinementStep();
+    }
+    
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
