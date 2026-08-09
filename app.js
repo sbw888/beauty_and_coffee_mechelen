@@ -279,9 +279,7 @@
   toggleExtra(creamChip);
   toggleExtra(biscoffChip);
   toggleExtra(pumpkinChip);
-     }
-     
-  }
+   }
 
   function renderContextOptions(){
     const wrap = $("#contextOptions");
