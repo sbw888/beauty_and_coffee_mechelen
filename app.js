@@ -9,6 +9,7 @@
     lang: "nl",
     profile: null,        // 'kind' | 'man' | 'vrouw'
     sunExposed: null,     // bool
+    healthFlags: { phlebitis:false, contactLenses:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     category: null,
@@ -17,16 +18,25 @@
     extras: [],
     context: null,        // 'salon' | 'thuis'
     photoDataUrl: null,
-    glow: false,
+    filter: "none",       // 'none' | 'glow' | 'warm' | 'bw' | 'vintage'
     cameraStream: null,
     match: null
   };
 
   const STEP_WEIGHTS = {
-    welcome:0, profile:12, sunCheck:22, kidsDrink:22, mood:34, category:48,
+    welcome:0, profile:10, sunCheck:20, healthCheck:28, kidsDrink:20, mood:38, category:50,
     caffeine:60, toppings:72, context:84, photo:92, loading:96, result:100
   };
   let history = ["welcome"];
+
+  const FILTERS = {
+    none:  "",
+    glow:    "brightness(1.08) saturate(1.15) contrast(0.96)",
+    warm:    "sepia(0.28) saturate(1.35) brightness(1.05)",
+    bw:      "grayscale(1) contrast(1.08)",
+    vintage: "sepia(0.35) contrast(0.9) brightness(1.05) saturate(0.8)"
+  };
+  const FILTER_IDS = ["none","glow","warm","bw","vintage"];
 
   /* ---------------- helpers ---------------- */
   const $ = (sel, ctx) => (ctx||document).querySelector(sel);
@@ -54,6 +64,7 @@
     });
     renderProfileOptions();
     renderSunOptions();
+    renderHealthOptions();
     renderKidsDrinkOptions();
     renderMoodOptions();
     renderCategoryOptions();
@@ -61,6 +72,7 @@
     renderMilkOptions();
     renderExtrasOptions();
     renderContextOptions();
+    renderFilterOptions();
     if (state.match) { renderResultDetails(); renderResultBlocks(); }
   }
 
@@ -81,7 +93,7 @@
     updateProgress(name);
 
     if (name === "toppings") {
-      renderRefinementStep();
+      renderMilkOptions();
     }
     if (name === "photo") {
       enterPhotoStep();
@@ -134,7 +146,7 @@
       tile.className = "option-tile" + (state.sunExposed===val ? " is-selected" : "");
       tile.innerHTML = `<span class="option-tile__icon">${key==="yes" ? "🌞" : "🌥️"}</span>
         <span class="option-tile__title">${t(`sun_${key}`, state.lang)}</span>`;
-      tile.addEventListener("click", () => { state.sunExposed = val; renderSunOptions(); setTimeout(()=>goTo("mood"), 200); });
+      tile.addEventListener("click", () => { state.sunExposed = val; renderSunOptions(); setTimeout(()=>goTo("healthCheck"), 200); });
       wrap.appendChild(tile);
     });
     let notice = wrap.parentElement.querySelector(".sun-notice");
@@ -144,6 +156,41 @@
       wrap.insertAdjacentElement("afterend", notice);
     }
     notice.innerHTML = `<span class="sun-notice__icon">🧴</span><span>${t("sun_filtered_notice", state.lang)}</span>`;
+  }
+
+  function renderHealthOptions(){
+    const checkWrap = $("#healthChecklist");
+    if (checkWrap){
+      checkWrap.innerHTML = "";
+      [
+        ["phlebitis", "🩸"],
+        ["contactLenses", "👓"]
+      ].forEach(([key, icon]) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip chip--check" + (state.healthFlags[key] ? " is-selected" : "");
+        chip.innerHTML = `<span class="chip__icon">${icon}</span> ${t(`health_${key}`, state.lang)}`;
+        chip.addEventListener("click", () => {
+          state.healthFlags[key] = !state.healthFlags[key];
+          renderHealthOptions();
+        });
+        checkWrap.appendChild(chip);
+      });
+    }
+
+    const dietWrap = $("#dietOptions");
+    if (dietWrap){
+      dietWrap.innerHTML = "";
+      [["yes",true],["no",false]].forEach(([key,val]) => {
+        const tile = document.createElement("button");
+        tile.type = "button";
+        tile.className = "option-tile" + (state.healthFlags.dietExercise===val ? " is-selected" : "");
+        tile.innerHTML = `<span class="option-tile__icon">${val ? "🥗" : "🍽️"}</span>
+          <span class="option-tile__title">${t(`diet_${key}`, state.lang)}</span>`;
+        tile.addEventListener("click", () => { state.healthFlags.dietExercise = val; renderHealthOptions(); });
+        dietWrap.appendChild(tile);
+      });
+    }
   }
 
   function renderKidsDrinkOptions(){
@@ -211,7 +258,15 @@
   }
 
   function renderMilkOptions(){
+    const group = $("#milkGroup");
     const wrap = $("#milkOptions");
+    // Plain teas don't take milk — except Matcha, our only caffeinated tea
+    // that comes with a milk option (choosing milk turns it into a Matcha
+    // Latte). So: hidden for decaf tea, shown otherwise.
+    const milkApplies = !(state.category === "tea" && state.caffeine === "decaf");
+    if (group) group.hidden = !milkApplies;
+    if (!milkApplies && state.milk !== "none") state.milk = "none";
+
     wrap.innerHTML = "";
     MILK_OPTIONS.forEach(id => {
       const chip = document.createElement("button");
@@ -221,6 +276,18 @@
       chip.addEventListener("click", () => { state.milk = id; renderMilkOptions(); });
       wrap.appendChild(chip);
     });
+
+    let hint = group ? group.querySelector(".milk-hint") : null;
+    if (milkApplies && state.category === "tea"){
+      if (!hint){
+        hint = document.createElement("p");
+        hint.className = "milk-hint";
+        group.appendChild(hint);
+      }
+      hint.textContent = t("milk_tea_hint", state.lang);
+    } else if (hint){
+      hint.remove();
+    }
   }
 
   function renderExtrasOptions(){
@@ -239,53 +306,6 @@
       wrap.appendChild(chip);
     });
     }
-     function renderRefinementStep() {
-  const selectedCategory = state.category; // 'coffee', 'tea', 'iced'
-  const selectedDrink = state.match ? state.match.drink.name : null;
-       // bijv: 'matcha_latte', 'earl_grey', 'americano'
-
-  // 1. Bepaal de logica voor zichtbaarheid
-  const isLatteOrCoffee = 
-      selectedCategory === 'coffee' || 
-      (selectedDrink && selectedDrink.includes('latte')) ||
-      (selectedCategory === 'tea' && state.caffeine === 'caff');
-      
-  // 2. Selecteer de DOM elementen
-  const milkSection = document.querySelector("#milkSection");
-  const creamChip = document.querySelector('[data-value="cream"]');
-  const biscoffChip = document.querySelector('[data-value="biscoff"]');
-  const pumpkinChip = document.querySelector('[data-value="pumpkin"]');
-
-  // 3. Pas logica toe met [hidden] attribuut (dankzij jouw CSS)
-  
-  // Melk sectie
-  if (milkSection) {
-    if (!isLatteOrCoffee) {
-      milkSection.setAttribute("hidden", "");
-      state.milk = "none"; // Reset in data
-    } else {
-      milkSection.removeAttribute("hidden");
-    }
-  }
-
-  // Extra's (Slagroom, Biscoff, Pumpkin)
-  const toggleExtra = (el) => {
-    if (!el) return;
-    if (!isLatteOrCoffee) {
-      el.setAttribute("hidden", "");
-      // Verwijder uit state als het verborgen is
-      if (state.extras && state.extras.includes(el.dataset.value)) {
-        state.extras = state.extras.filter(e => e !== el.dataset.value);
-      }
-    } else {
-      el.removeAttribute("hidden");
-    }
-  };
-
-  toggleExtra(creamChip);
-  toggleExtra(biscoffChip);
-  toggleExtra(pumpkinChip);
-   }
 
   function renderContextOptions(){
     const wrap = $("#contextOptions");
@@ -317,33 +337,19 @@
   const placeholder = () => $("#photoPlaceholder");
   let cameraFacing = "user";
 
-  /* Called every time the photo step becomes active. Branches between the
-     salon flow (live camera, auto-started — one tap to shoot) and the
-     thuis flow (no photo required, Generate is enabled straight away). */
+  /* Called every time the photo step becomes active. The camera/upload flow
+     is available regardless of salon vs. thuis — thuis just adds a visible
+     "skip this" hint since Generate never requires a photo either way. */
   function enterPhotoStep(){
-    if (state.context === "thuis"){
-      stopCamera();
-      $("#photoStage").hidden = true;
-      $("#photoEditor").hidden = true;
-      $("#glowToggleRow").hidden = true;
-      $("#photoActionsCamera").hidden = true;
-      $("#photoActionsIdle").hidden = true;
-      $("#photoActionsRetake").hidden = true;
-      $("#uploadInsteadBtn").hidden = true;
-      $("#photoHomeBlock").hidden = false;
-      $("#generateBtn").disabled = false;
-      return;
-    }
-
     $("#photoEditor").hidden = true;
     $("#photoStage").hidden = false;
-    $("#glowToggleRow").hidden = false;
-    $("#photoHomeBlock").hidden = true;
+    $("#filterRow").hidden = false;
+    $("#photoHomeBlock").hidden = state.context !== "thuis";
+    $("#generateBtn").disabled = false;
 
     if (state.photoDataUrl){
       showPhotoPreview();
     } else {
-      $("#generateBtn").disabled = true;
       openCamera();
     }
   }
@@ -446,7 +452,6 @@
     placeholder().hidden = false;
     $("#photoActionsRetake").hidden = true;
     $("#photoActionsIdle").hidden = false;
-    $("#generateBtn").disabled = true;
   }
 
   function handleFileUpload(file){
@@ -474,7 +479,7 @@
     img.onload = () => {
       editor.img = img;
       $("#photoStage").hidden = true;
-      $("#glowToggleRow").hidden = true;
+      $("#filterRow").hidden = true;
       $("#photoActionsCamera").hidden = true;
       $("#uploadInsteadBtn").hidden = true;
       $("#photoActionsIdle").hidden = true;
@@ -578,7 +583,21 @@
   }
 
   function applyGlowPreview(){
-    preview().classList.toggle("glow-active", state.glow);
+    preview().style.filter = FILTERS[state.filter] || "";
+  }
+
+  function renderFilterOptions(){
+    const wrap = $("#filterOptions");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    FILTER_IDS.forEach(id => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip" + (state.filter===id ? " is-selected" : "");
+      chip.textContent = t(`filters.${id}`, state.lang);
+      chip.addEventListener("click", () => { state.filter = id; renderFilterOptions(); applyGlowPreview(); });
+      wrap.appendChild(chip);
+    });
   }
 
   /* ---------------- matching engine ---------------- */
@@ -605,11 +624,16 @@
       return;
     }
 
-    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed);
+    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, state.healthFlags);
     let drink;
 
     if (state.category === "coffee"){
-      const list = BEVERAGES.coffee[state.caffeine];
+      const fullList = BEVERAGES.coffee[state.caffeine];
+      // "Geen melk" must only ever surface black/slow-brew coffees; a milk
+      // choice must only ever surface milk-based coffees — no more mismatches.
+      const wantsMilk = state.milk !== "none";
+      let list = fullList.filter(b => wantsMilk ? b.style === "milk" : b.style !== "milk");
+      if (!list.length) list = fullList; // safety net if a filter ever empties the pool
       const bev = pickRandom(list);
       let origin = null;
       if (bev.style !== "iced"){
@@ -618,8 +642,15 @@
       }
       drink = { name: bev.name, origin: origin ? origin.name : null, notes: origin ? origin.notes : (bev.notes||null) };
     } else if (state.category === "tea"){
-      const pool = state.caffeine === "decaf" ? TEAS_DECAF : TEAS_CAFF;
-      drink = { name: pickRandom(pool), origin:null, notes:null };
+      const wantsMilk = state.milk !== "none";
+      if (state.caffeine === "caff" && wantsMilk){
+        // Matcha is the only tea on the menu that takes milk — choosing a
+        // milk preference here always means "Matcha Latte", hot with steamed milk.
+        drink = { name: "Matcha Latte", origin:null, notes:null };
+      } else {
+        const pool = state.caffeine === "decaf" ? TEAS_DECAF : TEAS_CAFF;
+        drink = { name: pickRandom(pool), origin:null, notes:null };
+      }
     } else {
       const list = BEVERAGES.iced[state.caffeine];
       const bev = pickRandom(list);
@@ -630,7 +661,21 @@
     const extrasLabel = state.extras.map(id => t(`extras.${id}`, state.lang));
     const homecare = getHomecareRecommendation(treatmentObj.homecare.category, state.lang, treatmentObj.homecare.soapHint);
 
-    state.match = { isKid:false, treatment: treatmentObj, drink, milkLabel, extrasLabel, homecare };
+    // build a copy of the treatment so we can safely append a lens warning
+    // without mutating the shared catalog entry
+    let treatment = treatmentObj;
+    if (treatmentObj.lensWarning && state.healthFlags.contactLenses){
+      const warn = t("lens_warning_note", state.lang);
+      treatment = {
+        ...treatmentObj,
+        aftercare: {
+          nl: treatmentObj.aftercare.nl + " " + t("lens_warning_note", "nl"),
+          en: treatmentObj.aftercare.en + " " + t("lens_warning_note", "en")
+        }
+      };
+    }
+
+    state.match = { isKid:false, treatment, drink, milkLabel, extrasLabel, homecare };
   }
 
   function renderResultDetails(){
@@ -672,16 +717,23 @@
       ? `<p class="result-block__product">${m.homecare.productName}</p><p>${m.homecare.usage}</p>`
       : `<p>${t("homecare_generic_tip", lang)}</p>`;
 
-    // --- VOEG DE ZONADVIES-CHECK HIER TOE ---
+    // extra sun-care reinforcement specifically for hair-removal treatments
     let aftercareText = m.treatment.aftercare[lang];
-    const tId = m.treatment.id || "";
-    if (tId.includes("wax") || tId.includes("epil") || m.treatment.category === "hair-removal") {
-      const sunTip = lang === "nl" 
-        ? "<br><br>⚠️ <strong>Zonadvies:</strong> Vermijd directe zon gedurende 24 uur na het ontharen. Gebruik een zonnebrandcrème met hoge SPF om roodheid en pigmentvlekken te voorkomen."
-        : "<br><br>⚠️ <strong>Sun advice:</strong> Avoid direct sun for 24 hours after hair removal. Always apply high SPF sunscreen to protect your skin.";
+    const HAIR_REMOVAL_IDS = ["oksel","been","rug","buik","borst"];
+    if (HAIR_REMOVAL_IDS.includes(m.treatment.id)) {
+      const sunTip = lang === "nl"
+        ? "<br><br>⚠️ <strong>Zonadvies:</strong> vermijd directe zon of het solarium 24 uur na het ontharen, en gebruik nadien een hoge SPF om roodheid en pigmentvlekken te voorkomen."
+        : "<br><br>⚠️ <strong>Sun advice:</strong> avoid direct sun or a sunbed for 24 hours after hair removal, and use a high SPF afterwards to prevent redness and pigmentation.";
       aftercareText += sunTip;
     }
-     
+
+    const priceRow = m.treatment.price
+      ? `<div class="result-block">
+          <div class="result-block__head"><span class="result-block__icon">💶</span><span class="result-block__title">${t("block_price", lang)}</span></div>
+          <div class="result-block__body"><p class="result-block__product">${m.treatment.price}</p></div>
+        </div>`
+      : "";
+
     wrap.innerHTML = `
       <div class="result-block">
         <div class="result-block__head"><span class="result-block__icon">🌟</span><span class="result-block__title">${t("block_benefits", lang)}</span></div>
@@ -698,7 +750,8 @@
       <div class="result-block${m.homecare ? "" : " result-block--muted"}">
         <div class="result-block__head"><span class="result-block__icon">🛍️</span><span class="result-block__title">${t("block_homecare", lang)}</span></div>
         <div class="result-block__body">${homecareBody}</div>
-      </div>`;
+      </div>
+      ${priceRow}`;
   }
 
 
@@ -741,7 +794,7 @@
           const scale = Math.max(W/img.width, H/img.height);
           const dw = img.width*scale, dh = img.height*scale;
           ctx.save();
-          if (state.glow){ ctx.filter = "brightness(1.08) saturate(1.15) contrast(0.96)"; }
+          if (FILTERS[state.filter]){ ctx.filter = FILTERS[state.filter]; }
           ctx.drawImage(img, (W-dw)/2, (H-dh)/2, dw, dh);
           ctx.restore();
           res();
@@ -816,9 +869,16 @@
     ctx.fillStyle = "rgba(246,240,230,0.7)";
     ctx.font = "italic 22px 'Playfair Display', Georgia, serif";
     ctx.fillText("Where Beauty Meets Coffee", 44, H-40);
+
+    ctx.fillStyle = "rgba(246,240,230,0.55)";
+    ctx.font = "500 19px Jost, Arial, sans-serif";
+    ctx.fillText(SITE_URL_DISPLAY, 44, H-16);
   }
 
   /* ---------------- share / download ---------------- */
+  const SITE_URL = window.location.origin + window.location.pathname;
+  const SITE_URL_DISPLAY = (window.location.hostname + window.location.pathname).replace(/\/index\.html$/, "").replace(/\/$/, "");
+
   function canvasToBlob(){
     return new Promise(res => $("#resultCanvas").toBlob(res, "image/jpeg", 0.95));
   }
@@ -831,18 +891,40 @@
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
     showToast(t("toast_downloaded", state.lang));
+    trackEvent("download");
   }
 
   async function shareImage(){
     const blob = await canvasToBlob();
     const file = new File([blob], "beauty-and-coffee-match.jpg", { type:"image/jpeg" });
+    // The site link is drawn onto the image itself (see drawResultCanvas) because
+    // several share targets, WhatsApp included, drop accompanying text when an
+    // image file is shared — the caption text/url below is a bonus for apps that
+    // do keep it (Telegram, Signal, Mail, ...), not the only way the link travels.
+    const shareText = t("share_text", state.lang) + " " + SITE_URL;
     if (navigator.canShare && navigator.canShare({ files:[file] })){
-      try { await navigator.share({ files:[file], title:"Beauty & Coffee", text: t("share_text", state.lang) }); }
+      try { await navigator.share({ files:[file], title:"Beauty & Coffee", text: shareText, url: SITE_URL }); }
       catch(err){ /* user cancelled */ }
+      trackEvent("share");
+    } else if (navigator.share){
+      try { await navigator.share({ title:"Beauty & Coffee", text: shareText, url: SITE_URL }); }
+      catch(err){ /* user cancelled */ }
+      trackEvent("share");
     } else {
       showToast(t("toast_share_unsupported", state.lang));
       downloadImage();
     }
+  }
+
+  /* ---------------- analytics (optional, privacy-friendly) ----------------
+     No-ops until a GoatCounter (or similar) script is added in index.html —
+     see the comment there for setup instructions. Nothing is tracked without it. */
+  function trackEvent(name){
+    try {
+      if (window.goatcounter && typeof window.goatcounter.count === "function"){
+        window.goatcounter.count({ path: name, event: true });
+      }
+    } catch(e){ /* analytics should never break the app */ }
   }
 
   /* ---------------- reset ---------------- */
@@ -850,10 +932,10 @@
     stopCamera();
     cameraFacing = "user";
     state.profile = null; state.sunExposed = null; state.kidsDrink = null;
+    state.healthFlags = { phlebitis:false, contactLenses:false, dietExercise:false };
     state.mood = null; state.category = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
-    state.photoDataUrl = null; state.glow = false; state.match = null;
-    $("#glowToggle").checked = false;
+    state.photoDataUrl = null; state.filter = "none"; state.match = null;
     retakePhoto();
     history = ["welcome"];
     applyI18n();
@@ -874,6 +956,7 @@
       const action = el.dataset.action;
       if (action === "start") goTo("profile");
       if (action === "back") back();
+      if (action === "to-mood") goTo("mood");
       if (action === "to-context") goTo("context");
       if (action === "open-camera") openCamera();
       if (action === "switch-camera") switchCamera();
@@ -892,7 +975,6 @@
     });
 
     $("#fileInput").addEventListener("change", e => handleFileUpload(e.target.files[0]));
-    $("#glowToggle").addEventListener("change", e => { state.glow = e.target.checked; applyGlowPreview(); });
   }
 
   async function runGeneration(){
@@ -903,6 +985,7 @@
     renderResultDetails();
     renderResultBlocks();
     goTo("result");
+    trackEvent("match-generated");
     if (state.context === "thuis") showToast(t("toast_saved_home", state.lang));
   }
 

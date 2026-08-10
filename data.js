@@ -32,7 +32,7 @@ const TEAS_DECAF = [
 ];
 const TEAS_CAFF = [
   "Sun of Heaven (Organic Sencha & Mango)","China Bancha","China Jasmine","Jasmine Dragon Pearl",
-  "Cascara Costa Rica Sonora","Organic Matcha Green Tea","Lipton Peach Mango","Lipton Refreshing Lemon",
+  "Cascara Costa Rica Sonora","Matcha","Lipton Peach Mango","Lipton Refreshing Lemon",
   "Pickwick Original English","Pickwick Green Tea Pure","Lipton Japanese Sencha","Lord Nelson Chai",
   "Organo Gold Organic Green Tea (with Ganoderma)"
 ];
@@ -61,7 +61,7 @@ const BEVERAGES = {
       { name:"Iced Coffee + Whipped Cream", style:"iced" },
       { name:"Affogato", style:"iced", notes:"2 scoops vanilla ice cream" },
       { name:"Iced Latte + Choco + Whipped Cream + Biscoff Crumbs", style:"iced" },
-      { name:"Matcha Latte", style:"iced" }
+      { name:"Iced Matcha Latte", style:"iced" }
     ],
     decaf: [
       { name:"Iced Coffee + Whipped Cream", style:"iced" },
@@ -234,9 +234,13 @@ function getHomecareRecommendation(categoryId, lang, soapHints){
    Every treatment is tagged with the moods it satisfies, the
    profiles allowed to receive it, and whether it must be
    filtered out after recent/upcoming sun exposure.
+
+   Optional field: price — e.g. price:"€65" — add this to any
+   item below to show it on the result screen. Left out (or null)
+   by default; the app then just links to your full price list.
    ============================================================ */
 const TREATMENTS_CATALOG = [
-  { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false,
+  { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€90 (90')",
     homecare:{ category:"body" },
     benefits:{ nl:"Diepe spierontspanning en verbeterde doorbloeding dankzij de warmte van de stenen.",
                en:"Deep muscle relaxation and improved circulation thanks to the warmth of the stones." },
@@ -245,7 +249,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur extra water, vermijd een hete douche of sauna direct erna en neem de tijd om na te rusten.",
                 en:"Drink extra water for the first 24 hours, avoid a hot shower or sauna right after, and take time to rest afterwards." } },
 
-  { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false,
+  { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Vermindert spierspanning en stress door lange, vloeiende strijkbewegingen.",
                en:"Reduces muscle tension and stress through long, flowing strokes." },
@@ -254,7 +258,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur ruim water, vermijd zware maaltijden vlak na de massage en bouw rustmomenten in.",
                 en:"Drink plenty of water for the first 24 hours, avoid heavy meals right after the massage, and build in moments of rest." } },
 
-  { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false,
+  { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€65 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Verlicht een gespannen rug en geeft de huid een zachte, verzorgde afwerking.",
                en:"Relieves a tense back and leaves the skin soft and cared-for." },
@@ -263,7 +267,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Douche pas na 24 uur weer uitgebreid, drink veel water en hydrateer de huid dagelijks.",
                 en:"Wait 24 hours before showering thoroughly again, drink plenty of water and moisturize the skin daily." } },
 
-  { id:"manipedispa", name:"Extended Manicure/Pedicure with SPA supplement", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"manipedispa", name:"Extended Manicure/Pedicure with SPA supplement", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€35 manicure + €35 pedicure + €30 SPA-supplement",
     homecare:{ category:"hand" },
     benefits:{ nl:"Verzorgde handen én voeten in één sessie, met een extra ontspannen SPA-behandeling.",
                en:"Cared-for hands and feet in a single session, with an extra-relaxing SPA touch." },
@@ -272,7 +276,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Wacht minstens 2 uur (handen) en 4 uur (voeten) voor je iets nats of strak schoeisel aandoet, en hydrateer dagelijks.",
                 en:"Wait at least 2 hours (hands) and 4 hours (feet) before wet activities or tight footwear, and moisturize daily." } },
 
-  { id:"browlift", name:"Brow Lift", moods:["energetic"], genders:["vrouw"], sunSensitive:false,
+  { id:"browlift", name:"Brow Lift", moods:["energetic"], genders:["vrouw"], sunSensitive:false, price:"€75 (75')",
     homecare:{ category:"eye" },
     benefits:{ nl:"Een open, wakkere blik zonder dagelijks stylen — de wenkbrauwhaartjes blijven weken op hun plek.",
                en:"An open, awake look with no daily styling — the brow hairs stay in place for weeks." },
@@ -281,7 +285,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Houd de wenkbrauwen 24 uur droog en vermijd de eerste 48 uur oliehoudende reinigers op de wenkbrauw.",
                 en:"Keep the brows dry for 24 hours and avoid oil-based cleansers on the brow area for the first 48 hours." } },
 
-  { id:"hennabrows", name:"Henna Brows", moods:["energetic"], genders:["vrouw"], sunSensitive:false,
+  { id:"hennabrows", name:"Henna Brows", moods:["energetic"], genders:["vrouw"], sunSensitive:false, price:"€50 (60')",
     homecare:{ category:"eye" },
     benefits:{ nl:"Voller ogende wenkbrauwen met een natuurlijke kleurintensiteit die weken meegaat.",
                en:"Fuller-looking brows with a natural color intensity that lasts for weeks." },
@@ -290,7 +294,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Houd de wenkbrauwen 24 uur droog en vermijd scrubs of peelings rond de wenkbrauw gedurende 3 dagen.",
                 en:"Keep the brows dry for 24 hours and avoid scrubs or peels around the brow area for 3 days." } },
 
-  { id:"lashlift", name:"Lash Lift with Tint", moods:["energetic"], genders:["vrouw"], sunSensitive:false,
+  { id:"lashlift", name:"Lash Lift with Tint", moods:["energetic"], genders:["vrouw"], sunSensitive:false, lensWarning:true, price:"€75 (75')",
     homecare:{ category:"eye" },
     benefits:{ nl:"Krullende, donkere wimpers zonder mascara — bespaart tijd in je ochtendroutine.",
                en:"Curled, darker lashes without mascara — saves time in your morning routine." },
@@ -299,7 +303,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Houd de wimpers de eerste 24 uur volledig droog en vermijd olie-based make-up remover gedurende 48 uur.",
                 en:"Keep the lashes completely dry for the first 24 hours and avoid oil-based makeup remover for 48 hours." } },
 
-  { id:"glammakeup", timeOfDay: "pm", name:"Evening / Party Glam Makeup", moods:["energetic","luxury"], genders:["vrouw"], sunSensitive:false,
+  { id:"glammakeup", timeOfDay: "pm", name:"Evening / Party Glam Makeup", moods:["energetic","luxury"], genders:["vrouw"], sunSensitive:false, price:"€60 (60')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een foto- en feestklare look, afgestemd op jouw gelegenheid en huidtype.",
                en:"A photo- and party-ready look, tailored to your occasion and skin type." },
@@ -308,7 +312,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Reinig 's avonds grondig met een milde cleanser en hydrateer de huid voor het slapengaan.",
                 en:"Cleanse thoroughly in the evening with a mild cleanser and moisturize the skin before bed." } },
 
-  { id:"hydrapeel", name:"Skin-Renewing Hydra Peeling pH", moods:["energetic","focus"], genders:["vrouw","man"], sunSensitive:true,
+  { id:"hydrapeel", name:"Skin-Renewing Hydra Peeling pH", moods:["energetic","focus"], genders:["vrouw","man"], sunSensitive:true, price:"€100 (90')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Verwijdert dode huidcellen en brengt tegelijk vocht terug voor een frisse, egale teint.",
                en:"Removes dead skin cells while replenishing moisture for a fresh, even complexion." },
@@ -317,7 +321,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50, vermijd de zon 14 dagen en sla scrubs 48 uur over.",
                 en:"Use SPF 50 daily for 7 days, avoid sun exposure for 14 days and skip scrubs for 48 hours." } },
 
-  { id:"signaturefacial", name:"Signature Facial Treatment", moods:["focus"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"signaturefacial", name:"Signature Facial Treatment", moods:["focus"], genders:["vrouw","man"], sunSensitive:false, price:"€85 (75')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Diepgaande reiniging en verzorging op maat van jouw huidtype voor directe uitstraling.",
                en:"Deep cleansing and care tailored to your skin type for immediate radiance." },
@@ -326,7 +330,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50 en drink voldoende water om het reinigingseffect te ondersteunen.",
                 en:"Use SPF 50 daily for 7 days and drink enough water to support the cleansing effect." } },
 
-  { id:"fillme", name:"Fill Me Micro Infusion Treatment", moods:["focus"], genders:["vrouw","man"], sunSensitive:true,
+  { id:"fillme", name:"Fill Me Micro Infusion Treatment", moods:["focus"], genders:["vrouw","man"], sunSensitive:true, price:"€99 (45-60')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Brengt hyaluronzuur diep in de huid voor een plumpend, verjongend effect.",
                en:"Delivers hyaluronic acid deep into the skin for a plumping, rejuvenating effect." },
@@ -335,7 +339,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Draag 24 uur geen make-up, vermijd zon en sauna 48 uur en gebruik dagelijks SPF.",
                 en:"Avoid makeup for 24 hours, skip sun and sauna for 48 hours, and use daily SPF." } },
 
-  { id:"fruitacid", name:"Fruit Acid Peeling Dr. Renaud", moods:["focus"], genders:["vrouw","man"], sunSensitive:true,
+  { id:"fruitacid", name:"Fruit Acid Peeling Dr. Renaud", moods:["focus"], genders:["vrouw","man"], sunSensitive:true, price:"€100 (75')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Vernieuwt de huidtextuur en vermindert oneffenheden met natuurlijke vruchtzuren.",
                en:"Renews skin texture and reduces unevenness using natural fruit acids." },
@@ -344,7 +348,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50, vermijd de zon 14 dagen en sla actieve producten 48 uur over.",
                 en:"Use SPF 50 daily for 7 days, avoid sun exposure for 14 days and skip active products for 48 hours." } },
 
-  { id:"liftsummere", name:"Lift Summere", moods:["focus","luxury"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"liftsummere", name:"Lift Summere", moods:["focus","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€120 (70')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een liftend effect voor een steviger, stralender huidbeeld.",
                en:"A lifting effect for firmer, more radiant-looking skin." },
@@ -353,7 +357,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF, drink voldoende water en vermijd de eerste 24 uur zware make-up.",
                 en:"Use SPF daily, drink enough water and avoid heavy makeup for the first 24 hours." } },
 
-  { id:"detoxback", name:"Detoxifying Back Treatment", moods:["focus"], genders:["vrouw"], sunSensitive:false,
+  { id:"detoxback", name:"Detoxifying Back Treatment", moods:["focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Reinigt en verzacht de rughuid, ideaal bij onzuiverheden of een gespannen gevoel.",
                en:"Cleanses and soothes the skin on the back, ideal for blemishes or a tense feeling." },
@@ -362,7 +366,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Draag de eerste 24 uur losse kleding en vermijd een hete douche direct na de behandeling.",
                 en:"Wear loose clothing for the first 24 hours and avoid a hot shower right after the treatment." } },
 
-  { id:"antiagefacial", name:"Botanical Anti-Age Facial + Touch-Up Day Makeup", moods:["luxury"], genders:["vrouw"], sunSensitive:false,
+  { id:"antiagefacial", name:"Botanical Anti-Age Facial + Touch-Up Day Makeup", moods:["luxury"], genders:["vrouw"], sunSensitive:false, price:"€125 (90')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Combineert een verjongende gelaatsbehandeling met een frisse make-up touch-up.",
                en:"Combines a rejuvenating facial with a fresh makeup touch-up." },
@@ -371,7 +375,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF 50 gedurende 7 dagen en reinig 's avonds grondig.",
                 en:"Use SPF 50 daily for 7 days and cleanse thoroughly in the evening." } },
 
-  { id:"harmonizingbody", name:"Harmonizing Full Body Treatment", moods:["luxury"], genders:["vrouw"], sunSensitive:false,
+  { id:"harmonizingbody", name:"Harmonizing Full Body Treatment", moods:["luxury"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (70')",
     homecare:{ category:"body" },
     benefits:{ nl:"Een totaalervaring die lichaam en geest in balans brengt met verzorgende texturen.",
                en:"A total experience that brings body and mind into balance with nourishing textures." },
@@ -380,7 +384,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur veel water en hydrateer de huid dagelijks met een bodylotion.",
                 en:"Drink plenty of water for the first 24 hours and moisturize the skin daily with a body lotion." } },
 
-  { id:"fullbodywrap", name:"Energetic Full Body Wrap", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false,
+  { id:"fullbodywrap", name:"Energetic Full Body Wrap", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€110 (120')",
     homecare:{ category:"body" },
     benefits:{ nl:"Verstevigt en hydrateert de huid, en geeft een direct energiek, fris gevoel.",
                en:"Firms and hydrates the skin, giving an immediate energetic, fresh feeling." },
@@ -389,7 +393,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Douche pas na 24 uur weer uitgebreid en drink de eerste dag extra veel water.",
                 en:"Wait 24 hours before showering thoroughly again and drink extra water on the first day." } },
 
-  { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false,
+  { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
     benefits:{ nl:"Leer zelf professionele make-uptechnieken toepassen, samen met vriendinnen of collega's.",
                en:"Learn to apply professional makeup techniques yourself, together with friends or colleagues." },
@@ -398,7 +402,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen specifieke nazorg nodig — reinig de huid zoals gewoonlijk aan het einde van de dag.",
                 en:"No specific aftercare needed — cleanse the skin as usual at the end of the day." } },
 
-  { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
     benefits:{ nl:"Ontdek stap voor stap hoe je een professionele gelaatsroutine thuis nabootst.",
                en:"Discover step by step how to recreate a professional facial routine at home." },
@@ -407,7 +411,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF na een gelaatsbehandeling en hydrateer 's avonds goed.",
                 en:"Use daily SPF after a facial treatment and moisturize well in the evening." } },
 
-  { id:"tastingbasic", name:"Coffee Tasting Basic", moods:["group"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"tastingbasic", name:"Coffee Tasting Basic", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€60 p.p. (120')",
     homecare:{ category:"soap", soapHint:["koffie"] },
     benefits:{ nl:"Leer de basis van koffie proeven: aroma's, zuurgraad en afdronk herkennen.",
                en:"Learn the basics of coffee tasting: recognizing aroma, acidity and aftertaste." },
@@ -416,7 +420,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen nazorg nodig — geniet gerust van nog een kopje na afloop.",
                 en:"No aftercare needed — feel free to enjoy another cup afterwards." } },
 
-  { id:"tastingadvanced", name:"Coffee Tasting Advanced", moods:["group"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"tastingadvanced", name:"Coffee Tasting Advanced", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€65 p.p. (180')",
     homecare:{ category:"soap", soapHint:["koffie"] },
     benefits:{ nl:"Verdiep je in origin-vergelijkingen en brouwmethodes als een echte barista.",
                en:"Dive deeper into origin comparisons and brewing methods like a true barista." },
@@ -425,7 +429,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen nazorg nodig — noteer je favoriete bereidingswijze voor thuis.",
                 en:"No aftercare needed — jot down your favorite brew method for at home." } },
 
-  { id:"baristaworkshop", name:"Private Barista Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"baristaworkshop", name:"Private Barista Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€175 (120')",
     homecare:{ category:"soap", soapHint:["koffie"] },
     benefits:{ nl:"Leer zelf espresso's en melkschuim als een professional bereiden.",
                en:"Learn to prepare espresso and milk foam like a professional yourself." },
@@ -434,7 +438,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen nazorg nodig — oefen thuis gerust met je eigen espressomachine.",
                 en:"No aftercare needed — feel free to practice at home on your own espresso machine." } },
 
-  { id:"manicure", name:"Manicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"manicure", name:"Manicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€35 (60')",
     homecare:{ category:"hand" },
     benefits:{ nl:"Verzorgde, nette handen en nagels met een moment van pure ontspanning.",
                en:"Neat, well-groomed hands and nails with a moment of pure relaxation." },
@@ -443,7 +447,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Wacht minstens 2 uur voor je je handen intensief nat maakt en hydrateer dagelijks.",
                 en:"Wait at least 2 hours before getting your hands intensively wet, and moisturize daily." } },
 
-  { id:"pedicure", name:"Pedicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"pedicure", name:"Pedicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€35 (60')",
     homecare:{ category:"foot" },
     benefits:{ nl:"Zachte, verzorgde voeten en nette nagels — ideaal vóór sandalenseizoen.",
                en:"Soft, cared-for feet and neat nails — ideal ahead of sandal season." },
@@ -452,7 +456,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Wacht minstens 4 uur voor je gesloten of strakke schoenen aandoet en hydrateer dagelijks.",
                 en:"Wait at least 4 hours before wearing closed or tight shoes, and moisturize daily." } },
 
-  { id:"slimmassage", name:"Afslankingsmassage", moods:["relax","focus","luxury"], genders:["vrouw","man"], sunSensitive:false,
+  { id:"slimmassage", name:"Afslankingsmassage", moods:["relax","focus","luxury"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, requiresDietExercise:true, price:"€55 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Stimuleert de doorbloeding en lymfeafvoer voor een verstevigd, verfrist gevoel.",
                en:"Stimulates circulation and lymphatic drainage for a firmer, refreshed feeling." },
@@ -461,7 +465,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur extra water om de afvoer van afvalstoffen te ondersteunen.",
                 en:"Drink extra water for the first 24 hours to support the removal of waste products." } },
 
-  { id:"oksel", name:"Okselontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true,
+  { id:"oksel", name:"Okselontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, price:"€15 (20')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer","syndet"] },
     benefits:{ nl:"Wekenlang zachte, gladde oksels zonder dagelijks scheren.",
                en:"Weeks of soft, smooth underarms without daily shaving." },
@@ -470,7 +474,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik 24 uur geen deodorant, vermijd een hete douche of sauna en draag losse kleding.",
                 en:"Avoid deodorant for 24 hours, skip a hot shower or sauna, and wear loose clothing." } },
 
-  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true,
+  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, price:"vanaf €30 (Onderbenen, 20')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Wekenlang gladde benen met een fijnere, langzamere hergroei dan bij scheren.",
                en:"Weeks of smooth legs, with finer, slower regrowth than shaving." },
@@ -479,7 +483,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd 24 uur een hete douche, zon of solarium, en breng een milde hydraterende crème aan.",
                 en:"Avoid a hot shower, sun or sunbed for 24 hours, and apply a mild moisturizing cream." } },
 
-  { id:"rug", name:"Rugontharing", moods:["energetic","focus"], genders:["man"], sunSensitive:true,
+  { id:"rug", name:"Rugontharing", moods:["energetic","focus"], genders:["man"], sunSensitive:true, price:"€40 (60')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een gladde, verzorgde rug zonder de moeite van zelf scheren op een moeilijk bereikbare plek.",
                en:"A smooth, groomed back without the hassle of shaving a hard-to-reach area yourself." },
@@ -488,7 +492,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd 24 uur een hete douche, zon of strak zittende kleding op de rug.",
                 en:"Avoid a hot shower, sun exposure or tight-fitting clothing on the back for 24 hours." } },
 
-  { id:"buik", name:"Buikontharing", moods:["energetic"], genders:["man"], sunSensitive:true,
+  { id:"buik", name:"Buikontharing", moods:["energetic"], genders:["man"], sunSensitive:true, price:"€20 (45')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een gladde buik met langdurig resultaat en fijnere hergroei.",
                en:"A smooth stomach with long-lasting results and finer regrowth." },
@@ -497,7 +501,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd 24 uur een hete douche, zon en strakke kleding op de behandelde zone.",
                 en:"Avoid a hot shower, sun exposure and tight clothing on the treated area for 24 hours." } },
 
-  { id:"borst", name:"Borstontharing", moods:["energetic"], genders:["man"], sunSensitive:true,
+  { id:"borst", name:"Borstontharing", moods:["energetic"], genders:["man"], sunSensitive:true, price:"€25 (45')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een verzorgde, gladde borstkas met resultaat dat weken meegaat.",
                en:"A groomed, smooth chest with results that last for weeks." },
@@ -507,24 +511,29 @@ const TREATMENTS_CATALOG = [
                 en:"Avoid a hot shower, sun or sunbed for 24 hours, and wear loose clothing." } }
 ];
 
-/* Gentle, never-sun-sensitive items usable as a safe fallback when a
-   mood + profile + sun-exposure combination leaves no direct match. */
+/* Gentle, never-sun-sensitive, never-massage items usable as a safe
+   fallback when a mood + profile + sun/health combination leaves no match. */
 const SAFE_FALLBACK_IDS = ["signaturefacial","manicure","pedicure","liftsummere"];
 
-function matchTreatment(mood, gender, sunExposed){
+function matchTreatment(mood, gender, sunExposed, healthFlags){
+  healthFlags = healthFlags || {};
   const genderOk = (item) => item.genders.includes(gender);
   const sunOk = (item) => !sunExposed || !item.sunSensitive;
+  const phlebitisOk = (item) => !healthFlags.phlebitis || !item.isMassage;
+  const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
 
   const currentHour = new Date().getHours();
   const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
 
-  let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && genderOk(item) && sunOk(item) && timeOk(item));
-  
+  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item);
+
+  let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && allOk(item));
+
   if (!pool.length){
-    pool = TREATMENTS_CATALOG.filter(item => genderOk(item) && sunOk(item) && SAFE_FALLBACK_IDS.includes(item.id));
+    pool = TREATMENTS_CATALOG.filter(item => allOk(item) && SAFE_FALLBACK_IDS.includes(item.id));
   }
   if (!pool.length){
-    pool = TREATMENTS_CATALOG.filter(item => genderOk(item) && !item.sunSensitive);
+    pool = TREATMENTS_CATALOG.filter(item => genderOk(item) && !item.sunSensitive && !item.isMassage);
   }
   return pickRandom(pool);
 }

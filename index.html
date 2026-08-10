@@ -13,6 +13,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!--
+  OPTIONAL ANALYTICS — uitgeschakeld tot je 'm instelt.
+  Wil je zien hoeveel mensen de app gebruiken? GoatCounter is gratis,
+  bewaart geen cookies en vereist daardoor geen cookiebanner (GDPR-vriendelijk).
+
+  1. Maak een gratis account op https://www.goatcounter.com (bv. code "beautycoffee")
+  2. Vervang hieronder "beautycoffee" door jouw eigen GoatCounter-code
+  3. Verwijder de comment-markeringen rond dit hele blok om de tag te activeren
+
+  <script data-goatcounter="https://beautycoffee.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+-->
+
 </head>
 <body>
 
@@ -72,6 +86,26 @@
     </div>
   </section>
 
+  <!-- HEALTH CHECK (man/vrouw only) -->
+  <section class="step" data-step="healthCheck">
+    <div class="step__head">
+      <span class="step__eyebrow" data-i18n="step_health_eyebrow">Stap 3 · Aandachtspunten</span>
+      <h2 class="step__title" data-i18n="step_health_title">Nog iets dat we moeten weten?</h2>
+      <p class="step__hint" data-i18n="step_health_hint">Volledig optioneel — helpt ons een veilige match te kiezen.</p>
+    </div>
+    <div class="options options--chip" id="healthChecklist"></div>
+
+    <div class="refine-group">
+      <h3 class="refine-group__title" data-i18n="diet_title">Volg je een dieet en/of sport je regelmatig?</h3>
+      <div class="options options--row" id="dietOptions"></div>
+    </div>
+
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+      <button type="button" class="btn btn--primary" data-action="to-mood" data-i18n="continue_button">Volgende</button>
+    </div>
+  </section>
+
   <!-- KIDS DRINK (kind only) -->
   <section class="step" data-step="kidsDrink">
     <div class="step__head">
@@ -127,7 +161,7 @@
       <h2 class="step__title" data-i18n="step4_title">Maak 'm helemaal van jou</h2>
       <p class="step__hint" data-i18n="step4_hint">Optioneel.</p>
     </div>
-    <div class="refine-group">
+    <div class="refine-group" id="milkGroup">
       <h3 class="refine-group__title" data-i18n="milk_title">Melk</h3>
       <div class="options options--chip" id="milkOptions"></div>
     </div>
@@ -153,12 +187,17 @@
     </div>
   </section>
 
-  <!-- PHOTO (salon flow only) -->
+  <!-- PHOTO -->
   <section class="step" data-step="photo">
     <div class="step__head">
       <span class="step__eyebrow" data-i18n="step5_eyebrow">Stap 7 · Foto</span>
       <h2 class="step__title" data-i18n="step5_title">Zet jezelf in beeld</h2>
       <p class="step__hint" data-i18n="step5_hint">Maak een foto of upload er een. Alles blijft op jouw toestel.</p>
+    </div>
+
+    <div class="home-noticecard home-noticecard--compact" id="photoHomeBlock" hidden>
+      <p data-i18n="home_no_photo_text">Geen foto bij de hand? Geen probleem — je kunt deze stap ook overslaan.</p>
+      <button type="button" class="btn btn--text" data-action="generate" data-i18n="skip_photo_button">Sla deze stap over</button>
     </div>
 
     <div class="photo-stage" id="photoStage">
@@ -186,16 +225,10 @@
       </div>
     </div>
 
-    <div class="home-noticecard" id="photoHomeBlock" hidden>
-      <span class="bean bean--lg" aria-hidden="true"></span>
-      <p data-i18n="home_no_photo_text">Geen foto nodig — we bewaren je match voor je volgende salonbezoek.</p>
+    <div class="refine-group" id="filterRow">
+      <h3 class="refine-group__title" data-i18n="filter_title">Filter</h3>
+      <div class="options options--chip" id="filterOptions"></div>
     </div>
-
-    <label class="toggle-row glow-toggle" id="glowToggleRow">
-      <input type="checkbox" id="glowToggle">
-      <span class="toggle-row__switch" aria-hidden="true"></span>
-      <span data-i18n="glow_toggle">Glow-filter</span>
-    </label>
 
     <div class="photo-actions" id="photoActionsCamera" hidden>
       <button type="button" class="btn btn--primary btn--shutter" data-action="snap-photo" data-i18n="snap_button">Klik</button>
@@ -216,7 +249,7 @@
 
     <div class="step__nav">
       <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
-      <button type="button" class="btn btn--primary" data-action="generate" id="generateBtn" data-i18n="generate_button" disabled>Genereer mijn match</button>
+      <button type="button" class="btn btn--primary" data-action="generate" id="generateBtn" data-i18n="generate_button">Genereer mijn match</button>
     </div>
   </section>
 

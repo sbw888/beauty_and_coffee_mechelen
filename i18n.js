@@ -17,6 +17,16 @@ const I18N = {
     sun_no: "Nee, geen zon gepland",
     sun_filtered_notice: "We filteren ontharing en diepe peelings uit je match en kiezen milde, hydraterende opties.",
 
+    step_health_eyebrow: "Stap 3 · Aandachtspunten",
+    step_health_title: "Nog iets dat we moeten weten?",
+    step_health_hint: "Volledig optioneel — helpt ons een veilige match te kiezen.",
+    health_phlebitis: "Flebitis (aderontsteking)",
+    health_contactLenses: "Ik draag contactlenzen",
+    diet_title: "Volg je een dieet en/of sport je regelmatig?",
+    diet_yes: "Ja",
+    diet_no: "Nee",
+    lens_warning_note: "Draag je contactlenzen? Neem een bril mee — lenzen moeten tijdens én na de behandeling uit.",
+
     step1_eyebrow: "Stap 3 · Stemming",
     step1_title: "Waar heb je vandaag zin in?",
     step2_eyebrow: "Stap 4 · Drankcategorie",
@@ -42,6 +52,7 @@ const I18N = {
     step5_hint: "Maak een foto of upload er een. Alles blijft op jouw toestel.",
 
     milk_title: "Melk",
+    milk_tea_hint: "Geldt enkel voor Matcha — kies je een melk, dan serveren we een Matcha Latte.",
     extras_title: "Zoetstoffen & extra's",
 
     back_button: "Terug",
@@ -52,7 +63,8 @@ const I18N = {
     cancel_button: "Annuleren",
     retake_button: "🔄 Andere foto kiezen",
     generate_button: "Genereer mijn match",
-    glow_toggle: "Glow-filter",
+    filter_title: "Filter",
+    skip_photo_button: "Sla deze stap over",
     photo_placeholder: "Nog geen foto gekozen",
     camera_starting: "Camera wordt gestart…",
     camera_denied_text: "Camera niet beschikbaar. Kies hieronder een foto.",
@@ -83,6 +95,7 @@ const I18N = {
     block_funfact: "Fun Fact / Weetje",
     block_aftercare: "Exacte Nazorginstructies",
     block_homecare: "Aanbevolen Thuisverzorging",
+    block_price: "Prijs in de salon",
     homecare_generic_tip: "Deze categorie is momenteel uitverkocht in onze shop — vraag in de salon gerust naar een passend alternatief.",
 
     overlay_title: "Mijn Beauty & Coffee match ☕✨",
@@ -134,6 +147,13 @@ const I18N = {
     kidsdrinks: {
       water: "Plat water",
       chocolate: "Warme Chocomelk"
+    },
+    filters: {
+      none: "Geen",
+      glow: "Glow",
+      warm: "Warm",
+      bw: "Zwart-wit",
+      vintage: "Vintage"
     }
   },
 
@@ -151,6 +171,16 @@ const I18N = {
     sun_yes: "Yes, sun applies",
     sun_no: "No sun planned",
     sun_filtered_notice: "We filter out hair removal and deep peels and choose mild, hydrating options instead.",
+
+    step_health_eyebrow: "Step 3 · Things to know",
+    step_health_title: "Anything else we should know?",
+    step_health_hint: "Completely optional — helps us pick a safe match for you.",
+    health_phlebitis: "Phlebitis (vein inflammation)",
+    health_contactLenses: "I wear contact lenses",
+    diet_title: "Are you currently dieting and/or exercising regularly?",
+    diet_yes: "Yes",
+    diet_no: "No",
+    lens_warning_note: "Wearing contact lenses? Bring glasses — lenses must come out during and after the treatment.",
 
     step1_eyebrow: "Step 3 · Mood",
     step1_title: "What are you in the mood for today?",
@@ -177,6 +207,7 @@ const I18N = {
     step5_hint: "Take a photo or upload one. Everything stays on your device.",
 
     milk_title: "Milk",
+    milk_tea_hint: "Only applies to Matcha — choose a milk and we'll serve a Matcha Latte.",
     extras_title: "Sweeteners & extras",
 
     back_button: "Back",
@@ -187,7 +218,8 @@ const I18N = {
     cancel_button: "Cancel",
     retake_button: "🔄 Choose another photo",
     generate_button: "Generate my match",
-    glow_toggle: "Glow filter",
+    filter_title: "Filter",
+    skip_photo_button: "Skip this step",
     photo_placeholder: "No photo selected yet",
     camera_starting: "Starting camera…",
     camera_denied_text: "Camera unavailable. Choose a photo below.",
@@ -218,6 +250,7 @@ const I18N = {
     block_funfact: "Fun Fact",
     block_aftercare: "Exact Aftercare Instructions",
     block_homecare: "Recommended Home Care",
+    block_price: "Salon price",
     homecare_generic_tip: "This category is currently sold out in our shop — feel free to ask in the salon for a suitable alternative.",
 
     overlay_title: "My Beauty & Coffee Match ☕✨",
@@ -269,6 +302,13 @@ const I18N = {
     kidsdrinks: {
       water: "Still water",
       chocolate: "Hot Chocolate"
+    },
+    filters: {
+      none: "None",
+      glow: "Glow",
+      warm: "Warm",
+      bw: "Black & white",
+      vintage: "Vintage"
     }
   }
 };
