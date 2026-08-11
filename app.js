@@ -312,7 +312,10 @@
   function renderExtrasOptions(){
     const wrap = $("#extrasOptions");
     wrap.innerHTML = "";
-    EXTRA_OPTIONS.forEach(id => {
+    const options = state.category === "tea" ? TEA_EXTRA_OPTIONS : EXTRA_OPTIONS;
+    // drop any previously-picked extras that no longer apply (e.g. switched from coffee to tea)
+    state.extras = state.extras.filter(id => options.includes(id));
+    options.forEach(id => {
       const chip = document.createElement("button");
       chip.type = "button";
       chip.className = "chip" + (state.extras.includes(id) ? " is-selected" : "");
@@ -623,10 +626,10 @@
   const KID_CONTENT = {
     benefits: { nl:"Een veilige, kindvriendelijke verzorging van kleine handjes met een drankje erbij.",
                 en:"Safe, kid-friendly care for little hands, paired with a drink." },
-    funfact: { nl:"Bij Beauty & Coffee gebruiken we voor kinderen altijd milde, niet-prikkende lakjes en producten.",
-               en:"At Beauty & Coffee we always use mild, non-stinging polishes and products for children." },
-    aftercare: { nl:"Geen specifieke nazorg nodig — laat het lakje gewoon lekker drogen voor het spelen.",
-                 en:"No specific aftercare needed — just let the polish dry nicely before playing." }
+    funfact: { nl:"We gebruiken peel-off nagellak speciaal voor kinderen — na een paar dagen kunnen ze het laagje er zelf, in één stuk, afpellen.",
+               en:"We use peel-off nail polish made for kids — after a few days they can peel the whole layer off themselves." },
+    aftercare: { nl:"Geen aceton of remover nodig — laat het laklaagje eerst goed drogen, daarna is het gewoon zelf af te pellen.",
+                 en:"No acetone or remover needed — just let the polish dry first, then it simply peels off by hand." }
   };
 
   function generateMatch(){

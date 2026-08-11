@@ -18,6 +18,7 @@ const PROFILES = ["kind","man","vrouw"];
 
 const MILK_OPTIONS = ["none","whole","oat","extra"];
 const EXTRA_OPTIONS = ["honey","sugar","cream","icecream","biscoff","pumpkin"];
+const TEA_EXTRA_OPTIONS = ["honey","sugar"]; // whipped cream/ice cream/biscoff/pumpkin spice are coffee-only toppings
 
 /* ---------- coffee origins & blends (with tasting notes) ---------- */
 const COFFEE_ORIGINS = [
@@ -78,7 +79,7 @@ const BEVERAGES = {
 /* ---------- kids drinks (fixed, no caffeine ever) ---------- */
 const KIDS_DRINKS = [
   { id:"water", name:{ nl:"Plat water", en:"Still water" }, icon:"💧" },
-  { id:"chocolate", name:{ nl:"Warme Chocomelk", en:"Hot Chocolate" }, icon:"🍫" }
+  { id:"chocolate", name:{ nl:"Warme Chocomelk", en:"Hot Chocolate" }, icon:"☕" }
 ];
 const KIDS_TREATMENT = "Kindermanicure";
 
@@ -279,8 +280,8 @@ const TREATMENTS_CATALOG = [
                en:"Relieves a tense back and leaves the skin soft and cared-for." },
     funfact:{ nl:"Een lichaamswikkel combineert warmte met actieve ingrediënten, waardoor de huid ze beter opneemt.",
               en:"A body wrap combines heat with active ingredients, helping the skin absorb them more effectively." },
-    aftercare:{ nl:"Douche pas na 24 uur weer uitgebreid, drink veel water en hydrateer de huid dagelijks.",
-                en:"Wait 24 hours before showering thoroughly again, drink plenty of water and moisturize the skin daily." } },
+    aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink wel voldoende water en hydrateer de huid dagelijks.",
+                en:"You can shower normally once you're home — just drink enough water and moisturize the skin daily." } },
 
   { id:"manipedispa", name:"Extended Manicure/Pedicure with SPA supplement", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€35 manicure + €35 pedicure + €30 SPA-supplement",
     homecare:{ category:"hand" },
@@ -378,8 +379,8 @@ const TREATMENTS_CATALOG = [
                en:"Cleanses and soothes the skin on the back, ideal for blemishes or a tense feeling." },
     funfact:{ nl:"De rug is een van de moeilijkst zelf te verzorgen zones — een reden temeer voor een salonbehandeling.",
               en:"The back is one of the hardest areas to care for yourself — all the more reason for a salon treatment." },
-    aftercare:{ nl:"Draag de eerste 24 uur losse kleding en vermijd een hete douche direct na de behandeling.",
-                en:"Wear loose clothing for the first 24 hours and avoid a hot shower right after the treatment." } },
+    aftercare:{ nl:"Draag de eerste 24 uur bij voorkeur losse kleding. Eenmaal thuis kun je gewoon douchen zoals normaal.",
+                en:"Preferably wear loose clothing for the first 24 hours. You can shower normally once you're home." } },
 
   { id:"antiagefacial", name:"Botanical Anti-Age Facial + Touch-Up Day Makeup", moods:["luxury"], genders:["vrouw"], sunSensitive:false, price:"€125 (90')",
     homecare:{ category:"facial" },
@@ -405,8 +406,8 @@ const TREATMENTS_CATALOG = [
                en:"Firms and hydrates the skin, giving an immediate energetic, fresh feeling." },
     funfact:{ nl:"Een full body wrap wordt vaak gecombineerd met warmte om actieve stoffen dieper te laten doordringen.",
               en:"A full body wrap is often combined with heat to help active ingredients penetrate more deeply." },
-    aftercare:{ nl:"Douche pas na 24 uur weer uitgebreid en drink de eerste dag extra veel water.",
-                en:"Wait 24 hours before showering thoroughly again and drink extra water on the first day." } },
+    aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink de eerste dag wel extra veel water.",
+                en:"You can shower normally once you're home — just drink extra water on the first day." } },
 
   { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
