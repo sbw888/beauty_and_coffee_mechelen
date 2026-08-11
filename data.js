@@ -5,13 +5,15 @@
    ============================================================ */
 
 const MOOD_ICONS = { relax:"🌿", energetic:"✨", focus:"🧖‍♀️", luxury:"💛", group:"👥" };
-const CATEGORY_ICONS = { coffee:"☕", tea:"🍵", iced:"🧊" };
+const CATEGORY_ICONS = { coffee:"☕", tea:"🍵" };
 const CAFFEINE_ICONS = { caff:"⚡", decaf:"🌙" };
+const TEMPERATURE_ICONS = { hot:"🔥", iced:"🧊" };
 const PROFILE_ICONS = { kind:"🧒", man:"🧔", vrouw:"👩" };
 
 const MOODS = ["relax","energetic","focus","luxury","group"];
-const CATEGORIES = ["coffee","tea","iced"];
+const CATEGORIES = ["coffee","tea"];
 const CAFFEINE_OPTIONS = ["caff","decaf"];
+const TEMPERATURE_OPTIONS = ["hot","iced"];
 const PROFILES = ["kind","man","vrouw"];
 
 const MILK_OPTIONS = ["none","whole","oat","extra"];
@@ -36,8 +38,12 @@ const TEAS_CAFF = [
   "Pickwick Original English","Pickwick Green Tea Pure","Lipton Japanese Sencha","Lord Nelson Chai",
   "Organo Gold Organic Green Tea (with Ganoderma)"
 ];
+// Non-tea, non-coffee hot drinks — only ever surfaced for tea + decaf + hot,
+// alongside the real decaf teas (never when Iced is picked).
+const HOT_EXTRAS_DECAF = ["Hot Chocolate (Milk)", "Hot Chocolate (White)"];
 
-/* ---------- beverage menu, grouped by category + caffeine ---------- */
+/* ---------- beverage menu ----------
+   Iced is a hot/iced sub-choice within Coffee or Tea, not its own category. */
 const BEVERAGES = {
   coffee: {
     caff: [
@@ -56,18 +62,15 @@ const BEVERAGES = {
       { name:"French Press", style:"slow" }
     ]
   },
-  iced: {
+  coffeeIced: {
     caff: [
-      { name:"Iced Coffee + Whipped Cream", style:"iced" },
-      { name:"Affogato", style:"iced", notes:"2 scoops vanilla ice cream" },
-      { name:"Iced Latte + Choco + Whipped Cream + Biscoff Crumbs", style:"iced" },
-      { name:"Iced Matcha Latte", style:"iced" }
+      { name:"Iced Coffee + Whipped Cream" },
+      { name:"Affogato", notes:"2 scoops vanilla ice cream" },
+      { name:"Iced Latte + Choco + Whipped Cream + Biscoff Crumbs" }
     ],
     decaf: [
-      { name:"Iced Coffee + Whipped Cream", style:"iced" },
-      { name:"Iced Latte + Choco + Whipped Cream + Biscoff Crumbs", style:"iced" },
-      { name:"Hot Chocolate (Milk)", style:"iced" },
-      { name:"Hot Chocolate (White)", style:"iced" }
+      { name:"Iced Coffee + Whipped Cream" },
+      { name:"Iced Latte + Choco + Whipped Cream + Biscoff Crumbs" }
     ]
   }
 };
@@ -203,7 +206,11 @@ const PRODUCT_CATEGORIES = {
    general care tip when everything requested is sold out. */
 const HOMECARE_FALLBACK_ORDER = ["facial","body","hand","foot","soap","eye","sun"];
 
-function getHomecareRecommendation(categoryId, lang, soapHints){
+/* Picks WHICH product to recommend (language-independent — the random pick
+   happens exactly once, at match-generation time) and returns just its ids.
+   Call resolveHomecareText() with the current language whenever rendering,
+   so a language switch always shows correctly translated text. */
+function pickHomecareProduct(categoryId, soapHints){
   const tryCategory = (catId) => {
     const cat = PRODUCT_CATEGORIES[catId];
     if (!cat || !cat.inStock) return null;
@@ -212,10 +219,9 @@ function getHomecareRecommendation(categoryId, lang, soapHints){
       const hinted = pool.filter(p => soapHints.includes(p.id));
       if (hinted.length) pool = hinted;
     }
-    const inStockProducts = pool; // product-level stock only modeled for soaps below
-    if (!inStockProducts.length) return null;
-    const product = pickRandom(inStockProducts);
-    return { categoryLabel: cat.label[lang], productName: product.name, usage: product.usage[lang] };
+    if (!pool.length) return null;
+    const product = pickRandom(pool);
+    return { categoryId: catId, productId: product.id };
   };
 
   let result = tryCategory(categoryId);
@@ -227,6 +233,15 @@ function getHomecareRecommendation(categoryId, lang, soapHints){
     if (result) return result;
   }
   return null; // triggers the generic care-tip message in the UI
+}
+
+function resolveHomecareText(pick, lang){
+  if (!pick) return null;
+  const cat = PRODUCT_CATEGORIES[pick.categoryId];
+  if (!cat) return null;
+  const product = cat.products.find(p => p.id === pick.productId);
+  if (!product) return null;
+  return { categoryLabel: cat.label[lang], productName: product.name, usage: product.usage[lang] };
 }
 
 /* ============================================================

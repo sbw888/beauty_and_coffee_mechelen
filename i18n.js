@@ -27,13 +27,15 @@ const I18N = {
     diet_no: "Nee",
     lens_warning_note: "Draag je contactlenzen? Neem een bril mee — lenzen moeten tijdens én na de behandeling uit.",
 
-    step1_eyebrow: "Stap 3 · Stemming",
+    step1_eyebrow: "Stap 4 · Stemming",
     step1_title: "Waar heb je vandaag zin in?",
-    step2_eyebrow: "Stap 4 · Drankcategorie",
+    step2_eyebrow: "Stap 5 · Drankcategorie",
     step2_title: "Kies je richting",
-    step3_eyebrow: "Stap 5 · Cafeïne",
+    step_temp_eyebrow: "Stap 6 · Warm of koud",
+    step_temp_title: "Warm of koud?",
+    step3_eyebrow: "Stap 7 · Cafeïne",
     step3_title: "Met of zonder pit?",
-    step4_eyebrow: "Stap 6 · Verfijning",
+    step4_eyebrow: "Stap 8 · Verfijning",
     step4_title: "Maak 'm helemaal van jou",
     step4_hint: "Optioneel — kies zoveel je wilt.",
 
@@ -47,7 +49,7 @@ const I18N = {
     context_home: "Ik doe de test thuis",
     context_home_sub: "Bewaar je match voor je volgende afspraak of deel 'm alvast.",
 
-    step5_eyebrow: "Stap 7 · Foto",
+    step5_eyebrow: "Stap 9 · Foto",
     step5_title: "Zet jezelf in beeld",
     step5_hint: "Maak een foto of upload er een. Alles blijft op jouw toestel.",
 
@@ -118,8 +120,11 @@ const I18N = {
     },
     categories: {
       coffee: { title:"Koffie", sub:"Origins & blends" },
-      tea: { title:"Thee & Infusies", sub:"Los of in zakje" },
-      iced: { title:"IJskoud & Specialiteiten", sub:"Verfrissend & bijzonder" }
+      tea: { title:"Thee & Infusies", sub:"Los of in zakje" }
+    },
+    temperature: {
+      hot: { title:"Warm", sub:"Klassiek gezet" },
+      iced: { title:"IJskoud", sub:"Verfrissend & koud" }
     },
     caffeine: {
       caff: { title:"Cafeïne", sub:"Volle kracht" },
@@ -182,13 +187,15 @@ const I18N = {
     diet_no: "No",
     lens_warning_note: "Wearing contact lenses? Bring glasses — lenses must come out during and after the treatment.",
 
-    step1_eyebrow: "Step 3 · Mood",
+    step1_eyebrow: "Step 4 · Mood",
     step1_title: "What are you in the mood for today?",
-    step2_eyebrow: "Step 4 · Beverage category",
+    step2_eyebrow: "Step 5 · Beverage category",
     step2_title: "Choose your direction",
-    step3_eyebrow: "Step 5 · Caffeine",
+    step_temp_eyebrow: "Step 6 · Hot or iced",
+    step_temp_title: "Hot or iced?",
+    step3_eyebrow: "Step 7 · Caffeine",
     step3_title: "With or without a kick?",
-    step4_eyebrow: "Step 6 · Refine",
+    step4_eyebrow: "Step 8 · Refine",
     step4_title: "Make it entirely yours",
     step4_hint: "Optional — pick as many as you like.",
 
@@ -202,7 +209,7 @@ const I18N = {
     context_home: "I'm doing this at home",
     context_home_sub: "Save your match for your next appointment or share it now.",
 
-    step5_eyebrow: "Step 7 · Photo",
+    step5_eyebrow: "Step 9 · Photo",
     step5_title: "Put yourself in the picture",
     step5_hint: "Take a photo or upload one. Everything stays on your device.",
 
@@ -273,8 +280,11 @@ const I18N = {
     },
     categories: {
       coffee: { title:"Coffee", sub:"Origins & blends" },
-      tea: { title:"Tea & Infusions", sub:"Loose or bagged" },
-      iced: { title:"Iced & Specialties", sub:"Refreshing & unique" }
+      tea: { title:"Tea & Infusions", sub:"Loose or bagged" }
+    },
+    temperature: {
+      hot: { title:"Hot", sub:"Classically brewed" },
+      iced: { title:"Iced", sub:"Refreshing & cold" }
     },
     caffeine: {
       caff: { title:"Caffeinated", sub:"Full strength" },

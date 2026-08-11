@@ -1,5 +1,8 @@
-/* Beauty & Coffee — minimal offline-first service worker */
-const CACHE_NAME = "beauty-coffee-v4";
+/* Beauty & Coffee — service worker
+   Network-first for the app shell: online users always get the latest
+   files immediately after a deploy. Offline users fall back to whatever
+   was last cached, so the app still works without a connection. */
+const CACHE_NAME = "beauty-coffee-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -32,15 +35,14 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)).catch(()=>{});
-          return res;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
+    fetch(event.request)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)).catch(()=>{});
+        return res;
+      })
+      .catch(() =>
+        caches.match(event.request).then(cached => cached || caches.match("./index.html"))
+      )
   );
 });

@@ -13,6 +13,7 @@
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     category: null,
+    temperature: null,   // 'hot' | 'iced'
     caffeine: null,
     milk: "none",
     extras: [],
@@ -24,8 +25,8 @@
   };
 
   const STEP_WEIGHTS = {
-    welcome:0, profile:10, sunCheck:20, healthCheck:28, kidsDrink:20, mood:38, category:50,
-    caffeine:60, toppings:72, context:84, photo:92, loading:96, result:100
+    welcome:0, profile:10, sunCheck:20, healthCheck:28, kidsDrink:20, mood:36, category:46,
+    temperature:56, caffeine:66, toppings:76, context:84, photo:92, loading:96, result:100
   };
   let history = ["welcome"];
 
@@ -68,6 +69,7 @@
     renderKidsDrinkOptions();
     renderMoodOptions();
     renderCategoryOptions();
+    renderTemperatureOptions();
     renderCaffeineOptions();
     renderMilkOptions();
     renderExtrasOptions();
@@ -236,7 +238,24 @@
       tile.innerHTML = `<span class="option-tile__icon">${CATEGORY_ICONS[id]}</span>
         <span class="option-tile__title">${data.title}</span>
         <span class="option-tile__sub">${data.sub}</span>`;
-      tile.addEventListener("click", () => { state.category = id; renderCategoryOptions(); setTimeout(()=>goTo("caffeine"), 220); });
+      tile.addEventListener("click", () => { state.category = id; renderCategoryOptions(); setTimeout(()=>goTo("temperature"), 220); });
+      wrap.appendChild(tile);
+    });
+  }
+
+  function renderTemperatureOptions(){
+    const wrap = $("#temperatureOptions");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    TEMPERATURE_OPTIONS.forEach(id => {
+      const data = t(`temperature.${id}`, state.lang);
+      const tile = document.createElement("button");
+      tile.type = "button";
+      tile.className = "option-tile" + (state.temperature===id ? " is-selected" : "");
+      tile.innerHTML = `<span class="option-tile__icon">${TEMPERATURE_ICONS[id]}</span>
+        <span class="option-tile__title">${data.title}</span>
+        <span class="option-tile__sub">${data.sub}</span>`;
+      tile.addEventListener("click", () => { state.temperature = id; renderTemperatureOptions(); setTimeout(()=>goTo("caffeine"), 220); });
       wrap.appendChild(tile);
     });
   }
@@ -612,60 +631,59 @@
 
   function generateMatch(){
     if (state.profile === "kind"){
-      const drink = KIDS_DRINKS.find(d => d.id === state.kidsDrink) || KIDS_DRINKS[0];
-      const homecare = getHomecareRecommendation("hand", state.lang, null);
+      const drinkDef = KIDS_DRINKS.find(d => d.id === state.kidsDrink) || KIDS_DRINKS[0];
+      const homecarePick = pickHomecareProduct("hand", null);
       state.match = {
         isKid: true,
         treatment: { name: KIDS_TREATMENT, benefits:KID_CONTENT.benefits, funfact:KID_CONTENT.funfact, aftercare:KID_CONTENT.aftercare },
-        drink: { name: drink.name[state.lang], origin:null, notes:null },
-        milkLabel: null, extrasLabel: [],
-        homecare
+        drinkId: drinkDef.id, drink: null,
+        milkId: "none", extrasIds: [],
+        homecarePick
       };
       return;
     }
 
     const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, state.healthFlags);
     let drink;
+    const wantsMilk = state.milk !== "none";
+    const isIced = state.temperature === "iced";
 
     if (state.category === "coffee"){
-      const fullList = BEVERAGES.coffee[state.caffeine];
-      // "Geen melk" must only ever surface black/slow-brew coffees; a milk
-      // choice must only ever surface milk-based coffees — no more mismatches.
-      const wantsMilk = state.milk !== "none";
-      let list = fullList.filter(b => wantsMilk ? b.style === "milk" : b.style !== "milk");
-      if (!list.length) list = fullList; // safety net if a filter ever empties the pool
-      const bev = pickRandom(list);
-      let origin = null;
-      if (bev.style !== "iced"){
+      if (isIced){
+        const list = BEVERAGES.coffeeIced[state.caffeine];
+        const bev = pickRandom(list);
+        drink = { name: bev.name, origin:null, notes: bev.notes||null };
+      } else {
+        // "Geen melk" must only ever surface black/slow-brew coffees; a milk
+        // choice must only ever surface milk-based coffees — no more mismatches.
+        const fullList = BEVERAGES.coffee[state.caffeine];
+        let list = fullList.filter(b => wantsMilk ? b.style === "milk" : b.style !== "milk");
+        if (!list.length) list = fullList; // safety net if a filter ever empties the pool
+        const bev = pickRandom(list);
         const pool = COFFEE_ORIGINS.filter(o => o.decaf === (state.caffeine==="decaf"));
-        origin = pool.length ? pickRandom(pool) : pickRandom(COFFEE_ORIGINS);
+        const origin = pool.length ? pickRandom(pool) : pickRandom(COFFEE_ORIGINS);
+        drink = { name: bev.name, origin: origin.name, notes: origin.notes };
       }
-      drink = { name: bev.name, origin: origin ? origin.name : null, notes: origin ? origin.notes : (bev.notes||null) };
-    } else if (state.category === "tea"){
-      const wantsMilk = state.milk !== "none";
+    } else { // tea
       if (state.caffeine === "caff" && wantsMilk){
         // Matcha is the only tea on the menu that takes milk — choosing a
-        // milk preference here always means "Matcha Latte", hot with steamed milk.
-        drink = { name: "Matcha Latte", origin:null, notes:null };
-      } else {
+        // milk preference here always means Matcha Latte (hot or iced).
+        drink = { name: isIced ? "Iced Matcha Latte" : "Matcha Latte", origin:null, notes:null };
+      } else if (isIced){
         const pool = state.caffeine === "decaf" ? TEAS_DECAF : TEAS_CAFF;
+        drink = { name: "Iced " + pickRandom(pool), origin:null, notes:null };
+      } else {
+        const pool = state.caffeine === "decaf" ? [...TEAS_DECAF, ...HOT_EXTRAS_DECAF] : TEAS_CAFF;
         drink = { name: pickRandom(pool), origin:null, notes:null };
       }
-    } else {
-      const list = BEVERAGES.iced[state.caffeine];
-      const bev = pickRandom(list);
-      drink = { name: bev.name, origin:null, notes: bev.notes||null };
     }
 
-    const milkLabel = state.milk !== "none" ? t(`milk.${state.milk}`, state.lang) : null;
-    const extrasLabel = state.extras.map(id => t(`extras.${id}`, state.lang));
-    const homecare = getHomecareRecommendation(treatmentObj.homecare.category, state.lang, treatmentObj.homecare.soapHint);
+    const homecarePick = pickHomecareProduct(treatmentObj.homecare.category, treatmentObj.homecare.soapHint);
 
     // build a copy of the treatment so we can safely append a lens warning
     // without mutating the shared catalog entry
     let treatment = treatmentObj;
     if (treatmentObj.lensWarning && state.healthFlags.contactLenses){
-      const warn = t("lens_warning_note", state.lang);
       treatment = {
         ...treatmentObj,
         aftercare: {
@@ -675,7 +693,11 @@
       };
     }
 
-    state.match = { isKid:false, treatment, drink, milkLabel, extrasLabel, homecare };
+    state.match = {
+      isKid:false, treatment, drink,
+      milkId: state.milk, extrasIds: [...state.extras],
+      homecarePick
+    };
   }
 
   function renderResultDetails(){
@@ -683,8 +705,20 @@
     const m = state.match;
     if (!wrap) return;
     if (!m) { wrap.innerHTML = ""; return; }
-    const drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
-    const customLine = [m.milkLabel, ...m.extrasLabel].filter(Boolean).join(" · ");
+
+    let drinkFull, drinkNotes;
+    if (m.isKid){
+      const drinkDef = KIDS_DRINKS.find(d => d.id === m.drinkId) || KIDS_DRINKS[0];
+      drinkFull = drinkDef.name[state.lang];
+      drinkNotes = null;
+    } else {
+      drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
+      drinkNotes = m.drink.notes;
+    }
+
+    const milkLabel = m.milkId && m.milkId !== "none" ? t(`milk.${m.milkId}`, state.lang) : null;
+    const extrasLabel = (m.extrasIds || []).map(id => t(`extras.${id}`, state.lang));
+    const customLine = [milkLabel, ...extrasLabel].filter(Boolean).join(" · ");
 
     wrap.innerHTML = `
       <div class="result-row">
@@ -692,7 +726,7 @@
         <div>
           <div class="result-row__label">${t("drink_label", state.lang)}</div>
           <div class="result-row__value">${drinkFull}</div>
-          ${m.drink.notes ? `<div class="result-row__notes">${m.drink.notes}</div>` : ""}
+          ${drinkNotes ? `<div class="result-row__notes">${drinkNotes}</div>` : ""}
           ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}: ${customLine}</div>` : ""}
         </div>
       </div>
@@ -713,8 +747,9 @@
     const m = state.match;
     if (!m) { wrap.innerHTML = ""; return; }
     const lang = state.lang;
-    const homecareBody = m.homecare
-      ? `<p class="result-block__product">${m.homecare.productName}</p><p>${m.homecare.usage}</p>`
+    const homecare = resolveHomecareText(m.homecarePick, lang);
+    const homecareBody = homecare
+      ? `<p class="result-block__product">${homecare.productName}</p><p>${homecare.usage}</p>`
       : `<p>${t("homecare_generic_tip", lang)}</p>`;
 
     // extra sun-care reinforcement specifically for hair-removal treatments
@@ -764,6 +799,16 @@
       img.onload = () => { logoImg = img; resolve(img); };
       img.src = "assets/logo-transparent.png";
     });
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
   }
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight){
@@ -842,7 +887,9 @@
 
     const m = state.match;
     if (m){
-      const drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
+      const drinkFull = m.isKid
+        ? (KIDS_DRINKS.find(d => d.id === m.drinkId) || KIDS_DRINKS[0]).name[state.lang]
+        : (m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name);
       const pad = 44;
       let y = H - 300;
 
@@ -867,12 +914,21 @@
     }
 
     ctx.fillStyle = "rgba(246,240,230,0.7)";
-    ctx.font = "italic 22px 'Playfair Display', Georgia, serif";
-    ctx.fillText("Where Beauty Meets Coffee", 44, H-40);
+    ctx.font = "italic 21px 'Playfair Display', Georgia, serif";
+    ctx.fillText("Where Beauty Meets Coffee", 44, H-72);
 
-    ctx.fillStyle = "rgba(246,240,230,0.55)";
-    ctx.font = "500 19px Jost, Arial, sans-serif";
-    ctx.fillText(SITE_URL_DISPLAY, 44, H-16);
+    // Site link — drawn in its own high-contrast pill so it always survives
+    // sharing (WhatsApp and friends often strip any caption text you send).
+    ctx.font = "600 24px Jost, Arial, sans-serif";
+    const linkText = "🔗 " + SITE_URL_DISPLAY;
+    const linkWidth = ctx.measureText(linkText).width;
+    const pillPadX = 20, pillH = 44, pillY = H - 56;
+    roundRect(ctx, 44, pillY, linkWidth + pillPadX*2, pillH, pillH/2);
+    ctx.fillStyle = "#D9AE6C";
+    ctx.fill();
+    ctx.fillStyle = "#241A14";
+    ctx.textBaseline = "middle";
+    ctx.fillText(linkText, 44 + pillPadX, pillY + pillH/2 + 1);
   }
 
   /* ---------------- share / download ---------------- */
@@ -933,7 +989,7 @@
     cameraFacing = "user";
     state.profile = null; state.sunExposed = null; state.kidsDrink = null;
     state.healthFlags = { phlebitis:false, contactLenses:false, dietExercise:false };
-    state.mood = null; state.category = null; state.caffeine = null;
+    state.mood = null; state.category = null; state.temperature = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
     state.photoDataUrl = null; state.filter = "none"; state.match = null;
     retakePhoto();
