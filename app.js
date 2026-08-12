@@ -406,6 +406,7 @@
       v.srcObject = stream;
       v.hidden = false;
       placeholder().hidden = true;
+      applyGlowPreview();
       try { await v.play(); } catch(e){ /* some browsers auto-play once metadata loads */ }
       $("#photoActionsIdle").hidden = true;
       $("#photoActionsCamera").hidden = false;
@@ -451,8 +452,6 @@
     const c = canvas();
     c.width = v.videoWidth; c.height = v.videoHeight;
     const ctx = c.getContext("2d");
-    // mirror only the front camera — the back camera should not be flipped
-    if (cameraFacing === "user"){ ctx.translate(c.width, 0); ctx.scale(-1,1); }
     ctx.drawImage(v, 0, 0, c.width, c.height);
     const dataUrl = c.toDataURL("image/jpeg", 0.92);
     stopCamera();
@@ -619,7 +618,9 @@
   }
 
   function applyGlowPreview(){
-    preview().style.filter = FILTERS[state.filter] || "";
+    const filterCss = FILTERS[state.filter] || "";
+    preview().style.filter = filterCss;
+    video().style.filter = filterCss;
   }
 
   function renderFilterOptions(){
