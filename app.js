@@ -94,8 +94,12 @@
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
     updateProgress(name);
 
+    if (name === "temperature") {
+      renderTemperatureOptions();
+    }
     if (name === "toppings") {
       renderMilkOptions();
+      renderExtrasOptions();
     }
     if (name === "photo") {
       enterPhotoStep();
@@ -258,6 +262,16 @@
       tile.addEventListener("click", () => { state.temperature = id; renderTemperatureOptions(); setTimeout(()=>goTo("caffeine"), 220); });
       wrap.appendChild(tile);
     });
+
+    const hint = $("#temperatureHint");
+    if (hint){
+      if (state.category === "tea"){
+        hint.hidden = false;
+        hint.textContent = t("temperature_tea_hint", state.lang);
+      } else {
+        hint.hidden = true;
+      }
+    }
   }
 
   function renderCaffeineOptions(){
@@ -667,14 +681,12 @@
         const origin = pool.length ? pickRandom(pool) : pickRandom(COFFEE_ORIGINS);
         drink = { name: bev.name, origin: origin.name, notes: origin.notes };
       }
-    } else { // tea
+    } else { // tea — always served hot, except for the one iced exception below
       if (state.caffeine === "caff" && wantsMilk){
         // Matcha is the only tea on the menu that takes milk — choosing a
-        // milk preference here always means Matcha Latte (hot or iced).
+        // milk preference here always means Matcha Latte (hot, or iced if
+        // Iced was picked). Every other tea stays hot regardless of that choice.
         drink = { name: isIced ? "Iced Matcha Latte" : "Matcha Latte", origin:null, notes:null };
-      } else if (isIced){
-        const pool = state.caffeine === "decaf" ? TEAS_DECAF : TEAS_CAFF;
-        drink = { name: "Iced " + pickRandom(pool), origin:null, notes:null };
       } else {
         const pool = state.caffeine === "decaf" ? [...TEAS_DECAF, ...HOT_EXTRAS_DECAF] : TEAS_CAFF;
         drink = { name: pickRandom(pool), origin:null, notes:null };
