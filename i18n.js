@@ -22,6 +22,7 @@ const I18N = {
     step_health_hint: "Volledig optioneel — helpt ons een veilige match te kiezen.",
     health_phlebitis: "Flebitis (aderontsteking)",
     health_contactLenses: "Ik draag contactlenzen",
+    health_menstruation: "Ik ben ongesteld",
     diet_title: "Volg je een dieet en/of sport je regelmatig?",
     diet_yes: "Ja",
     diet_no: "Nee",
@@ -98,6 +99,7 @@ const I18N = {
     block_funfact: "Fun Fact / Weetje",
     block_aftercare: "Exacte Nazorginstructies",
     block_homecare: "Aanbevolen Thuisverzorging",
+    block_caution: "Let op",
     block_price: "Prijs in de salon",
     homecare_generic_tip: "Deze categorie is momenteel uitverkocht in onze shop — vraag in de salon gerust naar een passend alternatief.",
 
@@ -183,6 +185,7 @@ const I18N = {
     step_health_hint: "Completely optional — helps us pick a safe match for you.",
     health_phlebitis: "Phlebitis (vein inflammation)",
     health_contactLenses: "I wear contact lenses",
+    health_menstruation: "I'm on my period",
     diet_title: "Are you currently dieting and/or exercising regularly?",
     diet_yes: "Yes",
     diet_no: "No",
@@ -259,6 +262,7 @@ const I18N = {
     block_funfact: "Fun Fact",
     block_aftercare: "Exact Aftercare Instructions",
     block_homecare: "Recommended Home Care",
+    block_caution: "Please note",
     block_price: "Salon price",
     homecare_generic_tip: "This category is currently sold out in our shop — feel free to ask in the salon for a suitable alternative.",
 

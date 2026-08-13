@@ -333,6 +333,8 @@ body{
 .result-block__body p:last-child{ margin-bottom:0; }
 .result-block__product{ font-weight:600; }
 .result-block--muted .result-block__body{ color:var(--espresso-60); font-style:italic; }
+.result-block--caution{ background:#FBF0DD; border-color:#E8B95F; }
+.result-block--caution .result-block__title{ color:#9A5B0F; }
 
 /* ============ FOOTER ============ */
 .app-footer{ max-width:520px; margin:0 auto; padding:0 22px 34px; text-align:center; }

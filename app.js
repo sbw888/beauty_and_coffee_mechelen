@@ -9,7 +9,7 @@
     lang: "nl",
     profile: null,        // 'kind' | 'man' | 'vrouw'
     sunExposed: null,     // bool
-    healthFlags: { phlebitis:false, contactLenses:false, dietExercise:false },
+    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     category: null,
@@ -94,6 +94,9 @@
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
     updateProgress(name);
 
+    if (name === "healthCheck") {
+      renderHealthOptions();
+    }
     if (name === "temperature") {
       renderTemperatureOptions();
     }
@@ -168,10 +171,12 @@
     const checkWrap = $("#healthChecklist");
     if (checkWrap){
       checkWrap.innerHTML = "";
-      [
+      const items = [
         ["phlebitis", "🩸"],
         ["contactLenses", "👓"]
-      ].forEach(([key, icon]) => {
+      ];
+      if (state.profile === "vrouw") items.push(["menstruation", "🌙"]);
+      items.forEach(([key, icon]) => {
         const chip = document.createElement("button");
         chip.type = "button";
         chip.className = "chip chip--check" + (state.healthFlags[key] ? " is-selected" : "");
@@ -785,7 +790,15 @@
         </div>`
       : "";
 
+    const cautionRow = m.treatment.caution
+      ? `<div class="result-block result-block--caution">
+          <div class="result-block__head"><span class="result-block__icon">⚠️</span><span class="result-block__title">${t("block_caution", lang)}</span></div>
+          <div class="result-block__body"><p>${m.treatment.caution[lang]}</p></div>
+        </div>`
+      : "";
+
     wrap.innerHTML = `
+      ${cautionRow}
       <div class="result-block">
         <div class="result-block__head"><span class="result-block__icon">🌟</span><span class="result-block__title">${t("block_benefits", lang)}</span></div>
         <div class="result-block__body"><p>${m.treatment.benefits[lang]}</p></div>
@@ -1004,7 +1017,7 @@
     stopCamera();
     cameraFacing = "user";
     state.profile = null; state.sunExposed = null; state.kidsDrink = null;
-    state.healthFlags = { phlebitis:false, contactLenses:false, dietExercise:false };
+    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, dietExercise:false };
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
     state.photoDataUrl = null; state.filter = "none"; state.match = null;

@@ -265,14 +265,27 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur extra water, vermijd een hete douche of sauna direct erna en neem de tijd om na te rusten.",
                 en:"Drink extra water for the first 24 hours, avoid a hot shower or sauna right after, and take time to rest afterwards." } },
 
-  { id:"cupping", name:"Cupping Massage lokaal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, price:"€30 (30')",
+  { id:"cupping", name:"Cupping Massage lokaal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, cuppingRelated:true, price:"€30 (30')",
     homecare:{ category:"body" },
     benefits:{ nl:"Een doelgerichte, diepe behandelmethode voor lokale spierknopen, verkleefd bindweefsel, cellulite en spanningsklachten zoals migraine.",
                en:"A targeted, deep treatment method for localized muscle knots, fascia adhesions, cellulite, and tension complaints such as migraines." },
     funfact:{ nl:"Hoe donkerder de bekende 'cupping-plekken', hoe meer verkleving en opgehoopte afvalstoffen er in dat specifieke weefsel zaten. Omdat cupping een sterke reactie uitlokt, behandelen we altijd gericht specifieke zones en nooit het hele lichaam in één keer.",
               en:"The darker the famous 'cupping marks', the more adhesions and accumulated waste products were present in that specific tissue. Because cupping triggers a strong reaction, we always target specific zones and never treat the entire body at once." },
-    aftercare:{ nl:"Drink extra veel water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken en blijf rustig bewegen voor een optimale bloedsomloop. Voor duurzaam onderhoud wordt een sessie om de 3 tot 6 weken aanbevolen.",
-                en:"Drink plenty of water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep moving gently to support circulation. For long-term maintenance, a session every 3 to 6 weeks is recommended." } },
+    caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. De zon in mag gewoon na een lokale cupping massage.",
+              en:"Cupping isn't suitable if you have a fever, a contagious skin condition, stomach or intestinal ulcers, a heart condition, or are underweight — please let us know beforehand if any of these apply to you. Sun exposure is fine after a local cupping massage." },
+    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Drink extra veel water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een bikinimoment, trouwfeest of fotoshoot. Voor duurzaam onderhoud wordt een sessie om de 3 tot 6 weken aanbevolen.",
+                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. Drink plenty of water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a bikini moment, a wedding, or a photoshoot. For long-term maintenance, a session every 3 to 6 weeks is recommended." } },
+
+  { id:"cuppingpeeling", name:"Zonepeeling met Cupping Massage", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:true, isMassage:true, cuppingRelated:true, price:"€60 (60')",
+    homecare:{ category:"body" },
+    benefits:{ nl:"Combineert een vernieuwende zonepeeling met een diepgaande cupping massage — huidvernieuwing en spierontspanning in één sessie.",
+               en:"Combines a renewing zone peeling with a deep cupping massage — skin renewal and muscle relaxation in one session." },
+    funfact:{ nl:"Bijvoorbeeld een halfuur rugpeeling gevolgd door een halfuur massage met cupping — de exacte zone en verdeling passen we aan op wat jouw huid en spieren nodig hebben.",
+              en:"For example, half an hour of back peeling followed by half an hour of massage with cupping — the exact zone and split are tailored to what your skin and muscles need." },
+    caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. Ga je na deze behandeling in de zon? Dan raden we de peeling af vanwege verhoogde gevoeligheid.",
+              en:"Cupping isn't suitable if you have a fever, a contagious skin condition, stomach or intestinal ulcers, a heart condition, or are underweight — please let us know beforehand if any of these apply to you. Planning sun exposure after this treatment? Then we'd advise against the peeling due to increased sensitivity." },
+    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Vermijd daarnaast de eerste 24 tot 48 uur directe zon, de zonnebank en sauna's op de behandelde zone — gebruik nadien een hoge SPF. Drink extra water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een bikinimoment, trouwfeest of fotoshoot.",
+                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. On top of that, avoid direct sun, tanning beds, and saunas on the treated zone for the first 24 to 48 hours — use a high SPF afterwards. Drink extra water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a bikini moment, a wedding, or a photoshoot." } },
 
   { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (60')",
     homecare:{ category:"body" },
@@ -546,11 +559,12 @@ function matchTreatment(mood, gender, sunExposed, healthFlags){
   const sunOk = (item) => !sunExposed || !item.sunSensitive;
   const phlebitisOk = (item) => !healthFlags.phlebitis || !item.isMassage;
   const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
+  const menstruationOk = (item) => !healthFlags.menstruation || !item.cuppingRelated;
 
   const currentHour = new Date().getHours();
   const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
 
-  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item);
+  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item);
 
   let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && allOk(item));
 
