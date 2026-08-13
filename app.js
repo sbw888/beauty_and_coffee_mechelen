@@ -684,7 +684,11 @@
       return;
     }
 
-    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, { ...state.healthFlags, age45Plus: state.ageBracket === "45plus" });
+    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, {
+      ...state.healthFlags,
+      age30Plus: state.ageBracket === "30-44" || state.ageBracket === "45plus",
+      age45Plus: state.ageBracket === "45plus"
+    });
     let drink;
     const wantsMilk = state.milk !== "none";
     const isIced = state.temperature === "iced";

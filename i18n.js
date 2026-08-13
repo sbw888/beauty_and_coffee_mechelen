@@ -143,9 +143,8 @@ const I18N = {
       vrouw: { title:"Vrouw (16+)", sub:"Het volledige Beauty & Coffee-aanbod" }
     },
     age: {
-      "16-24": "16 – 24 jaar",
-      "25-34": "25 – 34 jaar",
-      "35-44": "35 – 44 jaar",
+      "16-29": "16 – 29 jaar",
+      "30-44": "30 – 44 jaar",
       "45plus": "45 jaar en ouder"
     },
     milk: {
@@ -316,9 +315,8 @@ const I18N = {
       vrouw: { title:"Woman (16+)", sub:"The complete Beauty & Coffee menu" }
     },
     age: {
-      "16-24": "16 – 24 years",
-      "25-34": "25 – 34 years",
-      "35-44": "35 – 44 years",
+      "16-29": "16 – 29 years",
+      "30-44": "30 – 44 years",
       "45plus": "45 years and up"
     },
     milk: {

@@ -15,8 +15,8 @@ const CATEGORIES = ["coffee","tea"];
 const CAFFEINE_OPTIONS = ["caff","decaf"];
 const TEMPERATURE_OPTIONS = ["hot","iced"];
 const PROFILES = ["kind","man","vrouw"];
-const AGE_BRACKETS = ["16-24","25-34","35-44","45plus"];
-const AGE_ICONS = { "16-24":"🌱", "25-34":"🌿", "35-44":"🌳", "45plus":"✨" };
+const AGE_BRACKETS = ["16-29","30-44","45plus"];
+const AGE_ICONS = { "16-29":"🌱", "30-44":"🌳", "45plus":"✨" };
 
 const MILK_OPTIONS = ["none","whole","oat","extra"];
 const EXTRA_OPTIONS = ["honey","sugar","cream","icecream","biscoff","pumpkin"];
@@ -388,7 +388,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50, vermijd de zon 14 dagen en sla actieve producten 48 uur over.",
                 en:"Use SPF 50 daily for 7 days, avoid sun exposure for 14 days and skip active products for 48 hours." } },
 
-  { id:"liftsummere", name:"Lift Summum", moods:["focus","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€120 (70')",
+  { id:"liftsummere", name:"Lift Summum", moods:["focus","luxury"], genders:["vrouw","man"], sunSensitive:false, minAge30:true, price:"€120 (70')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een liftend effect voor een steviger, stralender huidbeeld.",
                en:"A lifting effect for firmer, more radiant-looking skin." },
@@ -562,7 +562,7 @@ function matchTreatment(mood, gender, sunExposed, healthFlags){
   const phlebitisOk = (item) => !healthFlags.phlebitis || !item.isMassage;
   const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
   const menstruationOk = (item) => !healthFlags.menstruation || !item.cuppingRelated;
-  const ageOk = (item) => !item.minAge45 || healthFlags.age45Plus;
+  const ageOk = (item) => (!item.minAge45 || healthFlags.age45Plus) && (!item.minAge30 || healthFlags.age30Plus);
 
   const currentHour = new Date().getHours();
   const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
