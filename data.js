@@ -258,7 +258,7 @@ function resolveHomecareText(pick, lang){
    by default; the app then just links to your full price list.
    ============================================================ */
 const TREATMENTS_CATALOG = [
-  { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€90 (90')",
+  { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€90 (90')",
     homecare:{ category:"body" },
     benefits:{ nl:"Diepe spierontspanning en verbeterde doorbloeding dankzij de warmte van de stenen.",
                en:"Deep muscle relaxation and improved circulation thanks to the warmth of the stones." },
@@ -267,7 +267,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur extra water, vermijd een hete douche of sauna direct erna en neem de tijd om na te rusten.",
                 en:"Drink extra water for the first 24 hours, avoid a hot shower or sauna right after, and take time to rest afterwards." } },
 
-  { id:"cupping", name:"Cupping Massage lokaal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, cuppingRelated:true, price:"€30 (30')",
+  { id:"cupping", name:"Cupping Massage lokaal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, cuppingRelated:true, price:"€30 (30')",
     homecare:{ category:"body" },
     benefits:{ nl:"Een doelgerichte, diepe behandelmethode voor lokale spierknopen, verkleefd bindweefsel, cellulite en spanningsklachten zoals migraine.",
                en:"A targeted, deep treatment method for localized muscle knots, fascia adhesions, cellulite, and tension complaints such as migraines." },
@@ -278,7 +278,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Drink extra veel water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een bikinimoment, trouwfeest of fotoshoot. Voor duurzaam onderhoud wordt een sessie om de 3 tot 6 weken aanbevolen.",
                 en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. Drink plenty of water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a bikini moment, a wedding, or a photoshoot. For long-term maintenance, a session every 3 to 6 weeks is recommended." } },
 
-  { id:"cuppingpeeling", name:"Zonepeeling met Cupping Massage", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:true, isMassage:true, cuppingRelated:true, price:"€60 (60')",
+  { id:"cuppingpeeling", name:"Zonepeeling met Cupping Massage", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:true, isMassage:true, pregnancyUnsafe:true, cuppingRelated:true, price:"€60 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Combineert een vernieuwende zonepeeling met een diepgaande cupping massage — huidvernieuwing en spierontspanning in één sessie.",
                en:"Combines a renewing zone peeling with a deep cupping massage — skin renewal and muscle relaxation in one session." },
@@ -289,7 +289,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Vermijd daarnaast de eerste 24 tot 48 uur directe zon, de zonnebank en sauna's op de behandelde zone — gebruik nadien een hoge SPF. Drink extra water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een bikinimoment, trouwfeest of fotoshoot.",
                 en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. On top of that, avoid direct sun, tanning beds, and saunas on the treated zone for the first 24 to 48 hours — use a high SPF afterwards. Drink extra water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a bikini moment, a wedding, or a photoshoot." } },
 
-  { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (60')",
+  { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€70 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Vermindert spierspanning en stress door lange, vloeiende strijkbewegingen.",
                en:"Reduces muscle tension and stress through long, flowing strokes." },
@@ -298,7 +298,16 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur ruim water, vermijd zware maaltijden vlak na de massage en bouw rustmomenten in.",
                 en:"Drink plenty of water for the first 24 hours, avoid heavy meals right after the massage, and build in moments of rest." } },
 
-  { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€65 (60')",
+  { id:"swedishbackneck", name:"Zweedse Rug-Nek-Schouder Massage", moods:["relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, price:"€40 (30')",
+    homecare:{ category:"body" },
+    benefits:{ nl:"Gerichte massage van rug, nek en schouders om stressklachten en spanning te verminderen — ook geschikt tijdens de zwangerschap.",
+               en:"A targeted massage of the back, neck, and shoulders to ease stress and tension — also suitable during pregnancy." },
+    funfact:{ nl:"Deze kortere massage focust bewust op de zones waar we de meeste spanning opbouwen — ideaal als een volledige lichaamsmassage (nog) niet aan de orde is, zoals tijdens de zwangerschap.",
+              en:"This shorter massage deliberately focuses on the areas where we build up the most tension — ideal when a full-body massage isn't (yet) an option, such as during pregnancy." },
+    aftercare:{ nl:"Drink voldoende water na de massage en neem de tijd om rustig na te bewegen.",
+                en:"Drink enough water after the massage and take time to move gently afterwards." } },
+
+  { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€65 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Verlicht een gespannen rug en geeft de huid een zachte, verzorgde afwerking.",
                en:"Relieves a tense back and leaves the skin soft and cared-for." },
@@ -397,7 +406,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF, drink voldoende water en vermijd de eerste 24 uur zware make-up.",
                 en:"Use SPF daily, drink enough water and avoid heavy makeup for the first 24 hours." } },
 
-  { id:"detoxback", name:"Detoxifying Back Treatment", moods:["focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (60')",
+  { id:"detoxback", name:"Detoxifying Back Treatment", moods:["focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€70 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Reinigt en verzacht de rughuid, ideaal bij onzuiverheden of een gespannen gevoel.",
                en:"Cleanses and soothes the skin on the back, ideal for blemishes or a tense feeling." },
@@ -415,7 +424,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF 50 gedurende 7 dagen en reinig 's avonds grondig.",
                 en:"Use SPF 50 daily for 7 days and cleanse thoroughly in the evening." } },
 
-  { id:"harmonizingbody", name:"Harmonizing Full Body Treatment", moods:["luxury"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€70 (70')",
+  { id:"harmonizingbody", name:"Harmonizing Full Body Treatment", moods:["luxury"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€70 (70')",
     homecare:{ category:"body" },
     benefits:{ nl:"Een totaalervaring die lichaam en geest in balans brengt met verzorgende texturen.",
                en:"A total experience that brings body and mind into balance with nourishing textures." },
@@ -424,7 +433,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur veel water en hydrateer de huid dagelijks met een bodylotion.",
                 en:"Drink plenty of water for the first 24 hours and moisturize the skin daily with a body lotion." } },
 
-  { id:"fullbodywrap", name:"Energetic Full Body Wrap", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, price:"€110 (120')",
+  { id:"fullbodywrap", name:"Energetic Full Body Wrap", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€110 (120')",
     homecare:{ category:"body" },
     benefits:{ nl:"Verstevigt en hydrateert de huid, en geeft een direct energiek, fris gevoel.",
                en:"Firms and hydrates the skin, giving an immediate energetic, fresh feeling." },
@@ -496,7 +505,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Kies je voor gellak? Dan zijn je nagels direct droog en stootvast. Bij klassieke nagellak raden we aan om je voeten de eerste 4 uur (gesloten schoenen) rust te gunnen. Hydrateer nagelriemen dagelijks met nagelriemolie.",
                 en:"Opting for gel polish or builder gel (BIAB)? Your nails are dry and smudge-proof immediately! For classic nail polish, please allow 4 hours (feet in closed shoes) to fully dry. Apply cuticle oil daily for best results." } },
 
-  { id:"slimmassage", name:"Afslankingsmassage", moods:["relax","focus","luxury"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, requiresDietExercise:true, price:"€55 (60')",
+  { id:"slimmassage", name:"Afslankingsmassage", moods:["relax","focus","luxury"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, requiresDietExercise:true, price:"€55 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Stimuleert de doorbloeding en lymfeafvoer voor een verstevigd, verfrist gevoel.",
                en:"Stimulates circulation and lymphatic drainage for a firmer, refreshed feeling." },
@@ -562,12 +571,13 @@ function matchTreatment(mood, gender, sunExposed, healthFlags){
   const phlebitisOk = (item) => !healthFlags.phlebitis || !item.isMassage;
   const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
   const menstruationOk = (item) => !healthFlags.menstruation || !item.cuppingRelated;
+  const pregnancyOk = (item) => !healthFlags.pregnant || !item.pregnancyUnsafe;
   const ageOk = (item) => (!item.minAge45 || healthFlags.age45Plus) && (!item.minAge30 || healthFlags.age30Plus);
 
   const currentHour = new Date().getHours();
   const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
 
-  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item) && ageOk(item);
+  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item) && pregnancyOk(item) && ageOk(item);
 
   let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && allOk(item));
 

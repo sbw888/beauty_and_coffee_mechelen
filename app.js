@@ -10,7 +10,7 @@
     profile: null,        // 'kind' | 'man' | 'vrouw'
     ageBracket: null,     // '16-24' | '25-34' | '35-44' | '45plus'
     sunExposed: null,     // bool
-    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, musclePain:false, dietExercise:false },
+    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     category: null,
@@ -193,7 +193,7 @@
         ["contactLenses", "👓"],
         ["musclePain", "💪"]
       ];
-      if (state.profile === "vrouw") items.push(["menstruation", "🌙"]);
+      if (state.profile === "vrouw") items.push(["menstruation", "🌙"], ["pregnant", "🤰"]);
       items.forEach(([key, icon]) => {
         const chip = document.createElement("button");
         chip.type = "button";
@@ -1039,7 +1039,7 @@
     stopCamera();
     cameraFacing = "user";
     state.profile = null; state.ageBracket = null; state.sunExposed = null; state.kidsDrink = null;
-    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, musclePain:false, dietExercise:false };
+    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false };
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
     state.photoDataUrl = null; state.filter = "none"; state.match = null;
