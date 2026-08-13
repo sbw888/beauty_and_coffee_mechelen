@@ -10,34 +10,38 @@ const I18N = {
 
     step_profile_eyebrow: "Stap 1 · Profiel",
     step_profile_title: "Voor wie is deze match?",
-    step_sun_eyebrow: "Stap 2 · Zon-check",
+
+    step_age_eyebrow: "Stap 2 · Leeftijd",
+    step_age_title: "Wat is je leeftijd?",
+    step_sun_eyebrow: "Stap 3 · Zon-check",
     step_sun_title: "Ga je binnen 14 dagen op zonvakantie, of ben je de afgelopen 14 dagen in de volle zon geweest?",
     step_sun_hint: "Zo houden we ontharing en diepe peelings veilig voor je huid.",
     sun_yes: "Ja, zon van toepassing",
     sun_no: "Nee, geen zon gepland",
     sun_filtered_notice: "We filteren ontharing en diepe peelings uit je match en kiezen milde, hydraterende opties.",
 
-    step_health_eyebrow: "Stap 3 · Aandachtspunten",
+    step_health_eyebrow: "Stap 4 · Aandachtspunten",
     step_health_title: "Nog iets dat we moeten weten?",
     step_health_hint: "Volledig optioneel — helpt ons een veilige match te kiezen.",
     health_phlebitis: "Flebitis (aderontsteking)",
     health_contactLenses: "Ik draag contactlenzen",
     health_menstruation: "Ik ben ongesteld",
+    health_musclePain: "Spierpijn / veel stress",
     diet_title: "Volg je een dieet en/of sport je regelmatig?",
     diet_yes: "Ja",
     diet_no: "Nee",
     lens_warning_note: "Draag je contactlenzen? Neem een bril mee — lenzen moeten tijdens én na de behandeling uit.",
 
-    step1_eyebrow: "Stap 4 · Stemming",
+    step1_eyebrow: "Stap 5 · Stemming",
     step1_title: "Waar heb je vandaag zin in?",
-    step2_eyebrow: "Stap 5 · Drankcategorie",
+    step2_eyebrow: "Stap 6 · Drankcategorie",
     step2_title: "Kies je richting",
-    step_temp_eyebrow: "Stap 6 · Warm of koud",
+    step_temp_eyebrow: "Stap 7 · Warm of koud",
     step_temp_title: "Warm of koud?",
     temperature_tea_hint: "Thee blijft warm — de enige koude theeoptie is een Iced Matcha Latte (cafeïnehoudend + melk).",
-    step3_eyebrow: "Stap 7 · Cafeïne",
+    step3_eyebrow: "Stap 8 · Cafeïne",
     step3_title: "Met of zonder pit?",
-    step4_eyebrow: "Stap 8 · Verfijning",
+    step4_eyebrow: "Stap 9 · Verfijning",
     step4_title: "Maak 'm helemaal van jou",
     step4_hint: "Optioneel — kies zoveel je wilt.",
 
@@ -51,7 +55,7 @@ const I18N = {
     context_home: "Ik doe de test thuis",
     context_home_sub: "Bewaar je match voor je volgende afspraak of deel 'm alvast.",
 
-    step5_eyebrow: "Stap 9 · Foto",
+    step5_eyebrow: "Stap 10 · Foto",
     step5_title: "Zet jezelf in beeld",
     step5_hint: "Maak een foto of upload er een. Alles blijft op jouw toestel.",
 
@@ -138,6 +142,12 @@ const I18N = {
       man: { title:"Man (16+)", sub:"Gelaats-, hand-, voet- & ontharingsbehandelingen" },
       vrouw: { title:"Vrouw (16+)", sub:"Het volledige Beauty & Coffee-aanbod" }
     },
+    age: {
+      "16-24": "16 – 24 jaar",
+      "25-34": "25 – 34 jaar",
+      "35-44": "35 – 44 jaar",
+      "45plus": "45 jaar en ouder"
+    },
     milk: {
       none: "Geen melk",
       whole: "Volle melk",
@@ -173,34 +183,38 @@ const I18N = {
 
     step_profile_eyebrow: "Step 1 · Profile",
     step_profile_title: "Who is this match for?",
-    step_sun_eyebrow: "Step 2 · Sun check",
+
+    step_age_eyebrow: "Step 2 · Age",
+    step_age_title: "What's your age?",
+    step_sun_eyebrow: "Step 3 · Sun check",
     step_sun_title: "Are you going on a sun holiday within 14 days, or have you been in strong sun over the last 14 days?",
     step_sun_hint: "This keeps hair removal and deep peels safe for your skin.",
     sun_yes: "Yes, sun applies",
     sun_no: "No sun planned",
     sun_filtered_notice: "We filter out hair removal and deep peels and choose mild, hydrating options instead.",
 
-    step_health_eyebrow: "Step 3 · Things to know",
+    step_health_eyebrow: "Step 4 · Things to know",
     step_health_title: "Anything else we should know?",
     step_health_hint: "Completely optional — helps us pick a safe match for you.",
     health_phlebitis: "Phlebitis (vein inflammation)",
     health_contactLenses: "I wear contact lenses",
     health_menstruation: "I'm on my period",
+    health_musclePain: "Muscle pain / a lot of stress",
     diet_title: "Are you currently dieting and/or exercising regularly?",
     diet_yes: "Yes",
     diet_no: "No",
     lens_warning_note: "Wearing contact lenses? Bring glasses — lenses must come out during and after the treatment.",
 
-    step1_eyebrow: "Step 4 · Mood",
+    step1_eyebrow: "Step 5 · Mood",
     step1_title: "What are you in the mood for today?",
-    step2_eyebrow: "Step 5 · Beverage category",
+    step2_eyebrow: "Step 6 · Beverage category",
     step2_title: "Choose your direction",
-    step_temp_eyebrow: "Step 6 · Hot or iced",
+    step_temp_eyebrow: "Step 7 · Hot or iced",
     step_temp_title: "Hot or iced?",
     temperature_tea_hint: "Tea stays hot — the only cold tea option is an Iced Matcha Latte (caffeinated + milk).",
-    step3_eyebrow: "Step 7 · Caffeine",
+    step3_eyebrow: "Step 8 · Caffeine",
     step3_title: "With or without a kick?",
-    step4_eyebrow: "Step 8 · Refine",
+    step4_eyebrow: "Step 9 · Refine",
     step4_title: "Make it entirely yours",
     step4_hint: "Optional — pick as many as you like.",
 
@@ -214,7 +228,7 @@ const I18N = {
     context_home: "I'm doing this at home",
     context_home_sub: "Save your match for your next appointment or share it now.",
 
-    step5_eyebrow: "Step 9 · Photo",
+    step5_eyebrow: "Step 10 · Photo",
     step5_title: "Put yourself in the picture",
     step5_hint: "Take a photo or upload one. Everything stays on your device.",
 
@@ -300,6 +314,12 @@ const I18N = {
       kind: { title:"Child (up to 15)", sub:"Kids manicure + kids drink" },
       man: { title:"Man (16+)", sub:"Facial, hand, foot & hair removal treatments" },
       vrouw: { title:"Woman (16+)", sub:"The complete Beauty & Coffee menu" }
+    },
+    age: {
+      "16-24": "16 – 24 years",
+      "25-34": "25 – 34 years",
+      "35-44": "35 – 44 years",
+      "45plus": "45 years and up"
     },
     milk: {
       none: "No milk",

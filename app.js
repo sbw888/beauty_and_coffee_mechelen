@@ -8,8 +8,9 @@
   const state = {
     lang: "nl",
     profile: null,        // 'kind' | 'man' | 'vrouw'
+    ageBracket: null,     // '16-24' | '25-34' | '35-44' | '45plus'
     sunExposed: null,     // bool
-    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, dietExercise:false },
+    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, musclePain:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     category: null,
@@ -25,7 +26,7 @@
   };
 
   const STEP_WEIGHTS = {
-    welcome:0, profile:10, sunCheck:20, healthCheck:28, kidsDrink:20, mood:36, category:46,
+    welcome:0, profile:8, age:16, sunCheck:24, healthCheck:30, kidsDrink:16, mood:38, category:48,
     temperature:56, caffeine:66, toppings:76, context:84, photo:92, loading:96, result:100
   };
   let history = ["welcome"];
@@ -64,6 +65,7 @@
       b.setAttribute("aria-pressed", active ? "true" : "false");
     });
     renderProfileOptions();
+    renderAgeOptions();
     renderSunOptions();
     renderHealthOptions();
     renderKidsDrinkOptions();
@@ -140,9 +142,24 @@
         </span>`;
       card.addEventListener("click", () => {
         state.profile = id; renderProfileOptions();
-        setTimeout(() => { goTo(id === "kind" ? "kidsDrink" : "sunCheck"); }, 200);
+        setTimeout(() => { goTo(id === "kind" ? "kidsDrink" : "age"); }, 200);
       });
       wrap.appendChild(card);
+    });
+  }
+
+  function renderAgeOptions(){
+    const wrap = $("#ageOptions");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    AGE_BRACKETS.forEach(id => {
+      const tile = document.createElement("button");
+      tile.type = "button";
+      tile.className = "option-tile" + (state.ageBracket===id ? " is-selected" : "");
+      tile.innerHTML = `<span class="option-tile__icon">${AGE_ICONS[id]}</span>
+        <span class="option-tile__title">${t(`age.${id}`, state.lang)}</span>`;
+      tile.addEventListener("click", () => { state.ageBracket = id; renderAgeOptions(); setTimeout(()=>goTo("sunCheck"), 200); });
+      wrap.appendChild(tile);
     });
   }
 
@@ -173,7 +190,8 @@
       checkWrap.innerHTML = "";
       const items = [
         ["phlebitis", "🩸"],
-        ["contactLenses", "👓"]
+        ["contactLenses", "👓"],
+        ["musclePain", "💪"]
       ];
       if (state.profile === "vrouw") items.push(["menstruation", "🌙"]);
       items.forEach(([key, icon]) => {
@@ -666,7 +684,7 @@
       return;
     }
 
-    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, state.healthFlags);
+    const treatmentObj = matchTreatment(state.mood, state.profile, !!state.sunExposed, { ...state.healthFlags, age45Plus: state.ageBracket === "45plus" });
     let drink;
     const wantsMilk = state.milk !== "none";
     const isIced = state.temperature === "iced";
@@ -1016,8 +1034,8 @@
   function resetApp(){
     stopCamera();
     cameraFacing = "user";
-    state.profile = null; state.sunExposed = null; state.kidsDrink = null;
-    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, dietExercise:false };
+    state.profile = null; state.ageBracket = null; state.sunExposed = null; state.kidsDrink = null;
+    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, musclePain:false, dietExercise:false };
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null;
     state.milk = "none"; state.extras = []; state.context = null;
     state.photoDataUrl = null; state.filter = "none"; state.match = null;

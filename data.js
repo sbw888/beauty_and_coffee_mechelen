@@ -15,6 +15,8 @@ const CATEGORIES = ["coffee","tea"];
 const CAFFEINE_OPTIONS = ["caff","decaf"];
 const TEMPERATURE_OPTIONS = ["hot","iced"];
 const PROFILES = ["kind","man","vrouw"];
+const AGE_BRACKETS = ["16-24","25-34","35-44","45plus"];
+const AGE_ICONS = { "16-24":"🌱", "25-34":"🌿", "35-44":"🌳", "45plus":"✨" };
 
 const MILK_OPTIONS = ["none","whole","oat","extra"];
 const EXTRA_OPTIONS = ["honey","sugar","cream","icecream","biscoff","pumpkin"];
@@ -404,7 +406,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Draag de eerste 24 uur bij voorkeur losse kleding. Eenmaal thuis kun je gewoon douchen zoals normaal.",
                 en:"Preferably wear loose clothing for the first 24 hours. You can shower normally once you're home." } },
 
-  { id:"antiagefacial", name:"Anti-Age Facial", moods:["luxury"], genders:["vrouw"], sunSensitive:false, price:"€125 (90')",
+  { id:"antiagefacial", name:"Anti-Age Facial", moods:["luxury"], genders:["vrouw"], sunSensitive:false, minAge45:true, price:"€125 (90')",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een anti-aging gelaatsbehandeling afgestemd op de specifieke noden van de rijpe huid (45+).",
                en:"An anti-aging facial tailored to the specific needs of mature skin (45+)." },
@@ -560,13 +562,21 @@ function matchTreatment(mood, gender, sunExposed, healthFlags){
   const phlebitisOk = (item) => !healthFlags.phlebitis || !item.isMassage;
   const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
   const menstruationOk = (item) => !healthFlags.menstruation || !item.cuppingRelated;
+  const ageOk = (item) => !item.minAge45 || healthFlags.age45Plus;
 
   const currentHour = new Date().getHours();
   const timeOk = (item) => !(currentHour < 12 && item.timeOfDay === "pm");
 
-  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item);
+  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item) && ageOk(item);
 
   let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && allOk(item));
+
+  // Muscle pain / a lot of stress → steer toward cupping when it's available
+  // for the chosen mood (cupping only fits "focus" and "relax" moods).
+  if (healthFlags.musclePain){
+    const cuppingPool = pool.filter(item => item.cuppingRelated);
+    if (cuppingPool.length) pool = cuppingPool;
+  }
 
   if (!pool.length){
     pool = TREATMENTS_CATALOG.filter(item => allOk(item) && SAFE_FALLBACK_IDS.includes(item.id));
