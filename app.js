@@ -428,6 +428,7 @@
       const v = video();
       v.srcObject = stream;
       v.hidden = false;
+      v.classList.toggle("is-mirrored", cameraFacing === "user");
       placeholder().hidden = true;
       applyGlowPreview();
       try { await v.play(); } catch(e){ /* some browsers auto-play once metadata loads */ }
