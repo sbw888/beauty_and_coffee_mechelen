@@ -476,6 +476,14 @@
     const c = canvas();
     c.width = v.videoWidth; c.height = v.videoHeight;
     const ctx = c.getContext("2d");
+    // Match what was just shown live: the front-camera preview is mirrored
+    // via CSS (natural, mirror-like), but CSS transforms don't affect what
+    // drawImage reads — so the mirror has to be reapplied here explicitly,
+    // or the saved photo would flip relative to what the user just composed.
+    if (cameraFacing === "user"){
+      ctx.translate(c.width, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(v, 0, 0, c.width, c.height);
     const dataUrl = c.toDataURL("image/jpeg", 0.92);
     stopCamera();
