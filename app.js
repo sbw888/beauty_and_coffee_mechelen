@@ -654,9 +654,17 @@
 
   async function applyGlowPreview(){
     if (state.filter === "cartoon"){
+      // Full edge-detection cartoon processing is too slow to run on every
+      // live video frame, so the live camera gets a cheap CSS/SVG posterize
+      // approximation instead — close enough to preview live, like the
+      // other filters. The captured photo gets the full, sharper version.
+      const liveCartoonCss = "url(#cartoonPosterize) saturate(1.3) contrast(1.1)";
+      video().style.filter = liveCartoonCss;
+      if (!state.photoDataUrl){
+        preview().style.filter = liveCartoonCss;
+        return;
+      }
       preview().style.filter = "";
-      video().style.filter = "";
-      if (!state.photoDataUrl) return; // nothing to cartoonify yet (still on live camera)
       const cartoonUrl = await getCartoonDataUrl();
       if (state.filter === "cartoon" && cartoonUrl){ // guard: filter may have changed while we were processing
         preview().src = cartoonUrl;
