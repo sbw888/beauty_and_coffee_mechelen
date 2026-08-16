@@ -333,6 +333,7 @@ body{
 .result-block__body p{ margin:0 0 6px; }
 .result-block__body p:last-child{ margin-bottom:0; }
 .result-block__product{ font-weight:600; }
+.result-block__soaptip{ margin-top:10px !important; padding-top:10px; border-top:1px dashed var(--espresso-12); }
 .result-block--muted .result-block__body{ color:var(--espresso-60); font-style:italic; }
 .result-block--caution{ background:#FBF0DD; border-color:#E8B95F; }
 .result-block--caution .result-block__title{ color:#9A5B0F; }

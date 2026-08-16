@@ -37,8 +37,11 @@
     warm:    "sepia(0.28) saturate(1.35) brightness(1.05)",
     bw:      "grayscale(1) contrast(1.08)",
     vintage: "sepia(0.35) contrast(0.9) brightness(1.05) saturate(0.8)"
+    // "cartoon" is NOT a CSS filter — it needs real pixel processing
+    // (see applyCartoonEffect), so it's handled separately below.
   };
-  const FILTER_IDS = ["none","glow","warm","bw","vintage"];
+  const FILTER_IDS = ["none","glow","warm","bw","vintage","cartoon"];
+  const cartoonCache = { sourceUrl: null, resultUrl: null };
 
   /* ---------------- helpers ---------------- */
   const $ = (sel, ctx) => (ctx||document).querySelector(sel);
@@ -649,7 +652,20 @@
     });
   }
 
-  function applyGlowPreview(){
+  async function applyGlowPreview(){
+    if (state.filter === "cartoon"){
+      preview().style.filter = "";
+      video().style.filter = "";
+      if (!state.photoDataUrl) return; // nothing to cartoonify yet (still on live camera)
+      const cartoonUrl = await getCartoonDataUrl();
+      if (state.filter === "cartoon" && cartoonUrl){ // guard: filter may have changed while we were processing
+        preview().src = cartoonUrl;
+      }
+      return;
+    }
+    if (state.photoDataUrl && preview().src !== state.photoDataUrl){
+      preview().src = state.photoDataUrl; // restore the original if we'd swapped in the cartoon version
+    }
     const filterCss = FILTERS[state.filter] || "";
     preview().style.filter = filterCss;
     video().style.filter = filterCss;
@@ -683,12 +699,13 @@
     if (state.profile === "kind"){
       const drinkDef = KIDS_DRINKS.find(d => d.id === state.kidsDrink) || KIDS_DRINKS[0];
       const homecarePick = pickHomecareProduct("hand", null);
+      const soapPick = pickSecondarySoap(homecarePick ? homecarePick.categoryId : null);
       state.match = {
         isKid: true,
         treatment: { name: KIDS_TREATMENT, benefits:KID_CONTENT.benefits, funfact:KID_CONTENT.funfact, aftercare:KID_CONTENT.aftercare },
         drinkId: drinkDef.id, drink: null,
         milkId: "none", extrasIds: [],
-        homecarePick
+        homecarePick, soapPick
       };
       return;
     }
@@ -731,6 +748,7 @@
     }
 
     const homecarePick = pickHomecareProduct(treatmentObj.homecare.category, treatmentObj.homecare.soapHint);
+    const soapPick = pickSecondarySoap(homecarePick ? homecarePick.categoryId : null);
 
     // build a copy of the treatment so we can safely append a lens warning
     // without mutating the shared catalog entry
@@ -748,7 +766,7 @@
     state.match = {
       isKid:false, treatment, drink,
       milkId: state.milk, extrasIds: [...state.extras],
-      homecarePick
+      homecarePick, soapPick
     };
   }
 
@@ -800,9 +818,13 @@
     if (!m) { wrap.innerHTML = ""; return; }
     const lang = state.lang;
     const homecare = resolveHomecareText(m.homecarePick, lang);
-    const homecareBody = homecare
+    const soapTip = resolveHomecareText(m.soapPick, lang);
+    let homecareBody = homecare
       ? `<p class="result-block__product">${homecare.productName}</p><p>${homecare.usage}</p>`
       : `<p>${t("homecare_generic_tip", lang)}</p>`;
+    if (soapTip){
+      homecareBody += `<p class="result-block__soaptip"><span class="result-block__product">${t("homecare_soap_tip_label", lang)} ${soapTip.productName}</span><br>${soapTip.usage}</p>`;
+    }
 
     // extra sun-care reinforcement specifically for hair-removal treatments
     let aftercareText = m.treatment.aftercare[lang];
@@ -861,6 +883,77 @@
     });
   }
 
+  /* ---------------- cartoon-style filter (client-side only) ----------------
+     A real "turn me into an animated movie character" transformation needs a
+     generative AI model, which would mean sending the photo to an external
+     API — breaking the "100% on your device" privacy promise, and needing a
+     paid key that can't be safely stored in a static site with no backend.
+     This gives an honest, achievable alternative instead: a genuine cartoon/
+     comic look (flat posterized colors + inked outlines) computed entirely
+     in the browser, nothing ever uploaded anywhere. */
+  function applyCartoonEffect(img){
+    const MAX_DIM = 720; // capped for speed; still looks great once scaled up
+    const scale = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
+    const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(img, 0, 0, w, h);
+    const srcData = ctx.getImageData(0, 0, w, h);
+    const src = srcData.data;
+
+    // grayscale pass for edge detection
+    const gray = new Uint8ClampedArray(w * h);
+    for (let i = 0, p = 0; i < src.length; i += 4, p++){
+      gray[p] = src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114;
+    }
+
+    // Sobel edge detection
+    const edges = new Uint8Array(w * h);
+    for (let y = 1; y < h - 1; y++){
+      for (let x = 1; x < w - 1; x++){
+        const i = y * w + x;
+        const gx = -gray[i-w-1] + gray[i-w+1] - 2*gray[i-1] + 2*gray[i+1] - gray[i+w-1] + gray[i+w+1];
+        const gy = -gray[i-w-1] - 2*gray[i-w] - gray[i-w+1] + gray[i+w-1] + 2*gray[i+w] + gray[i+w+1];
+        edges[i] = Math.sqrt(gx*gx + gy*gy) > 90 ? 1 : 0;
+      }
+    }
+
+    // posterize colors + ink the detected edges on top
+    const levels = 6;
+    const step = 255 / (levels - 1);
+    const out = ctx.createImageData(w, h);
+    const od = out.data;
+    for (let i = 0, p = 0; i < src.length; i += 4, p++){
+      if (edges[p]){
+        od[i] = od[i+1] = od[i+2] = 25;
+      } else {
+        od[i]   = Math.round(Math.round(src[i]   / step) * step);
+        od[i+1] = Math.round(Math.round(src[i+1] / step) * step);
+        od[i+2] = Math.round(Math.round(src[i+2] / step) * step);
+      }
+      od[i+3] = src[i+3];
+    }
+    ctx.putImageData(out, 0, 0);
+    return c.toDataURL("image/jpeg", 0.9);
+  }
+
+  function getCartoonDataUrl(){
+    return new Promise(resolve => {
+      if (!state.photoDataUrl){ resolve(null); return; }
+      if (cartoonCache.sourceUrl === state.photoDataUrl){ resolve(cartoonCache.resultUrl); return; }
+      const img = new Image();
+      img.onload = () => {
+        const result = applyCartoonEffect(img);
+        cartoonCache.sourceUrl = state.photoDataUrl;
+        cartoonCache.resultUrl = result;
+        resolve(result);
+      };
+      img.src = state.photoDataUrl;
+    });
+  }
+
   function roundRect(ctx, x, y, w, h, r){
     ctx.beginPath();
     ctx.moveTo(x+r, y);
@@ -893,18 +986,20 @@
     const ctx = out.getContext("2d");
 
     if (state.photoDataUrl){
+      const isCartoon = state.filter === "cartoon";
+      const sourceUrl = isCartoon ? (await getCartoonDataUrl()) || state.photoDataUrl : state.photoDataUrl;
       await new Promise(res => {
         const img = new Image();
         img.onload = () => {
           const scale = Math.max(W/img.width, H/img.height);
           const dw = img.width*scale, dh = img.height*scale;
           ctx.save();
-          if (FILTERS[state.filter]){ ctx.filter = FILTERS[state.filter]; }
+          if (!isCartoon && FILTERS[state.filter]){ ctx.filter = FILTERS[state.filter]; }
           ctx.drawImage(img, (W-dw)/2, (H-dh)/2, dw, dh);
           ctx.restore();
           res();
         };
-        img.src = state.photoDataUrl;
+        img.src = sourceUrl;
       });
     } else {
       const grad = ctx.createLinearGradient(0,0,0,H);

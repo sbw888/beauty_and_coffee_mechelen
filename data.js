@@ -247,6 +247,20 @@ function resolveHomecareText(pick, lang){
   return { categoryLabel: cat.label[lang], productName: product.name, usage: product.usage[lang] };
 }
 
+/* Secondary soap suggestion — surfaces the dry/sensitive-skin artisan soaps
+   alongside whatever the primary home-care recommendation is, since those
+   soaps suit almost anyone and deserve more visibility. Skipped when soap
+   is already the primary recommendation (no point suggesting it twice). */
+function pickSecondarySoap(primaryCategoryId){
+  if (primaryCategoryId === "soap") return null;
+  const cat = PRODUCT_CATEGORIES.soap;
+  if (!cat || !cat.inStock) return null;
+  const pool = cat.products.filter(p => p.tag === "dry" || p.tag === "sensitive");
+  if (!pool.length) return null;
+  const product = pickRandom(pool);
+  return { categoryId: "soap", productId: product.id };
+}
+
 /* ============================================================
    TREATMENT CATALOG
    Every treatment is tagged with the moods it satisfies, the

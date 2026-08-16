@@ -107,6 +107,7 @@ const I18N = {
     block_caution: "Let op",
     block_price: "Prijs in de salon",
     homecare_generic_tip: "Deze categorie is momenteel uitverkocht in onze shop — vraag in de salon gerust naar een passend alternatief.",
+    homecare_soap_tip_label: "Ook fijn voor je huid: onze ambachtelijke zeep",
 
     overlay_title: "Mijn Beauty & Coffee match ☕✨",
     overlay_drink_prefix: "Drankje: ",
@@ -171,7 +172,8 @@ const I18N = {
       glow: "Glow",
       warm: "Warm",
       bw: "Zwart-wit",
-      vintage: "Vintage"
+      vintage: "Vintage",
+      cartoon: "Cartoon"
     }
   },
 
@@ -280,6 +282,7 @@ const I18N = {
     block_caution: "Please note",
     block_price: "Salon price",
     homecare_generic_tip: "This category is currently sold out in our shop — feel free to ask in the salon for a suitable alternative.",
+    homecare_soap_tip_label: "Also great for your skin: our artisan soap",
 
     overlay_title: "My Beauty & Coffee Match ☕✨",
     overlay_drink_prefix: "Drink: ",
@@ -344,7 +347,8 @@ const I18N = {
       glow: "Glow",
       warm: "Warm",
       bw: "Black & white",
-      vintage: "Vintage"
+      vintage: "Vintage",
+      cartoon: "Cartoon"
     }
   }
 };
