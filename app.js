@@ -426,7 +426,14 @@
     video().hidden = true;
     preview().hidden = true;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: cameraFacing } }, audio:false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: cameraFacing },
+          width: { ideal: 1080 },
+          height: { ideal: 1350 }
+        },
+        audio: false
+      });
       state.cameraStream = stream;
       const v = video();
       v.srcObject = stream;
