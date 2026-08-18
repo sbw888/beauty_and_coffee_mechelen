@@ -5,13 +5,13 @@
    ============================================================ */
 
 const MOOD_ICONS = { relax:"🌿", energetic:"✨", focus:"🧖‍♀️", luxury:"💛", group:"👥" };
-const CATEGORY_ICONS = { coffee:"☕", tea:"🍵" };
+const CATEGORY_ICONS = { coffee:"☕", tea:"🫖", matcha:"🍵" };
 const CAFFEINE_ICONS = { caff:"⚡", decaf:"🌙" };
 const TEMPERATURE_ICONS = { hot:"🔥", iced:"🧊" };
 const PROFILE_ICONS = { kind:"🧒", man:"🧔", vrouw:"👩" };
 
 const MOODS = ["relax","energetic","focus","luxury","group"];
-const CATEGORIES = ["coffee","tea"];
+const CATEGORIES = ["coffee","tea","matcha"];
 const CAFFEINE_OPTIONS = ["caff","decaf"];
 const TEMPERATURE_OPTIONS = ["hot","iced"];
 const PROFILES = ["kind","man","vrouw"];
@@ -37,7 +37,7 @@ const TEAS_DECAF = [
 ];
 const TEAS_CAFF = [
   "Sun of Heaven (Organic Sencha & Mango)","China Bancha","China Jasmine","Jasmine Dragon Pearl",
-  "Cascara Costa Rica Sonora","Matcha","Lipton Peach Mango","Lipton Refreshing Lemon",
+  "Cascara Costa Rica Sonora","Lipton Peach Mango","Lipton Refreshing Lemon",
   "Pickwick Original English","Pickwick Green Tea Pure","Lipton Japanese Sencha","Lord Nelson Chai",
   "Organo Gold Organic Green Tea (with Ganoderma)"
 ];
@@ -274,8 +274,8 @@ function pickSecondarySoap(primaryCategoryId){
 const TREATMENTS_CATALOG = [
   { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, excludeSummer:true, promoted:true, price:"€90 (90')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Een warme, diepe massage-ervaring met verwarmde stenen gecombineerd met manuele technieken — ideaal voor wie volledig wil ontspannen.",
-               en:"A warm, deep massage experience with heated stones combined with manual techniques — ideal for anyone looking to fully unwind." },
+    benefits:{ nl:"Een intensieve verzorgingsbehandeling volgens het Fill Me-protocol, met cleanser, tonic, Fill Me Serum, masker, LED-masker en UV-bescherming.",
+               en:"An intensive care treatment following the Fill Me protocol, with cleanser, tonic, Fill Me Serum, mask, LED mask and UV protection." },
     funfact:{ nl:"Warme basaltstenen absorberen en geven warmte langzaam af — vandaar hun gebruik in massagetherapie sinds oude beschavingen.",
               en:"Warm basalt stones absorb and slowly release heat — which is why they've been used in massage therapy since ancient civilizations." },
     aftercare:{ nl:"Drink de eerste 24 uur extra water, vermijd een hete douche of sauna direct erna en neem de tijd om na te rusten.",
@@ -283,8 +283,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"cupping", name:"Cupping Massage lokaal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, cuppingRelated:true, promoted:true, price:"€30 (30')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Een doelgerichte, intensieve massage-ervaring met cups op specifieke zones, voor wie op zoek is naar diepe spierontspanning.",
-               en:"A targeted, intensive massage experience using cups on specific zones, for anyone looking for deep muscle relaxation." },
+    benefits:{ nl:"Een intensieve massage waarbij cups lokaal worden ingezet in combinatie met manuele massagetechnieken, bijvoorbeeld op rug, schouders, armen of benen.",
+               en:"An intensive massage where cups are used locally in combination with manual massage techniques, for example on the back, shoulders, arms or legs." },
     funfact:{ nl:"De bekende 'cupping-plekken' ontstaan door de zuigkracht van de cups op de huid — hoe donkerder de plek, hoe intenser de lokale reactie was. We behandelen daarom altijd gericht specifieke zones en nooit het hele lichaam in één keer.",
               en:"The well-known 'cupping marks' come from the suction the cups create on the skin — the darker the mark, the more intense the local reaction was. That's why we always target specific zones and never treat the entire body at once." },
     caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. De zon in mag gewoon na een lokale cupping massage.",
@@ -294,8 +294,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"cuppingpeeling", name:"Zonepeeling met Cupping Massage", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:true, isMassage:true, pregnancyUnsafe:true, cuppingRelated:true, promoted:true, price:"€60 (60')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Combineert een vernieuwende zonepeeling met een diepgaande cupping massage — huidvernieuwing en spierontspanning in één sessie.",
-               en:"Combines a renewing zone peeling with a deep cupping massage — skin renewal and muscle relaxation in one session." },
+    benefits:{ nl:"Combineert een verzorgende zonepeeling met een intensieve cupping massage op dezelfde zone — huidverzorging en een diepe massage-ervaring in één sessie.",
+               en:"Combines a caring zone peeling with an intensive cupping massage on the same area — skin care and a deep massage experience in one session." },
     funfact:{ nl:"Bijvoorbeeld een halfuur rugpeeling gevolgd door een halfuur massage met cupping — de exacte zone en verdeling passen we aan op wat jouw huid en spieren nodig hebben.",
               en:"For example, half an hour of back peeling followed by half an hour of massage with cupping — the exact zone and split are tailored to what your skin and muscles need." },
     caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. Ga je na deze behandeling in de zon? Dan raden we de peeling af vanwege verhoogde gevoeligheid.",
@@ -305,8 +305,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (60')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Vermindert spierspanning en stress door lange, vloeiende strijkbewegingen.",
-               en:"Reduces muscle tension and stress through long, flowing strokes." },
+    benefits:{ nl:"Een volledige, ontspannende lichaamsmassage met aandacht voor het hele lichaam — de intensiteit wordt afgestemd op jouw voorkeur.",
+               en:"A complete, relaxing full-body massage with attention for the whole body — the intensity is tailored to your preference." },
     funfact:{ nl:"De Zweedse massage combineert vijf klassieke bewegingen en ligt aan de basis van de meeste westerse massagetechnieken.",
               en:"Swedish massage combines five classic strokes and forms the basis of most Western massage techniques." },
     aftercare:{ nl:"Drink de eerste 24 uur ruim water, vermijd zware maaltijden vlak na de massage en bouw rustmomenten in.",
@@ -314,8 +314,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"swedishbackneck", name:"Zweedse Rug-Nek-Schouder Massage", moods:["relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, promoted:true, price:"€40 (30')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Gerichte massage van rug, nek en schouders om stressklachten en spanning te verminderen — ook geschikt tijdens de zwangerschap.",
-               en:"A targeted massage of the back, neck, and shoulders to ease stress and tension — also suitable during pregnancy." },
+    benefits:{ nl:"Een ontspannende massage met extra aandacht voor rug, nek en schouders — ideaal wanneer je behoefte hebt aan een moment van rust.",
+               en:"A relaxing massage with extra attention for the back, neck and shoulders — ideal whenever you need a moment of calm." },
     funfact:{ nl:"Deze kortere massage focust bewust op de zones waar we de meeste spanning opbouwen — ideaal als een volledige lichaamsmassage (nog) niet aan de orde is, zoals tijdens de zwangerschap.",
               en:"This shorter massage deliberately focuses on the areas where we build up the most tension — ideal when a full-body massage isn't (yet) an option, such as during pregnancy." },
     aftercare:{ nl:"Drink voldoende water na de massage en neem de tijd om rustig na te bewegen.",
@@ -323,8 +323,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€65 (60')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Verlicht een gespannen rug en geeft de huid een zachte, verzorgde afwerking.",
-               en:"Relieves a tense back and leaves the skin soft and cared-for." },
+    benefits:{ nl:"Een verzorgende rugpakking met verfrissende peeling, revitaliserende algenpakking en massage.",
+               en:"A caring back wrap with a refreshing peel, revitalizing algae wrap and massage." },
     funfact:{ nl:"Een lichaamswikkel combineert warmte met actieve ingrediënten, waardoor de huid ze beter opneemt.",
               en:"A body wrap combines heat with active ingredients, helping the skin absorb them more effectively." },
     aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink wel voldoende water en hydrateer de huid dagelijks.",
@@ -377,8 +377,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"hydrapeel", name:"Skin-Renewing Hydra Peeling pH", moods:["energetic","focus"], genders:["vrouw","man"], sunSensitive:true, seasonalBoost:true, price:"€100 (90')",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Verwijdert dode huidcellen en brengt tegelijk vocht terug voor een frisse, egale teint.",
-               en:"Removes dead skin cells while replenishing moisture for a fresh, even complexion." },
+    benefits:{ nl:"Een verzorgende peeling voor een vale of vermoeide uitstraling en een ongelijkmatige huiduitstraling.",
+               en:"A caring peel for a dull or tired-looking complexion and an uneven skin tone." },
     funfact:{ nl:"Een pH-peeling werkt zachter dan een klassieke peeling, waardoor herstel sneller verloopt.",
               en:"A pH peel works more gently than a classic peel, allowing for faster skin recovery." },
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50, vermijd de zon 14 dagen en sla scrubs 48 uur over.",
@@ -386,8 +386,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"signaturefacial", name:"Signature Facial Treatment", moods:["focus"], genders:["vrouw","man"], sunSensitive:false, price:"€85 (75')",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Diepgaande reiniging en verzorging op maat van jouw huidtype voor directe uitstraling.",
-               en:"Deep cleansing and care tailored to your skin type for immediate radiance." },
+    benefits:{ nl:"Een uitgebreide gelaatsverzorging met aandacht voor reiniging, huidconditie, verzorging en ontspanning.",
+               en:"An extensive facial with attention for cleansing, skin condition, care and relaxation." },
     funfact:{ nl:"Onze behandelingen combineren hoogwaardige productlijnen van topmerken zoals Guinot, Dr. Renaud en Janssen Cosmetics, aangevuld met specifieke Bio Balance accenten op maat van jouw huid.",
               en:"Our treatments combine high-quality product lines from top brands like Guinot, Dr. Renaud, and Janssen Cosmetics, complemented by tailored Bio Balance accents for your specific skin needs." },
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50 en drink voldoende water om het reinigingseffect te ondersteunen.",
@@ -404,8 +404,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"fruitacid", name:"Fruit Acid Peeling Dr. Renaud", moods:["focus"], genders:["vrouw","man"], sunSensitive:true, monthRange:[9,10,11,12,1,2,3], seasonalBoost:true, price:"€100 (75')",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Vernieuwt de huidtextuur en vermindert oneffenheden met natuurlijke vruchtzuren.",
-               en:"Renews skin texture and reduces unevenness using natural fruit acids." },
+    benefits:{ nl:"Een professionele peeling met fruitzuren, gericht op een frissere en egalere huiduitstraling.",
+               en:"A professional fruit-acid peel, aimed at a fresher and more even-looking complexion." },
     funfact:{ nl:"Vruchtzuren (AHA) versnellen de natuurlijke celvernieuwing van de huid met weken.",
               en:"Fruit acids (AHA) speed up the skin's natural cell renewal by weeks." },
     aftercare:{ nl:"Gebruik 7 dagen dagelijks SPF 50, vermijd de zon 14 dagen en sla actieve producten 48 uur over.",
@@ -413,44 +413,44 @@ const TREATMENTS_CATALOG = [
 
   { id:"liftsummere", name:"Lift Summum", moods:["focus","luxury"], genders:["vrouw","man"], sunSensitive:false, minAge30:true, price:"€120 (70')",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Een liftend effect voor een steviger, stralender huidbeeld.",
-               en:"A lifting effect for firmer, more radiant-looking skin." },
+    benefits:{ nl:"Een uitgebreide verzorging voor een huid met zichtbare tekenen van huidveroudering en verlies van stevigheid.",
+               en:"An extensive treatment for skin showing visible signs of aging and loss of firmness." },
     funfact:{ nl:"Liftende gelaatsbehandelingen stimuleren de doorbloeding, wat het stralingseffect direct zichtbaar maakt.",
               en:"Lifting facials stimulate circulation, which makes the radiance effect visible right away." },
     aftercare:{ nl:"Gebruik dagelijks SPF, drink voldoende water en vermijd de eerste 24 uur zware make-up.",
                 en:"Use SPF daily, drink enough water and avoid heavy makeup for the first 24 hours." } },
 
-  { id:"detoxback", name:"Detoxifying Back Treatment", moods:["focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (60')",
+  { id:"detoxback", name:"Zuiverende Rugverzorging", moods:["focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (60')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Reinigt en verzacht de rughuid, ideaal bij onzuiverheden of een gespannen gevoel.",
-               en:"Cleanses and soothes the skin on the back, ideal for blemishes or a tense feeling." },
+    benefits:{ nl:"Een uitgebreide verzorging voor de rug met dieptereiniging, verzorging van onzuiverheden, een verzorgende pakking en ontspannende massage.",
+               en:"An extensive back treatment with deep cleansing, care for blemishes, a nourishing wrap and a relaxing massage." },
     funfact:{ nl:"De rug is een van de moeilijkst zelf te verzorgen zones — een reden temeer voor een salonbehandeling.",
               en:"The back is one of the hardest areas to care for yourself — all the more reason for a salon treatment." },
     aftercare:{ nl:"Draag de eerste 24 uur bij voorkeur losse kleding. Eenmaal thuis kun je gewoon douchen zoals normaal.",
                 en:"Preferably wear loose clothing for the first 24 hours. You can shower normally once you're home." } },
 
-  { id:"antiagefacial", name:"Anti-Age Facial", moods:["luxury"], genders:["vrouw"], sunSensitive:false, minAge45:true, price:"€125 (90')",
+  { id:"antiagefacial", name:"Botanische Anti-Age", moods:["luxury"], genders:["vrouw"], sunSensitive:false, minAge45:true, price:"€125 (90')",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Een anti-aging gelaatsbehandeling afgestemd op de specifieke noden van de rijpe huid (45+).",
-               en:"An anti-aging facial tailored to the specific needs of mature skin (45+)." },
+    benefits:{ nl:"Een uitgebreide botanische gelaatsverzorging voor een huid met zichtbare tekenen van huidveroudering.",
+               en:"An extensive botanical facial for skin showing visible signs of aging." },
     funfact:{ nl:"Extracten worden gekozen op hun antioxidantwerking tegen huidveroudering.",
               en:"Extracts are selected for their antioxidant action against skin aging." },
     aftercare:{ nl:"Gebruik dagelijks SPF 50 gedurende 7 dagen en reinig 's avonds grondig.",
                 en:"Use SPF 50 daily for 7 days and cleanse thoroughly in the evening." } },
 
-  { id:"harmonizingbody", name:"Harmonizing Full Body Treatment", moods:["luxury"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (70')",
+  { id:"harmonizingbody", name:"Harmoniserende Full Body Verzorging", moods:["luxury"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (70')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Een totaalervaring die lichaam en geest in balans brengt met verzorgende texturen.",
-               en:"A total experience that brings body and mind into balance with nourishing textures." },
+    benefits:{ nl:"Een verzorgende lichaamsbehandeling met peeling en massage voor een ruwe, droge of onregelmatige huid — ook interessant als extra verzorging na ontharing.",
+               en:"A caring body treatment with peeling and massage for rough, dry or uneven skin — also nice as extra care after hair removal." },
     funfact:{ nl:"Deze behandeling combineert peeling, massage én masker in één doorlopende sessie.",
               en:"This treatment combines exfoliation, massage and a mask in one continuous session." },
     aftercare:{ nl:"Drink de eerste 24 uur veel water en hydrateer de huid dagelijks met een bodylotion.",
                 en:"Drink plenty of water for the first 24 hours and moisturize the skin daily with a body lotion." } },
 
-  { id:"fullbodywrap", name:"Energetic Full Body Wrap", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€110 (120')",
+  { id:"fullbodywrap", name:"Energetische Full Body Pakking", moods:["luxury","relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€110 (120')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Verstevigt en hydrateert de huid, en geeft een direct energiek, fris gevoel.",
-               en:"Firms and hydrates the skin, giving an immediate energetic, fresh feeling." },
+    benefits:{ nl:"Een uitgebreid lichaamsritueel met verfrissende peeling, revitaliserende algenpakking en massage — een moment om even helemaal te vertragen.",
+               en:"An extensive body ritual with a refreshing peel, revitalizing algae wrap and massage — a moment to fully slow down." },
     funfact:{ nl:"Een full body wrap wordt vaak gecombineerd met warmte om actieve stoffen dieper te laten doordringen.",
               en:"A full body wrap is often combined with heat to help active ingredients penetrate more deeply." },
     aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink de eerste dag wel extra veel water.",
@@ -458,8 +458,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Leer zelf professionele make-uptechnieken toepassen, samen met vriendinnen of collega's.",
-               en:"Learn to apply professional makeup techniques yourself, together with friends or colleagues." },
+    benefits:{ nl:"Een gezellige privéworkshop waarin je leert hoe je jouw make-up mooi en praktisch kunt aanbrengen.",
+               en:"A fun private workshop where you'll learn how to apply your makeup beautifully and practically." },
     funfact:{ nl:"Deelnemers gaan naar huis met een persoonlijke productenlijst afgestemd op hun huidtype.",
               en:"Participants go home with a personal product list tailored to their skin type." },
     aftercare:{ nl:"Geen specifieke nazorg nodig — reinig de huid zoals gewoonlijk aan het einde van de dag.",
@@ -467,8 +467,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Ontdek stap voor stap hoe je een professionele gelaatsroutine thuis nabootst.",
-               en:"Discover step by step how to recreate a professional facial routine at home." },
+    benefits:{ nl:"Ontdek een eenvoudige verzorgingsroutine en leer hoe je jouw look daarna met een mooie touch-up afwerkt.",
+               en:"Discover a simple skincare routine and learn how to finish your look afterwards with a lovely touch-up." },
     funfact:{ nl:"Je gaat naar huis met de exacte volgorde van producten die het beste bij jouw huid past.",
               en:"You'll go home with the exact product order that suits your skin best." },
     aftercare:{ nl:"Gebruik dagelijks SPF na een gelaatsbehandeling en hydrateer 's avonds goed.",
@@ -494,8 +494,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"baristaworkshop", name:"Private Barista Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€175 (120')",
     homecare:{ category:"soap", soapHint:["koffie"] },
-    benefits:{ nl:"Leer zelf espresso's en melkschuim als een professional bereiden.",
-               en:"Learn to prepare espresso and milk foam like a professional yourself." },
+    benefits:{ nl:"Leer hoe je thuis lekkere espresso's, espresso-afgeleiden en slow coffees kunt bereiden met onder andere V60, French Press, Phin en Moka Pot.",
+               en:"Learn how to brew delicious espressos, espresso-based drinks and slow coffees at home using a V60, French Press, Phin and Moka Pot, among others." },
     funfact:{ nl:"Perfecte latte art begint bij melk die tot exact de juiste microschuim-textuur is opgeklopt.",
               en:"Perfect latte art starts with milk steamed to exactly the right microfoam texture." },
     aftercare:{ nl:"Geen nazorg nodig — oefen thuis gerust met je eigen espressomachine.",
@@ -503,8 +503,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"manicure", name:"Extended Manicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€35 (60')",
     homecare:{ category:"hand" },
-    benefits:{ nl:"Verzorgde, nette handen en nagels met een moment van pure ontspanning.",
-               en:"Neat, well-groomed hands and nails with a moment of pure relaxation." },
+    benefits:{ nl:"Knippen, vijlen, nagelriemverzorging, polijsten, verzorging van de nagelomgeving en massage.",
+               en:"Trimming, filing, cuticle care, buffing, care of the nail area and a hand massage." },
     funfact:{ nl:"Regelmatige nagelriemverzorging voorkomt op termijn braamranden en droge nagelriemen.",
               en:"Regular cuticle care prevents hangnails and dry cuticles over time." },
     aftercare:{ nl:"Kies je voor gellak of verstevigende BIAB? Dan zijn je nagels direct droog en stootvast. Bij klassieke nagellak raden we aan om je handen de eerste 2 uur droog te houden. Hydrateer nagelriemen dagelijks met nagelriemolie.",
@@ -512,8 +512,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"pedicure", name:"Extended Pedicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, promoted:true, price:"€35 (60')",
     homecare:{ category:"foot" },
-    benefits:{ nl:"Zachte, verzorgde voeten en nette nagels — ideaal vóór sandalenseizoen.",
-               en:"Soft, cared-for feet and neat nails — ideal ahead of sandal season." },
+    benefits:{ nl:"Een complete voetverzorging met aandacht voor nagels, nagelwallen, nagelriemen, eelt en ontspanning.",
+               en:"A complete pedicure with attention for nails, nail walls, cuticles, hard skin and relaxation." },
     funfact:{ nl:"Eeltverwijdering helpt niet alleen esthetisch, maar voorkomt ook drukplekken bij het lopen.",
               en:"Removing hard skin isn't just cosmetic — it also prevents pressure spots while walking." },
     aftercare:{ nl:"Kies je voor gellak? Dan zijn je nagels direct droog en stootvast. Bij klassieke nagellak raden we aan om je voeten de eerste 4 uur (gesloten schoenen) rust te gunnen. Hydrateer nagelriemen dagelijks met nagelriemolie.",
@@ -521,8 +521,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"slimmassage", name:"Afslankingsmassage", moods:["relax","focus","luxury"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, requiresDietExercise:true, promoted:true, price:"€55 (60')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Een stevige lichaamsmassage gericht op een verstevigd en verfrist gevoel.",
-               en:"A firm body massage focused on a tightened, refreshed feeling." },
+    benefits:{ nl:"Een stevige lichaamsmassage waarbij gewerkt wordt rond de zones van de lymfeklieren en vervolgens met diepere massagetechnieken op de gewenste lichaamszones — gericht op huidverzorging en lichaamscontouren binnen het aangeleerde massageprotocol.",
+               en:"A firm body massage that works around the lymph node areas and then applies deeper massage techniques to the desired body zones — focused on skin care and body contours within the trained massage protocol." },
     funfact:{ nl:"Deze massagetechniek combineert stevige grepen met specifieke bewegingsrichtingen voor een verstevigend effect.",
               en:"This massage technique combines firm grips with specific movement directions for a tightening effect." },
     aftercare:{ nl:"Drink de eerste 24 uur extra water om de afvoer van afvalstoffen te ondersteunen.",

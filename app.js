@@ -285,7 +285,13 @@
       tile.innerHTML = `<span class="option-tile__icon">${TEMPERATURE_ICONS[id]}</span>
         <span class="option-tile__title">${data.title}</span>
         <span class="option-tile__sub">${data.sub}</span>`;
-      tile.addEventListener("click", () => { state.temperature = id; renderTemperatureOptions(); setTimeout(()=>goTo("caffeine"), 220); });
+      tile.addEventListener("click", () => {
+        state.temperature = id; renderTemperatureOptions();
+        setTimeout(() => {
+          if (state.category === "matcha"){ state.caffeine = "caff"; goTo("toppings"); }
+          else { goTo("caffeine"); }
+        }, 220);
+      });
       wrap.appendChild(tile);
     });
 
@@ -352,7 +358,7 @@
   function renderExtrasOptions(){
     const wrap = $("#extrasOptions");
     wrap.innerHTML = "";
-    const options = state.category === "tea" ? TEA_EXTRA_OPTIONS : EXTRA_OPTIONS;
+    const options = (state.category === "tea" || state.category === "matcha") ? TEA_EXTRA_OPTIONS : EXTRA_OPTIONS;
     // drop any previously-picked extras that no longer apply (e.g. switched from coffee to tea)
     state.extras = state.extras.filter(id => options.includes(id));
     options.forEach(id => {
@@ -595,6 +601,9 @@
     ctx.clearRect(0, 0, c.width, c.height);
     ctx.fillStyle = "#241A14";
     ctx.fillRect(0, 0, c.width, c.height);
+    ctx.filter = state.filter === "cartoon"
+      ? "url(#cartoonPosterize) saturate(1.3) contrast(1.1)"
+      : (FILTERS[state.filter] || "none");
     const scale = editorBaseScale() * editor.scale;
     ctx.save();
     ctx.translate(c.width/2 + editor.offsetX, c.height/2 + editor.offsetY);
@@ -602,6 +611,7 @@
     ctx.scale(scale, scale);
     ctx.drawImage(editor.img, -editor.img.width/2, -editor.img.height/2);
     ctx.restore();
+    ctx.filter = "none";
   }
 
   function editorRotate(){
@@ -750,16 +760,15 @@
         const origin = pool.length ? pickRandom(pool) : pickRandom(COFFEE_ORIGINS);
         drink = { name: bev.name, origin: origin.name, notes: origin.notes };
       }
-    } else { // tea — always served hot, except for the one iced exception below
-      if (state.caffeine === "caff" && wantsMilk){
-        // Matcha is the only tea on the menu that takes milk — choosing a
-        // milk preference here always means Matcha Latte (hot, or iced if
-        // Iced was picked). Every other tea stays hot regardless of that choice.
-        drink = { name: isIced ? "Iced Matcha Latte" : "Matcha Latte", origin:null, notes:null };
-      } else {
-        const pool = state.caffeine === "decaf" ? [...TEAS_DECAF, ...HOT_EXTRAS_DECAF] : TEAS_CAFF;
-        drink = { name: pickRandom(pool), origin:null, notes:null };
-      }
+    } else if (state.category === "matcha"){
+      // Matcha is always caffeinated. Milk determines Matcha vs. Matcha
+      // Latte; temperature determines hot vs. iced — fully deterministic,
+      // no randomness, since this is now its own explicit choice.
+      const base = wantsMilk ? "Matcha Latte" : "Matcha";
+      drink = { name: isIced ? "Iced " + base : base, origin:null, notes:null };
+    } else { // tea — always served hot; no iced plain-tea option on the menu
+      const pool = state.caffeine === "decaf" ? [...TEAS_DECAF, ...HOT_EXTRAS_DECAF] : TEAS_CAFF;
+      drink = { name: pickRandom(pool), origin:null, notes:null };
     }
 
     const homecarePick = pickHomecareProduct(treatmentObj.homecare.category, treatmentObj.homecare.soapHint);
@@ -918,35 +927,75 @@
     const srcData = ctx.getImageData(0, 0, w, h);
     const src = srcData.data;
 
-    // grayscale pass for edge detection
+    // grayscale pass for edge detection — computed from the sharp original,
+    // so edges stay crisp even though the color pass below gets blurred
     const gray = new Uint8ClampedArray(w * h);
     for (let i = 0, p = 0; i < src.length; i += 4, p++){
       gray[p] = src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114;
     }
 
-    // Sobel edge detection
-    const edges = new Uint8Array(w * h);
+    // Sobel edge detection, then thicken the lines by 1px (dilate) for a
+    // bolder, more "inked" comic-line look instead of thin photo edges
+    const edgesRaw = new Uint8Array(w * h);
     for (let y = 1; y < h - 1; y++){
       for (let x = 1; x < w - 1; x++){
         const i = y * w + x;
         const gx = -gray[i-w-1] + gray[i-w+1] - 2*gray[i-1] + 2*gray[i+1] - gray[i+w-1] + gray[i+w+1];
         const gy = -gray[i-w-1] - 2*gray[i-w] - gray[i-w+1] + gray[i+w-1] + 2*gray[i+w] + gray[i+w+1];
-        edges[i] = Math.sqrt(gx*gx + gy*gy) > 90 ? 1 : 0;
+        edgesRaw[i] = Math.sqrt(gx*gx + gy*gy) > 85 ? 1 : 0;
+      }
+    }
+    const edges = new Uint8Array(w * h);
+    for (let y = 1; y < h - 1; y++){
+      for (let x = 1; x < w - 1; x++){
+        const i = y * w + x;
+        edges[i] = (edgesRaw[i] || edgesRaw[i-1] || edgesRaw[i+1] || edgesRaw[i-w] || edgesRaw[i+w]) ? 1 : 0;
       }
     }
 
-    // posterize colors + ink the detected edges on top
-    const levels = 6;
+    // Box-blur the color channels before posterizing — flattens photo noise
+    // and skin texture into clean, flat "cel-shaded" color regions instead
+    // of the speckled look you get from posterizing raw, noisy pixels.
+    const blurred = new Uint8ClampedArray(src.length);
+    const R = 2; // blur radius
+    for (let y = 0; y < h; y++){
+      for (let x = 0; x < w; x++){
+        let rSum=0, gSum=0, bSum=0, count=0;
+        for (let dy=-R; dy<=R; dy++){
+          const yy = y+dy; if (yy<0 || yy>=h) continue;
+          for (let dx=-R; dx<=R; dx++){
+            const xx = x+dx; if (xx<0 || xx>=w) continue;
+            const j = (yy*w+xx)*4;
+            rSum += src[j]; gSum += src[j+1]; bSum += src[j+2]; count++;
+          }
+        }
+        const i = (y*w+x)*4;
+        blurred[i]   = rSum/count;
+        blurred[i+1] = gSum/count;
+        blurred[i+2] = bSum/count;
+      }
+    }
+
+    // posterize the blurred color + boost saturation for a punchier, more
+    // illustrated palette, then ink the (dilated) edges on top in a warm
+    // dark brown rather than flat black
+    const levels = 5;
     const step = 255 / (levels - 1);
+    const satBoost = 1.35;
     const out = ctx.createImageData(w, h);
     const od = out.data;
     for (let i = 0, p = 0; i < src.length; i += 4, p++){
       if (edges[p]){
-        od[i] = od[i+1] = od[i+2] = 25;
+        od[i] = 40; od[i+1] = 28; od[i+2] = 22;
       } else {
-        od[i]   = Math.round(Math.round(src[i]   / step) * step);
-        od[i+1] = Math.round(Math.round(src[i+1] / step) * step);
-        od[i+2] = Math.round(Math.round(src[i+2] / step) * step);
+        let r = blurred[i], g = blurred[i+1], b = blurred[i+2];
+        const lum = r*0.299 + g*0.587 + b*0.114;
+        r = lum + (r - lum) * satBoost;
+        g = lum + (g - lum) * satBoost;
+        b = lum + (b - lum) * satBoost;
+        od[i]   = Math.round(Math.round(Math.max(0,Math.min(255,r)) / step) * step);
+        od[i+1] = Math.round(Math.round(Math.max(0,Math.min(255,g)) / step) * step);
+        od[i+2] = Math.round(Math.round(Math.max(0,Math.min(255,b)) / step) * step);
       }
       od[i+3] = src[i+3];
     }

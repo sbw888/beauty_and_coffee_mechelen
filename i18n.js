@@ -129,7 +129,8 @@ const I18N = {
     },
     categories: {
       coffee: { title:"Koffie", sub:"Origins & blends" },
-      tea: { title:"Thee & Infusies", sub:"Los of in zakje" }
+      tea: { title:"Thee & Infusies", sub:"Los of in zakje" },
+      matcha: { title:"Matcha", sub:"Puur, latte of iced" }
     },
     temperature: {
       hot: { title:"Warm", sub:"Klassiek gezet" },
@@ -304,7 +305,8 @@ const I18N = {
     },
     categories: {
       coffee: { title:"Coffee", sub:"Origins & blends" },
-      tea: { title:"Tea & Infusions", sub:"Loose or bagged" }
+      tea: { title:"Tea & Infusions", sub:"Loose or bagged" },
+      matcha: { title:"Matcha", sub:"Plain, latte or iced" }
     },
     temperature: {
       hot: { title:"Hot", sub:"Classically brewed" },
