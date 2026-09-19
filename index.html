@@ -68,6 +68,9 @@
     <h1 class="step__eyebrow" data-i18n="welcome_eyebrow">Welkom</h1>
     <h2 class="step__title step__title--hero" data-i18n="welcome_title">Waar schoonheid koffie ontmoet</h2>
     <p class="step__lede" data-i18n="welcome_lede">Beantwoord een paar korte vragen.</p>
+
+    <div class="returning-user" id="returningUserBlock" hidden></div>
+
     <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
   </section>
 
@@ -310,9 +313,12 @@
     <div class="result-details" id="resultDetails"></div>
     <div class="result-blocks" id="resultBlocks"></div>
 
+    <div class="loyalty" id="loyaltyBlock"></div>
+
     <div class="result-actions" id="resultActionsSalon">
       <button type="button" class="btn btn--primary btn--wide" data-action="share" data-i18n="share_button">Deel jouw match</button>
       <button type="button" class="btn btn--outline btn--wide" data-action="download" data-i18n="download_button">Download afbeelding</button>
+      <button type="button" class="btn btn--outline btn--wide" data-action="add-reminder" data-i18n="reminder_button">📅 Zet een herinnering in mijn agenda</button>
       <a class="btn btn--gold-outline btn--wide" id="menuCta" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee" target="_blank" rel="noopener" data-i18n="menu_cta">Bekijk menu &amp; prijzen</a>
       <button type="button" class="btn btn--text" data-action="restart" data-i18n="restart_button">Opnieuw beginnen</button>
     </div>
@@ -323,6 +329,7 @@
 <footer class="app-footer">
   <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
   <p data-i18n="footer_privacy">Jouw foto's blijven altijd op je eigen toestel — 100% privé.</p>
+  <button type="button" class="footer-reset-btn" data-action="reset-local-data" data-i18n="footer_reset_button">Wis mijn lokale gegevens</button>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>

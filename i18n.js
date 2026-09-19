@@ -95,6 +95,29 @@ const I18N = {
     restart_button: "Opnieuw beginnen",
 
     footer_privacy: "Jouw foto's blijven altijd op je eigen toestel — 100% privé.",
+    footer_reset_button: "Wis mijn lokale gegevens",
+
+    reminder_button: "📅 Zet een herinnering in mijn agenda",
+    reminder_ics_title: "Beauty & Coffee — volgend moment",
+    reminder_weeks_label: "Over hoeveel weken wil je herinnerd worden?",
+    reminder_saved_toast: "Herinnering gedownload — open het bestand om toe te voegen aan je agenda.",
+
+    welcome_back_title: "Welkom terug ☕ — dit is wat je tot nu toe ontdekte:",
+    stamps_label: "stempels",
+    treatments_discovered_label: "behandelingen ontdekt",
+    drinks_discovered_label: "drankjes ontdekt",
+
+    stamp_card_title: "Mijn stempelkaart",
+    stamp_card_hint: "Toon dit scherm in de salon om een stempel te laten zetten.",
+    stamp_card_button: "Stempel toevoegen",
+    stamp_confirm_text: "Voeg een stempel toe voor dit bezoek? Doe dit best samen met Beauty & Coffee in de salon.",
+    stamp_card_full_toast: "🎉 Kaart vol! Bespreek je beloning met Beauty & Coffee.",
+
+    collection_title: "Mijn ontdekkingen",
+
+    loyalty_privacy_note: "Deze gegevens worden alleen op dit toestel bewaard.",
+    reset_confirm_text: "Weet je zeker dat je al je lokale stempels en ontdekkingen wilt wissen? Dit kan niet ongedaan worden gemaakt.",
+    reset_done_toast: "Je lokale gegevens zijn gewist.",
 
     drink_label: "Drankje",
     treatment_label: "Behandeling / workshop",
@@ -107,7 +130,6 @@ const I18N = {
     block_caution: "Let op",
     block_price: "Prijs in de salon",
     homecare_generic_tip: "Deze categorie is momenteel uitverkocht in onze shop — vraag in de salon gerust naar een passend alternatief.",
-    homecare_soap_tip_label: "Ook fijn voor je huid: onze ambachtelijke zeep",
 
     overlay_title: "Mijn Beauty & Coffee match ☕✨",
     overlay_drink_prefix: "Drankje: ",
@@ -271,6 +293,29 @@ const I18N = {
     restart_button: "Start over",
 
     footer_privacy: "Your photos always stay on your own device — 100% private.",
+    footer_reset_button: "Wipe my local data",
+
+    reminder_button: "📅 Add a reminder to my calendar",
+    reminder_ics_title: "Beauty & Coffee — next moment",
+    reminder_weeks_label: "How many weeks until you'd like a reminder?",
+    reminder_saved_toast: "Reminder downloaded — open the file to add it to your calendar.",
+
+    welcome_back_title: "Welcome back ☕ — here's what you've discovered so far:",
+    stamps_label: "stamps",
+    treatments_discovered_label: "treatments discovered",
+    drinks_discovered_label: "drinks discovered",
+
+    stamp_card_title: "My stamp card",
+    stamp_card_hint: "Show this screen in the salon to get a stamp.",
+    stamp_card_button: "Add a stamp",
+    stamp_confirm_text: "Add a stamp for this visit? Best done together with Beauty & Coffee in the salon.",
+    stamp_card_full_toast: "🎉 Card full! Discuss your reward with Beauty & Coffee.",
+
+    collection_title: "My discoveries",
+
+    loyalty_privacy_note: "This data is only stored on this device.",
+    reset_confirm_text: "Are you sure you want to wipe all your local stamps and discoveries? This can't be undone.",
+    reset_done_toast: "Your local data has been wiped.",
 
     drink_label: "Drink",
     treatment_label: "Treatment / workshop",
@@ -283,7 +328,6 @@ const I18N = {
     block_caution: "Please note",
     block_price: "Salon price",
     homecare_generic_tip: "This category is currently sold out in our shop — feel free to ask in the salon for a suitable alternative.",
-    homecare_soap_tip_label: "Also great for your skin: our artisan soap",
 
     overlay_title: "My Beauty & Coffee Match ☕✨",
     overlay_drink_prefix: "Drink: ",

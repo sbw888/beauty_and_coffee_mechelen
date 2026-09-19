@@ -37,8 +37,6 @@
     warm:    "sepia(0.28) saturate(1.35) brightness(1.05)",
     bw:      "grayscale(1) contrast(1.08)",
     vintage: "sepia(0.35) contrast(0.9) brightness(1.05) saturate(0.8)"
-    // "cartoon" is NOT a CSS filter — it needs real pixel processing
-    // (see applyCartoonEffect), so it's handled separately below.
   };
   const FILTER_IDS = ["none","glow","warm","bw","vintage","cartoon"];
   const cartoonCache = { sourceUrl: null, resultUrl: null };
@@ -492,10 +490,6 @@
     const c = canvas();
     c.width = v.videoWidth; c.height = v.videoHeight;
     const ctx = c.getContext("2d");
-    // Match what was just shown live: the front-camera preview is mirrored
-    // via CSS (natural, mirror-like), but CSS transforms don't affect what
-    // drawImage reads — so the mirror has to be reapplied here explicitly,
-    // or the saved photo would flip relative to what the user just composed.
     if (cameraFacing === "user"){
       ctx.translate(c.width, 0);
       ctx.scale(-1, 1);
@@ -671,10 +665,6 @@
 
   async function applyGlowPreview(){
     if (state.filter === "cartoon"){
-      // Full edge-detection cartoon processing is too slow to run on every
-      // live video frame, so the live camera gets a cheap CSS/SVG posterize
-      // approximation instead — close enough to preview live, like the
-      // other filters. The captured photo gets the full, sharper version.
       const liveCartoonCss = "url(#cartoonPosterize) saturate(1.3) contrast(1.1)";
       video().style.filter = liveCartoonCss;
       if (!state.photoDataUrl){
@@ -683,13 +673,13 @@
       }
       preview().style.filter = "";
       const cartoonUrl = await getCartoonDataUrl();
-      if (state.filter === "cartoon" && cartoonUrl){ // guard: filter may have changed while we were processing
+      if (state.filter === "cartoon" && cartoonUrl){
         preview().src = cartoonUrl;
       }
       return;
     }
     if (state.photoDataUrl && preview().src !== state.photoDataUrl){
-      preview().src = state.photoDataUrl; // restore the original if we'd swapped in the cartoon version
+      preview().src = state.photoDataUrl;
     }
     const filterCss = FILTERS[state.filter] || "";
     preview().style.filter = filterCss;
@@ -761,9 +751,6 @@
         drink = { name: bev.name, origin: origin.name, notes: origin.notes };
       }
     } else if (state.category === "matcha"){
-      // Matcha is always caffeinated. Milk determines Matcha vs. Matcha
-      // Latte; temperature determines hot vs. iced — fully deterministic,
-      // no randomness, since this is now its own explicit choice.
       const base = wantsMilk ? "Matcha Latte" : "Matcha";
       drink = { name: isIced ? "Iced " + base : base, origin:null, notes:null };
     } else { // tea — always served hot; no iced plain-tea option on the menu
@@ -916,7 +903,7 @@
      comic look (flat posterized colors + inked outlines) computed entirely
      in the browser, nothing ever uploaded anywhere. */
   function applyCartoonEffect(img){
-    const MAX_DIM = 720; // capped for speed; still looks great once scaled up
+    const MAX_DIM = 720;
     const scale = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
     const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
 
@@ -927,15 +914,11 @@
     const srcData = ctx.getImageData(0, 0, w, h);
     const src = srcData.data;
 
-    // grayscale pass for edge detection — computed from the sharp original,
-    // so edges stay crisp even though the color pass below gets blurred
     const gray = new Uint8ClampedArray(w * h);
     for (let i = 0, p = 0; i < src.length; i += 4, p++){
       gray[p] = src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114;
     }
 
-    // Sobel edge detection, then thicken the lines by 1px (dilate) for a
-    // bolder, more "inked" comic-line look instead of thin photo edges
     const edgesRaw = new Uint8Array(w * h);
     for (let y = 1; y < h - 1; y++){
       for (let x = 1; x < w - 1; x++){
@@ -953,11 +936,8 @@
       }
     }
 
-    // Box-blur the color channels before posterizing — flattens photo noise
-    // and skin texture into clean, flat "cel-shaded" color regions instead
-    // of the speckled look you get from posterizing raw, noisy pixels.
     const blurred = new Uint8ClampedArray(src.length);
-    const R = 2; // blur radius
+    const R = 2;
     for (let y = 0; y < h; y++){
       for (let x = 0; x < w; x++){
         let rSum=0, gSum=0, bSum=0, count=0;
@@ -976,9 +956,6 @@
       }
     }
 
-    // posterize the blurred color + boost saturation for a punchier, more
-    // illustrated palette, then ink the (dilated) edges on top in a warm
-    // dark brown rather than flat black
     const levels = 5;
     const step = 255 / (levels - 1);
     const satBoost = 1.35;
@@ -1218,8 +1195,171 @@
   }
 
   /* ---------------- wire up ---------------- */
+  /* ---------------- local memory (localStorage) ----------------
+     Everything below stays on this device only — no account, no
+     server, nothing ever sent to Beauty & Coffee. The stamp card
+     is self-reported (shown in the salon for a manual stamp), not
+     an automated discount system. */
+  const LOCAL_KEY = "beautyCoffeeLocal_v1";
+  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[] };
+
+  function loadLocalData(){
+    try {
+      const saved = localStorage.getItem(LOCAL_KEY);
+      if (saved){
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === "object") Object.assign(localData, parsed);
+      }
+    } catch(e){ /* private browsing or storage disabled — app still works without memory */ }
+  }
+
+  function saveLocalData(){
+    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(localData)); }
+    catch(e){ /* storage full/unavailable — fail silently, this is a non-critical extra */ }
+  }
+
+  function getAllDrinkNames(){
+    const names = new Set();
+    BEVERAGES.coffee.caff.forEach(b => names.add(b.name));
+    BEVERAGES.coffee.decaf.forEach(b => names.add(b.name));
+    BEVERAGES.coffeeIced.caff.forEach(b => names.add(b.name));
+    BEVERAGES.coffeeIced.decaf.forEach(b => names.add(b.name));
+    TEAS_CAFF.forEach(n => names.add(n));
+    TEAS_DECAF.forEach(n => names.add(n));
+    HOT_EXTRAS_DECAF.forEach(n => names.add(n));
+    ["Matcha","Matcha Latte","Iced Matcha","Iced Matcha Latte"].forEach(n => names.add(n));
+    KIDS_DRINKS.forEach(d => names.add(d.name.nl));
+    return names;
+  }
+
+  function recordDiscovery(){
+    if (!state.match) return false;
+    let changed = false;
+    const tid = state.match.isKid ? "kindermanicure" : state.match.treatment.id;
+    if (tid && !localData.discoveredTreatments.includes(tid)){
+      localData.discoveredTreatments.push(tid);
+      changed = true;
+    }
+    const dname = state.match.isKid
+      ? (KIDS_DRINKS.find(d => d.id === state.match.drinkId) || KIDS_DRINKS[0]).name.nl
+      : state.match.drink.name;
+    if (dname && !localData.discoveredDrinks.includes(dname)){
+      localData.discoveredDrinks.push(dname);
+      changed = true;
+    }
+    if (changed) saveLocalData();
+    return changed;
+  }
+
+  function renderReturningUserBlock(){
+    const block = $("#returningUserBlock");
+    if (!block) return;
+    const hasHistory = localData.stamps > 0 || localData.discoveredTreatments.length > 0;
+    block.hidden = !hasHistory;
+    if (!hasHistory) return;
+    const totalTreatments = TREATMENTS_CATALOG.length;
+    const totalDrinks = getAllDrinkNames().size;
+    block.innerHTML = `
+      <p class="returning-user__title">${t("welcome_back_title", state.lang)}</p>
+      <div class="returning-user__stats">
+        <span>☕ ${Math.min(localData.stamps,10)}/10 ${t("stamps_label", state.lang)}</span>
+        <span>✨ ${localData.discoveredTreatments.length}/${totalTreatments} ${t("treatments_discovered_label", state.lang)}</span>
+        <span>🍵 ${localData.discoveredDrinks.length}/${totalDrinks} ${t("drinks_discovered_label", state.lang)}</span>
+      </div>`;
+  }
+
+  function renderLoyaltyBlock(){
+    const block = $("#loyaltyBlock");
+    if (!block) return;
+    const totalTreatments = TREATMENTS_CATALOG.length;
+    const totalDrinks = getAllDrinkNames().size;
+    const stampsCapped = Math.min(localData.stamps, 10);
+    const tPct = Math.round(localData.discoveredTreatments.length / totalTreatments * 100);
+    const dPct = Math.round(localData.discoveredDrinks.length / totalDrinks * 100);
+    block.innerHTML = `
+      <div class="loyalty-card">
+        <p class="loyalty-card__title">☕ ${t("stamp_card_title", state.lang)}</p>
+        <div class="loyalty-card__stamps">
+          ${Array.from({length:10}, (_,i) => `<span class="stamp${i < stampsCapped ? " is-filled" : ""}"></span>`).join("")}
+        </div>
+        <p class="loyalty-card__hint">${t("stamp_card_hint", state.lang)}</p>
+        <button type="button" class="btn btn--outline" data-action="add-stamp">${t("stamp_card_button", state.lang)}</button>
+      </div>
+      <div class="collection-card">
+        <p class="collection-card__title">✨ ${t("collection_title", state.lang)}</p>
+        <div class="collection-card__row"><span>${t("treatments_discovered_label", state.lang)}</span><span>${localData.discoveredTreatments.length}/${totalTreatments}</span></div>
+        <div class="collection-card__bar"><div class="collection-card__fill" style="width:${tPct}%"></div></div>
+        <div class="collection-card__row"><span>${t("drinks_discovered_label", state.lang)}</span><span>${localData.discoveredDrinks.length}/${totalDrinks}</span></div>
+        <div class="collection-card__bar"><div class="collection-card__fill" style="width:${dPct}%"></div></div>
+      </div>
+      <p class="loyalty-privacy">🔒 ${t("loyalty_privacy_note", state.lang)}</p>`;
+  }
+
+  function addStamp(){
+    if (!confirm(t("stamp_confirm_text", state.lang))) return;
+    localData.stamps++;
+    saveLocalData();
+    renderLoyaltyBlock();
+    if (localData.stamps > 0 && localData.stamps % 10 === 0){
+      showToast(t("stamp_card_full_toast", state.lang));
+    }
+  }
+
+  function resetLocalData(){
+    if (!confirm(t("reset_confirm_text", state.lang))) return;
+    localData.stamps = 0;
+    localData.discoveredTreatments = [];
+    localData.discoveredDrinks = [];
+    saveLocalData();
+    renderReturningUserBlock();
+    renderLoyaltyBlock();
+    showToast(t("reset_done_toast", state.lang));
+  }
+
+  /* ---------------- calendar reminder (.ics download) ----------------
+     No backend means no reliable push notifications on every device —
+     a downloaded .ics file is the one reminder mechanism that genuinely
+     works everywhere, because the phone's own calendar app takes over
+     from there and handles the actual notification. */
+  function addCalendarReminder(){
+    const weeksStr = prompt(t("reminder_weeks_label", state.lang), "5");
+    if (weeksStr === null) return;
+    const weeks = parseInt(weeksStr, 10);
+    if (!weeks || weeks <= 0) return;
+
+    const start = new Date();
+    start.setDate(start.getDate() + weeks * 7);
+    start.setHours(10, 0, 0, 0);
+    const end = new Date(start.getTime() + 30 * 60 * 1000);
+
+    const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const title = state.match && !state.match.isKid ? state.match.treatment.name : t("reminder_ics_title", state.lang);
+
+    const ics = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      `DTSTART:${fmt(start)}`,
+      `DTEND:${fmt(end)}`,
+      `SUMMARY:${t("reminder_ics_title", state.lang)} — ${title}`,
+      "DESCRIPTION:Beauty & Coffee",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "beauty-coffee-herinnering.ics";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    showToast(t("reminder_saved_toast", state.lang));
+  }
+
   function init(){
+    loadLocalData();
     applyI18n();
+    renderReturningUserBlock();
     showStep("welcome");
     setupEditorDrag();
 
@@ -1247,6 +1387,9 @@
       if (action === "share") shareImage();
       if (action === "download") downloadImage();
       if (action === "restart") resetApp();
+      if (action === "add-stamp") addStamp();
+      if (action === "reset-local-data") resetLocalData();
+      if (action === "add-reminder") addCalendarReminder();
     });
 
     $("#fileInput").addEventListener("change", e => handleFileUpload(e.target.files[0]));
@@ -1259,8 +1402,11 @@
     await drawResultCanvas();
     renderResultDetails();
     renderResultBlocks();
+    const isNewDiscovery = recordDiscovery();
+    renderLoyaltyBlock();
     goTo("result");
     trackEvent("match-generated");
+    if (isNewDiscovery) trackEvent("new-discovery");
     if (state.context === "thuis") showToast(t("toast_saved_home", state.lang));
   }
 
