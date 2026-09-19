@@ -596,7 +596,7 @@
     ctx.fillStyle = "#241A14";
     ctx.fillRect(0, 0, c.width, c.height);
     ctx.filter = state.filter === "cartoon"
-      ? "url(#cartoonPosterize) saturate(1.3) contrast(1.1)"
+      ? "url(#cartoonPosterize) saturate(1.6) contrast(1.15)"
       : (FILTERS[state.filter] || "none");
     const scale = editorBaseScale() * editor.scale;
     ctx.save();
@@ -665,7 +665,7 @@
 
   async function applyGlowPreview(){
     if (state.filter === "cartoon"){
-      const liveCartoonCss = "url(#cartoonPosterize) saturate(1.3) contrast(1.1)";
+      const liveCartoonCss = "url(#cartoonPosterize) saturate(1.6) contrast(1.15)";
       video().style.filter = liveCartoonCss;
       if (!state.photoDataUrl){
         preview().style.filter = liveCartoonCss;
@@ -956,14 +956,14 @@
       }
     }
 
-    const levels = 5;
+    const levels = 4;
     const step = 255 / (levels - 1);
-    const satBoost = 1.35;
+    const satBoost = 1.6;
     const out = ctx.createImageData(w, h);
     const od = out.data;
     for (let i = 0, p = 0; i < src.length; i += 4, p++){
       if (edges[p]){
-        od[i] = 40; od[i+1] = 28; od[i+2] = 22;
+        od[i] = 18; od[i+1] = 16; od[i+2] = 22;
       } else {
         let r = blurred[i], g = blurred[i+1], b = blurred[i+2];
         const lum = r*0.299 + g*0.587 + b*0.114;
