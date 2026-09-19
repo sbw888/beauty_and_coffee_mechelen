@@ -458,8 +458,8 @@ const TREATMENTS_CATALOG = [
 
   { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
     homecare:{ category:"facial" },
-    benefits:{ nl:"Een gezellige privéworkshop waarin je leert hoe je jouw make-up mooi en praktisch kunt aanbrengen.",
-               en:"A fun private workshop where you'll learn how to apply your makeup beautifully and practically." },
+    benefits:{ nl:"Een gezellige privéworkshop waarin je leert hoe je jouw make-up mooi en praktisch kunt aanbrengen — met een uitgebreide Beauty & Coffee-tafel vol verse hapjes en een affogato met vanille-ijs als afsluiter.",
+               en:"A fun private workshop where you'll learn how to apply your makeup beautifully and practically — with an extensive Beauty & Coffee spread of fresh treats and an affogato with vanilla ice cream to finish." },
     funfact:{ nl:"Deelnemers gaan naar huis met een persoonlijke productenlijst afgestemd op hun huidtype.",
               en:"Participants go home with a personal product list tailored to their skin type." },
     aftercare:{ nl:"Geen specifieke nazorg nodig — reinig de huid zoals gewoonlijk aan het einde van de dag.",
@@ -469,8 +469,8 @@ const TREATMENTS_CATALOG = [
     homecare:{ category:"facial" },
     benefits:{ nl:"Ontdek een eenvoudige verzorgingsroutine en leer hoe je jouw look daarna met een mooie touch-up afwerkt.",
                en:"Discover a simple skincare routine and learn how to finish your look afterwards with a lovely touch-up." },
-    funfact:{ nl:"Je gaat naar huis met de exacte volgorde van producten die het beste bij jouw huid past.",
-              en:"You'll go home with the exact product order that suits your skin best." },
+    funfact:{ nl:"Je gaat naar huis met de exacte volgorde van producten die het beste bij jouw huid past — en met een eigen goodiebag vol proefverpakkingen om je nieuwe routine thuis meteen te ontdekken.",
+              en:"You'll go home with the exact product order that suits your skin best — plus your own goodie bag full of sample sizes to try your new routine at home right away." },
     aftercare:{ nl:"Gebruik dagelijks SPF na een gelaatsbehandeling en hydrateer 's avonds goed.",
                 en:"Use daily SPF after a facial treatment and moisturize well in the evening." } },
 
