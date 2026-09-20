@@ -345,6 +345,13 @@ body{
 }
 
 /* ============ RETURNING USER (welcome screen) ============ */
+.review-prompt{
+  background: var(--gold-light, #F3E4C6); border:1px solid var(--gold); border-radius: var(--radius-m);
+  padding:16px 18px; margin-bottom:14px; text-align:center;
+}
+.review-prompt p{ margin:0 0 12px; font-size:13.5px; }
+.review-prompt .btn{ margin:0 6px 6px; }
+
 .returning-user{
   background: var(--cream); border:1px solid var(--espresso-12); border-radius: var(--radius-m);
   padding:16px 18px; margin:22px 0; text-align:left;

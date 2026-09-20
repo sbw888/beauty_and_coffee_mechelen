@@ -1201,7 +1201,7 @@
      is self-reported (shown in the salon for a manual stamp), not
      an automated discount system. */
   const LOCAL_KEY = "beautyCoffeeLocal_v1";
-  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[] };
+  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], lastMatchAt:null, reviewPromptShownFor:null };
 
   function loadLocalData(){
     try {
@@ -1247,25 +1247,54 @@
       localData.discoveredDrinks.push(dname);
       changed = true;
     }
-    if (changed) saveLocalData();
+    localData.lastMatchAt = new Date().toISOString();
+    saveLocalData();
     return changed;
+  }
+
+  /* ---------------- Google review prompt ----------------
+     Shown on the welcome screen a few days after someone's last
+     generated match — a reasonable proxy for "had their treatment
+     by now" without any real appointment data. Shown once per visit
+     cycle (never repeats for the same lastMatchAt timestamp). */
+  const REVIEW_PROMPT_DELAY_DAYS = 3;
+  const GOOGLE_REVIEW_URL = "https://g.page/r/CWswrSNuP25zEBM/review";
+
+  function shouldShowReviewPrompt(){
+    if (!localData.lastMatchAt) return false;
+    if (localData.reviewPromptShownFor === localData.lastMatchAt) return false;
+    const daysSince = (Date.now() - new Date(localData.lastMatchAt).getTime()) / 86400000;
+    return daysSince >= REVIEW_PROMPT_DELAY_DAYS;
+  }
+
+  function dismissReviewPrompt(){
+    localData.reviewPromptShownFor = localData.lastMatchAt;
+    saveLocalData();
+    renderReturningUserBlock();
   }
 
   function renderReturningUserBlock(){
     const block = $("#returningUserBlock");
     if (!block) return;
     const hasHistory = localData.stamps > 0 || localData.discoveredTreatments.length > 0;
-    block.hidden = !hasHistory;
-    if (!hasHistory) return;
+    const showReview = shouldShowReviewPrompt();
+    block.hidden = !hasHistory && !showReview;
+    if (!hasHistory && !showReview) return;
     const totalTreatments = TREATMENTS_CATALOG.length;
     const totalDrinks = getAllDrinkNames().size;
-    block.innerHTML = `
+    const reviewHtml = showReview ? `
+      <div class="review-prompt">
+        <p>${t("review_prompt_text", state.lang)}</p>
+        <a class="btn btn--primary" href="${GOOGLE_REVIEW_URL}" target="_blank" rel="noopener" data-action="dismiss-review">${t("review_prompt_button", state.lang)}</a>
+        <button type="button" class="btn btn--text" data-action="dismiss-review">${t("review_prompt_dismiss", state.lang)}</button>
+      </div>` : "";
+    block.innerHTML = reviewHtml + (hasHistory ? `
       <p class="returning-user__title">${t("welcome_back_title", state.lang)}</p>
       <div class="returning-user__stats">
         <span>☕ ${Math.min(localData.stamps,10)}/10 ${t("stamps_label", state.lang)}</span>
         <span>✨ ${localData.discoveredTreatments.length}/${totalTreatments} ${t("treatments_discovered_label", state.lang)}</span>
         <span>🍵 ${localData.discoveredDrinks.length}/${totalDrinks} ${t("drinks_discovered_label", state.lang)}</span>
-      </div>`;
+      </div>` : "");
   }
 
   function renderLoyaltyBlock(){
@@ -1390,6 +1419,7 @@
       if (action === "add-stamp") addStamp();
       if (action === "reset-local-data") resetLocalData();
       if (action === "add-reminder") addCalendarReminder();
+      if (action === "dismiss-review") dismissReviewPrompt();
     });
 
     $("#fileInput").addEventListener("change", e => handleFileUpload(e.target.files[0]));

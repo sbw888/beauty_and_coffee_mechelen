@@ -103,6 +103,9 @@ const I18N = {
     reminder_saved_toast: "Herinnering gedownload — open het bestand om toe te voegen aan je agenda.",
 
     welcome_back_title: "Welkom terug ☕ — dit is wat je tot nu toe ontdekte:",
+    review_prompt_text: "❤️ We hopen dat je Beauty & Coffee-moment je goed heeft gedaan! Zou je dat met anderen willen delen via een Google review?",
+    review_prompt_button: "⭐ Schrijf een review",
+    review_prompt_dismiss: "Niet nu",
     stamps_label: "stempels",
     treatments_discovered_label: "behandelingen ontdekt",
     drinks_discovered_label: "drankjes ontdekt",
@@ -301,6 +304,9 @@ const I18N = {
     reminder_saved_toast: "Reminder downloaded — open the file to add it to your calendar.",
 
     welcome_back_title: "Welcome back ☕ — here's what you've discovered so far:",
+    review_prompt_text: "❤️ We hope your Beauty & Coffee moment did you good! Would you like to share that with others via a Google review?",
+    review_prompt_button: "⭐ Write a review",
+    review_prompt_dismiss: "Not now",
     stamps_label: "stamps",
     treatments_discovered_label: "treatments discovered",
     drinks_discovered_label: "drinks discovered",
