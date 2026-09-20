@@ -821,6 +821,19 @@
 
     const titleEl = $("#resultTitle");
     if (titleEl) titleEl.textContent = t(state.context === "thuis" ? "result_saved_title" : "result_title", state.lang);
+
+    updateBookingLink(m, drinkFull);
+  }
+
+  const BOOKING_EMAIL = "sandra.truong@ikmail.com";
+  function updateBookingLink(m, drinkFull){
+    const link = $("#bookEmailCta");
+    if (!link || !m) return;
+    const subject = t("book_email_subject", state.lang);
+    const body = t("book_email_body", state.lang)
+      .replace("{treatment}", m.treatment.name)
+      .replace("{drink}", drinkFull || "");
+    link.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   function renderResultBlocks(){

@@ -98,6 +98,9 @@ const I18N = {
     footer_reset_button: "Wis mijn lokale gegevens",
 
     reminder_button: "📅 Zet een herinnering in mijn agenda",
+    book_email_button: "📩 Boek deze afspraak per mail",
+    book_email_subject: "Afspraak boeken - Beauty & Coffee",
+    book_email_body: "Hallo Sandra,\n\nIk zou graag een afspraak boeken voor:\n✨ Behandeling: {treatment}\n☕ Drankje: {drink}\n\nMijn voorkeur voor dag/uur:\n\nGroetjes,",
     reminder_ics_title: "Beauty & Coffee — volgend moment",
     reminder_weeks_label: "Over hoeveel weken wil je herinnerd worden?",
     reminder_saved_toast: "Herinnering gedownload — open het bestand om toe te voegen aan je agenda.",
@@ -299,6 +302,9 @@ const I18N = {
     footer_reset_button: "Wipe my local data",
 
     reminder_button: "📅 Add a reminder to my calendar",
+    book_email_button: "📩 Book this appointment by email",
+    book_email_subject: "Booking a spot - Beauty & Coffee",
+    book_email_body: "Hi Sandra,\n\nI'd like to book an appointment for:\n✨ Treatment: {treatment}\n☕ Drink: {drink}\n\nMy preferred day/time:\n\nThanks,",
     reminder_ics_title: "Beauty & Coffee — next moment",
     reminder_weeks_label: "How many weeks until you'd like a reminder?",
     reminder_saved_toast: "Reminder downloaded — open the file to add it to your calendar.",
