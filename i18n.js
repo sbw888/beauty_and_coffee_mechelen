@@ -97,6 +97,9 @@ const I18N = {
     share_button: "Deel jouw match",
     download_button: "Download afbeelding",
     menu_cta: "Bekijk menu & prijzen",
+    practical_info_title: "📍 Praktisch om te weten",
+    practical_info_hours: "Momenteel enkel bereikbaar in het weekend — geen avondafspraken en (tijdelijk) geen huisbezoeken, wegens avondopleiding.",
+    practical_info_parking: "Parkeren: aan het begin van de straat (net vóór je links afslaat naar de woonhuizen) zijn parkeerplaatsen — vandaar is het maar 2 minuten stappen tot bij mij. Kom je met de bakfiets? Die mag je vastzetten bij de fietsen.",
     restart_button: "Opnieuw beginnen",
 
     footer_privacy: "Jouw foto's blijven altijd op je eigen toestel — 100% privé.",
@@ -308,6 +311,9 @@ const I18N = {
     share_button: "Share your match",
     download_button: "Download image",
     menu_cta: "View menu & pricing",
+    practical_info_title: "📍 Good to know",
+    practical_info_hours: "Currently only available on weekends — no evening appointments and (temporarily) no home visits, due to evening classes.",
+    practical_info_parking: "Parking: there are spots at the start of the street (just before you turn left toward the houses) — from there it's only a 2-minute walk to my place. Coming by cargo bike? You can lock it up with the bikes.",
     restart_button: "Start over",
 
     footer_privacy: "Your photos always stay on your own device — 100% private.",

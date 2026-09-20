@@ -805,6 +805,11 @@
     const extrasLabel = (m.extrasIds || []).map(id => t(`extras.${id}`, state.lang));
     const customLine = [milkLabel, ...extrasLabel].filter(Boolean).join(" · ");
 
+    const drinkPhotoOptions = !m.isKid && m.drink ? DRINK_PHOTOS[m.drink.name] : null;
+    const drinkPhotoHtml = drinkPhotoOptions
+      ? `<img class="result-row__photo" src="${pickRandom(drinkPhotoOptions)}" alt="${drinkFull}">`
+      : "";
+
     wrap.innerHTML = `
       <div class="result-row">
         <span class="result-row__icon">☕</span>
@@ -813,6 +818,7 @@
           <div class="result-row__value">${drinkFull}</div>
           ${drinkNotes ? `<div class="result-row__notes">${drinkNotes}</div>` : ""}
           ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}: ${customLine}</div>` : ""}
+          ${drinkPhotoHtml}
         </div>
       </div>
       <div class="result-row">

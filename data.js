@@ -6,6 +6,15 @@
 
 const MOOD_ICONS = { relax:"🌿", energetic:"✨", focus:"🧖‍♀️", luxury:"💛", group:"👥" };
 const CATEGORY_ICONS = { coffee:"☕", tea:"🫖", matcha:"🍵" };
+
+/* Real photos of specific drinks, shown on the result screen when the
+   matched drink has one available. Deliberately matched to the EXACT
+   drink name (e.g. only "Matcha Latte", not "Iced Matcha Latte" or
+   plain "Matcha") — showing the wrong variant's photo would be more
+   misleading than showing no photo at all. */
+const DRINK_PHOTOS = {
+  "Matcha Latte": ["assets/drinks/matcha-latte-1.jpg", "assets/drinks/matcha-latte-2.jpg"]
+};
 const CAFFEINE_ICONS = { caff:"⚡", decaf:"🌙" };
 const TEMPERATURE_ICONS = { hot:"🔥", iced:"🧊" };
 const PROFILE_ICONS = { kind:"🧒", man:"🧔", vrouw:"👩" };
@@ -321,6 +330,15 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink voldoende water na de massage en neem de tijd om rustig na te bewegen.",
                 en:"Drink enough water after the massage and take time to move gently afterwards." } },
 
+  { id:"swedishlegs", name:"Zweedse Benen- & Voetenmassage", moods:["relax"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, promoted:true, price:"€40 (30')",
+    homecare:{ category:"body" },
+    benefits:{ nl:"Een ontspannende massage voor benen en voeten die vermoeid of zwaar aanvoelen.",
+               en:"A relaxing massage for legs and feet that feel tired or heavy." },
+    funfact:{ nl:"Lang staan of zitten zorgt ervoor dat vocht zich makkelijker ophoopt in de onderbenen — een gerichte massage helpt de doorstroming weer op gang.",
+              en:"Standing or sitting for long periods makes fluid build up more easily in the lower legs — a targeted massage helps get circulation moving again." },
+    aftercare:{ nl:"Leg je benen na de massage waar mogelijk nog even iets hoger, en drink voldoende water.",
+                en:"Where possible, keep your legs slightly elevated for a while after the massage, and drink enough water." } },
+
   { id:"backwrap", name:"Energetic Back Wrap", moods:["relax","focus"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€65 (60')",
     homecare:{ category:"body" },
     benefits:{ nl:"Een verzorgende rugpakking met verfrissende peeling, revitaliserende algenpakking en massage.",
@@ -509,6 +527,15 @@ const TREATMENTS_CATALOG = [
               en:"Regular cuticle care prevents hangnails and dry cuticles over time." },
     aftercare:{ nl:"Kies je voor gellak of verstevigende BIAB? Dan zijn je nagels direct droog en stootvast. Bij klassieke nagellak raden we aan om je handen de eerste 2 uur droog te houden. Hydrateer nagelriemen dagelijks met nagelriemolie.",
                 en:"Opting for gel polish or builder gel (BIAB)? Your nails are dry and smudge-proof immediately! For classic nail polish, please allow 2 hours (hands) to fully dry. Apply cuticle oil daily for best results.." } },
+
+  { id:"pedicureexpress", name:"Express Pedicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, price:"€30 (30')",
+    homecare:{ category:"foot" },
+    benefits:{ nl:"Een basisvoetverzorging voor verzorgde nagels en nagelwallen — knippen, vijlen, nagelwalreiniging en voetencrème.",
+               en:"A basic pedicure for well-groomed nails and nail walls — trimming, filing, nail-wall cleaning and foot cream." },
+    funfact:{ nl:"Deze versie bevat bewust geen eeltverwijdering of massage — ideaal als je snel toonbare voeten wil zonder een volledige behandeling.",
+              en:"This version deliberately skips hard-skin removal and massage — ideal when you want presentable feet quickly, without a full treatment." },
+    aftercare:{ nl:"Hydrateer je voeten en nagelriemen regelmatig, zeker als je geen eeltbehandeling kreeg.",
+                en:"Moisturize your feet and cuticles regularly, especially since this version skips the hard-skin treatment." } },
 
   { id:"pedicure", name:"Extended Pedicure", moods:["relax","luxury"], genders:["vrouw","man"], sunSensitive:false, promoted:true, price:"€35 (60')",
     homecare:{ category:"foot" },
