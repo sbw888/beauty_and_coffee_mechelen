@@ -72,6 +72,7 @@
     <div class="returning-user" id="returningUserBlock" hidden></div>
 
     <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
+    <button type="button" class="btn btn--text" id="changeProfileLink" data-action="change-profile" data-i18n="change_profile_link" hidden>Niet jij? Pas je profiel aan</button>
   </section>
 
   <!-- PROFILE / AGE -->
@@ -150,6 +151,10 @@
       <h2 class="step__title" data-i18n="step1_title">Waar heb je vandaag zin in?</h2>
     </div>
     <div class="options options--mood" id="moodOptions"></div>
+    <div class="complaint-field">
+      <label for="complaintInput" data-i18n="complaint_label">Wil je iets kwijt over waar je last van hebt of aan wil werken? (optioneel)</label>
+      <textarea id="complaintInput" rows="2" data-i18n-placeholder="complaint_placeholder" placeholder="Bv. mijn rug staat helemaal vast, of ik heb dringend nood aan ontspanning..."></textarea>
+    </div>
     <div class="step__nav">
       <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
     </div>
@@ -228,14 +233,14 @@
   <!-- PHOTO -->
   <section class="step" data-step="photo">
     <div class="step__head">
-      <span class="step__eyebrow" data-i18n="step5_eyebrow">Stap 7 · Foto</span>
-      <h2 class="step__title" data-i18n="step5_title">Zet jezelf in beeld</h2>
-      <p class="step__hint" data-i18n="step5_hint">Maak een foto of upload er een. Alles blijft op jouw toestel.</p>
+      <span class="step__eyebrow" data-i18n="step5_eyebrow">Deel je moment</span>
+      <h2 class="step__title" data-i18n="step5_title">Voeg een foto toe aan je gedeelde moment</h2>
+      <p class="step__hint" data-i18n="step5_hint">Optioneel — voeg een foto toe van jou en je Beauty & Coffee moment. Alles blijft op jouw toestel.</p>
     </div>
 
     <div class="home-noticecard home-noticecard--compact" id="photoHomeBlock" hidden>
       <p data-i18n="home_no_photo_text">Geen foto bij de hand? Geen probleem — je kunt deze stap ook overslaan.</p>
-      <button type="button" class="btn btn--text" data-action="generate" data-i18n="skip_photo_button">Sla deze stap over</button>
+      <button type="button" class="btn btn--text" data-action="finish-photo" data-i18n="skip_photo_button">Sla deze stap over</button>
     </div>
 
     <div class="photo-stage" id="photoStage">
@@ -287,7 +292,7 @@
 
     <div class="step__nav">
       <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
-      <button type="button" class="btn btn--primary" data-action="generate" id="generateBtn" data-i18n="generate_button">Genereer mijn match</button>
+      <button type="button" class="btn btn--primary" data-action="finish-photo" id="generateBtn" data-i18n="finish_photo_button">Klaar</button>
     </div>
   </section>
 
@@ -316,8 +321,10 @@
     <div class="loyalty" id="loyaltyBlock"></div>
 
     <div class="result-actions" id="resultActionsSalon">
+      <button type="button" class="btn btn--outline btn--wide" data-action="open-photo-share" data-i18n="add_photo_button">📸 Voeg een foto toe aan je moment</button>
       <button type="button" class="btn btn--primary btn--wide" data-action="share" data-i18n="share_button">Deel jouw match</button>
       <a class="btn btn--primary btn--wide" id="bookEmailCta" href="#" data-i18n="book_email_button">📩 Boek deze afspraak per mail</a>
+      <a class="btn btn--primary btn--wide" id="bookWhatsappCta" href="#" target="_blank" rel="noopener" data-i18n="book_whatsapp_button">💬 Boek deze afspraak via WhatsApp</a>
       <button type="button" class="btn btn--outline btn--wide" data-action="download" data-i18n="download_button">Download afbeelding</button>
       <button type="button" class="btn btn--outline btn--wide" data-action="add-reminder" data-i18n="reminder_button">📅 Zet een herinnering in mijn agenda</button>
       <a class="btn btn--gold-outline btn--wide" id="menuCta" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee" target="_blank" rel="noopener" data-i18n="menu_cta">Bekijk menu &amp; prijzen</a>

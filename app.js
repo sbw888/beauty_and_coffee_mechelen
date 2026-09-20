@@ -13,6 +13,7 @@
     healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
+    complaintText: "",
     category: null,
     temperature: null,   // 'hot' | 'iced'
     caffeine: null,
@@ -143,6 +144,9 @@
         </span>`;
       card.addEventListener("click", () => {
         state.profile = id; renderProfileOptions();
+        localData.savedProfile = id;
+        if (id === "kind"){ localData.savedAgeBracket = null; }
+        saveLocalData();
         setTimeout(() => { goTo(id === "kind" ? "kidsDrink" : "age"); }, 200);
       });
       wrap.appendChild(card);
@@ -159,7 +163,7 @@
       tile.className = "option-tile" + (state.ageBracket===id ? " is-selected" : "");
       tile.innerHTML = `<span class="option-tile__icon">${AGE_ICONS[id]}</span>
         <span class="option-tile__title">${t(`age.${id}`, state.lang)}</span>`;
-      tile.addEventListener("click", () => { state.ageBracket = id; renderAgeOptions(); setTimeout(()=>goTo("sunCheck"), 200); });
+      tile.addEventListener("click", () => { state.ageBracket = id; renderAgeOptions(); localData.savedAgeBracket = id; saveLocalData(); setTimeout(()=>goTo("sunCheck"), 200); });
       wrap.appendChild(tile);
     });
   }
@@ -390,7 +394,7 @@
         </span>`;
       card.addEventListener("click", () => {
         state.context = opt.id; renderContextOptions();
-        setTimeout(() => { goTo("photo"); }, 200);
+        setTimeout(() => { runGeneration(); }, 200);
       });
       wrap.appendChild(card);
     });
@@ -729,7 +733,7 @@
       ...state.healthFlags,
       age30Plus: state.ageBracket === "30-44" || state.ageBracket === "45plus",
       age45Plus: state.ageBracket === "45plus"
-    });
+    }, state.complaintText);
     let drink;
     const wantsMilk = state.milk !== "none";
     const isIced = state.temperature === "iced";
@@ -826,14 +830,24 @@
   }
 
   const BOOKING_EMAIL = "sandra.truong@ikmail.com";
+  const BOOKING_WHATSAPP = "32499221901"; // wa.me format: country code + number, no + or spaces
   function updateBookingLink(m, drinkFull){
-    const link = $("#bookEmailCta");
-    if (!link || !m) return;
-    const subject = t("book_email_subject", state.lang);
-    const body = t("book_email_body", state.lang)
-      .replace("{treatment}", m.treatment.name)
-      .replace("{drink}", drinkFull || "");
-    link.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (!m) return;
+    const emailLink = $("#bookEmailCta");
+    if (emailLink){
+      const subject = t("book_email_subject", state.lang);
+      const body = t("book_email_body", state.lang)
+        .replace("{treatment}", m.treatment.name)
+        .replace("{drink}", drinkFull || "");
+      emailLink.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+    const waLink = $("#bookWhatsappCta");
+    if (waLink){
+      const waText = t("book_whatsapp_text", state.lang)
+        .replace("{treatment}", m.treatment.name)
+        .replace("{drink}", drinkFull || "");
+      waLink.href = `https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(waText)}`;
+    }
   }
 
   function renderResultBlocks(){
@@ -1198,7 +1212,8 @@
     cameraFacing = "user";
     state.profile = null; state.ageBracket = null; state.sunExposed = null; state.kidsDrink = null;
     state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false };
-    state.mood = null; state.category = null; state.temperature = null; state.caffeine = null;
+    state.mood = null; state.category = null; state.temperature = null; state.caffeine = null; state.complaintText = "";
+    const complaintEl = $("#complaintInput"); if (complaintEl) complaintEl.value = "";
     state.milk = "none"; state.extras = []; state.context = null;
     state.photoDataUrl = null; state.filter = "none"; state.match = null;
     retakePhoto();
@@ -1214,7 +1229,7 @@
      is self-reported (shown in the salon for a manual stamp), not
      an automated discount system. */
   const LOCAL_KEY = "beautyCoffeeLocal_v1";
-  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], lastMatchAt:null, reviewPromptShownFor:null };
+  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], lastMatchAt:null, reviewPromptShownFor:null, savedProfile:null, savedAgeBracket:null };
 
   function loadLocalData(){
     try {
@@ -1289,6 +1304,8 @@
   function renderReturningUserBlock(){
     const block = $("#returningUserBlock");
     if (!block) return;
+    const changeLink = $("#changeProfileLink");
+    if (changeLink) changeLink.hidden = !localData.savedProfile;
     const hasHistory = localData.stamps > 0 || localData.discoveredTreatments.length > 0;
     const showReview = shouldShowReviewPrompt();
     block.hidden = !hasHistory && !showReview;
@@ -1411,7 +1428,20 @@
       const el = e.target.closest("[data-action]");
       if (!el) return;
       const action = el.dataset.action;
-      if (action === "start") goTo("profile");
+      if (action === "start"){
+        if (localData.savedProfile && (localData.savedProfile === "kind" || localData.savedAgeBracket)){
+          state.profile = localData.savedProfile;
+          state.ageBracket = localData.savedAgeBracket;
+          goTo(state.profile === "kind" ? "kidsDrink" : "sunCheck");
+        } else {
+          goTo("profile");
+        }
+      }
+      if (action === "change-profile"){
+        localData.savedProfile = null; localData.savedAgeBracket = null; saveLocalData();
+        state.profile = null; state.ageBracket = null;
+        goTo("profile");
+      }
       if (action === "back") back();
       if (action === "to-mood") goTo("mood");
       if (action === "to-context") goTo("context");
@@ -1425,7 +1455,8 @@
       if (action === "editor-confirm") editorConfirm();
       if (action === "editor-cancel") editorCancel();
       if (action === "upload-photo") $("#fileInput").click();
-      if (action === "generate") runGeneration();
+      if (action === "finish-photo") finishPhotoShare();
+      if (action === "open-photo-share") goTo("photo");
       if (action === "share") shareImage();
       if (action === "download") downloadImage();
       if (action === "restart") resetApp();
@@ -1436,6 +1467,11 @@
     });
 
     $("#fileInput").addEventListener("change", e => handleFileUpload(e.target.files[0]));
+
+    const complaintEl = $("#complaintInput");
+    if (complaintEl){
+      complaintEl.addEventListener("input", () => { state.complaintText = complaintEl.value; });
+    }
   }
 
   async function runGeneration(){
@@ -1451,6 +1487,12 @@
     trackEvent("match-generated");
     if (isNewDiscovery) trackEvent("new-discovery");
     if (state.context === "thuis") showToast(t("toast_saved_home", state.lang));
+  }
+
+  async function finishPhotoShare(){
+    if (state.cameraStream) stopCamera();
+    await drawResultCanvas(); // re-bakes the share card with state.photoDataUrl if one was added
+    goTo("result");
   }
 
   document.addEventListener("DOMContentLoaded", init);

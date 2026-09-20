@@ -578,7 +578,42 @@ const TREATMENTS_CATALOG = [
    fallback when a mood + profile + sun/health combination leaves no match. */
 const SAFE_FALLBACK_IDS = ["signaturefacial","manicure","pedicure","liftsummere"];
 
-function matchTreatment(mood, gender, sunExposed, healthFlags){
+/* Optional free-text "waar heb je last van?" field — a lightweight,
+   fully local keyword scan (no AI, nothing sent anywhere). Each entry
+   maps a set of keywords to the treatment ids they should boost. This
+   is a hint layered on top of the mood-based matching, not a
+   replacement for it — the guided questions (safety filters included)
+   remain the reliable backbone. */
+const COMPLAINT_KEYWORDS = [
+  { words:["rug","rugpijn","rugklachten","nek","schouder","schouders"], ids:["backwrap","detoxback","harmonizingbody","swedishbackneck","cupping","cuppingpeeling"] },
+  { words:["stress","gestrest","ontspanning","ontspannen","moe","vermoeid","uitgeput"], ids:["swedish","swedishbackneck","hotstone","cupping"] },
+  { words:["spierpijn","spieren","stijf","gespannen"], ids:["cupping","cuppingpeeling","slimmassage","swedish"] },
+  { words:["rimpels","veroudering","verouderen","huidveroudering","stevigheid"], ids:["antiagefacial","liftsummere"] },
+  { words:["pigmentatie","pigmentvlekken","oneffen","dof","vale huid","vaal"], ids:["hydrapeel","fruitacid"] },
+  { words:["onzuiverheden","puistjes","acne","vette huid"], ids:["signaturefacial"] },
+  { words:["voeten","voet","eelt","nagelriem","ingegroeide nagel"], ids:["pedicure"] },
+  { words:["nagels","handen","manicure"], ids:["manicure","manipedispa"] },
+  { words:["wimpers","wenkbrauwen","brows","lashes"], ids:["lashlift","browlift","hennabrows"] },
+  { words:["ontharen","ontharing","haargroei","beharing"], ids:["oksel","been","rug","buik","borst"] },
+  { words:["contour","silhouet","gewicht","afslanken","cellulite"], ids:["slimmassage"] },
+  { words:["make-up","makeup","visagie"], ids:["glammakeup"] }
+];
+
+function boostByComplaint(pool, complaintText){
+  if (!complaintText) return pool;
+  const text = complaintText.toLowerCase();
+  const matchedIds = new Set();
+  COMPLAINT_KEYWORDS.forEach(entry => {
+    if (entry.words.some(w => text.includes(w))){
+      entry.ids.forEach(id => matchedIds.add(id));
+    }
+  });
+  if (!matchedIds.size) return pool;
+  const boosted = pool.filter(item => matchedIds.has(item.id));
+  return boosted.length ? boosted : pool;
+}
+
+function matchTreatment(mood, gender, sunExposed, healthFlags, complaintText){
   healthFlags = healthFlags || {};
   const genderOk = (item) => item.genders.includes(gender);
   const sunOk = (item) => !sunExposed || !item.sunSensitive;
@@ -606,6 +641,10 @@ function matchTreatment(mood, gender, sunExposed, healthFlags){
     const cuppingPool = pool.filter(item => item.cuppingRelated);
     if (cuppingPool.length) pool = cuppingPool;
   }
+
+  // Free-text complaint (optional) → narrow toward treatments matching
+  // the keywords found, if any of those still fit the chosen mood.
+  pool = boostByComplaint(pool, complaintText);
 
   // Business push: give massages, body peelings/wraps, and pedicure a much
   // higher chance of being recommended — and give the pigmentation-fading
