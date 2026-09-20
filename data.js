@@ -283,10 +283,10 @@ function pickSecondarySoap(primaryCategoryId){
 const TREATMENTS_CATALOG = [
   { id:"hotstone", name:"Hot Stone Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, excludeSummer:true, promoted:true, price:"€90 (90')",
     homecare:{ category:"body" },
-    benefits:{ nl:"Een intensieve verzorgingsbehandeling volgens het Fill Me-protocol, met cleanser, tonic, Fill Me Serum, masker, LED-masker en UV-bescherming.",
-               en:"An intensive care treatment following the Fill Me protocol, with cleanser, tonic, Fill Me Serum, mask, LED mask and UV protection." },
-    funfact:{ nl:"Helemaal onderaan de opperhuid ligt de basale laag — daar delen huidcellen zich continu om je huid van binnenuit te vernieuwen.",
-              en:"At the very base of the epidermis lies the basal layer — where skin cells continuously divide to renew your skin from within." },
+    benefits:{ nl:"Een diep ontspannende lichaamsmassage met warme stenen die over de huid glijden, gecombineerd met manuele massagetechnieken — een moment om helemaal tot rust te komen.",
+               en:"A deeply relaxing body massage with warm stones gliding over the skin, combined with manual massage techniques — a moment to fully unwind." },
+    funfact:{ nl:"De stenen zijn meestal van basalt, een vulkanisch gesteente dat warmte lang vasthoudt — daarom blijft de massage aangenaam warm aanvoelen.",
+              en:"The stones are usually basalt, a volcanic rock that holds heat for a long time — which is why the massage stays pleasantly warm." },
     aftercare:{ nl:"Drink de eerste 24 uur extra water, vermijd een hete douche of sauna direct erna en neem de tijd om na te rusten.",
                 en:"Drink extra water for the first 24 hours, avoid a hot shower or sauna right after, and take time to rest afterwards." } },
 

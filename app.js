@@ -1292,7 +1292,7 @@
      by now" without any real appointment data. Shown once per visit
      cycle (never repeats for the same lastMatchAt timestamp). */
   const REVIEW_PROMPT_DELAY_DAYS = 3;
-  const GOOGLE_REVIEW_URL = "https://g.page/r/CWswrSNuP25zEBM/review";
+  const GOOGLE_REVIEW_URL = "https://g.page/r/CWswrSNuP25zEAE/review";
 
   function shouldShowReviewPrompt(){
     if (!localData.lastMatchAt) return false;
