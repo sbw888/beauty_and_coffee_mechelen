@@ -420,3 +420,88 @@ body{
 [hidden] {
   display: none !important;
 }
+
+/* ============ CURRENT ACTIONS ============ */
+.action-card{
+  display:flex; gap:14px; align-items:flex-start;
+  background: linear-gradient(135deg, var(--cream), #fff8ea);
+  border:1px solid var(--gold-light); border-radius: var(--radius-m);
+  padding:14px 18px; margin-bottom:16px;
+}
+.action-card__icon{ font-size:26px; line-height:1; }
+.action-card__title{ font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--gold-ink); margin:0 0 4px; }
+.action-card__text{ font-size:13px; color:var(--espresso); margin:0; }
+
+/* ============ WELCOME: price list button ============ */
+.welcome-pricelist{ margin-top:12px; }
+
+/* ============ MATCH TOOLS (another match / favorite) ============ */
+.match-tools{ display:flex; gap:10px; margin:14px 0 18px; }
+.match-tools .btn{ flex:1; padding-left:10px; padding-right:10px; font-size:14px; }
+
+/* ============ SLOT PICKER (weekend preference) ============ */
+.slot-picker{
+  background: var(--cream); border:1px solid var(--espresso-12); border-radius: var(--radius-m);
+  padding:14px 16px; margin-bottom:16px;
+}
+.slot-picker__title{ font-family:var(--font-display); font-weight:600; font-size:14px; margin:0 0 10px; }
+.slot-picker__chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.slot-chip{
+  font-family:var(--font-body); font-size:13px; color:var(--espresso);
+  background:#fff; border:1px solid var(--espresso-30); border-radius:999px;
+  padding:8px 14px; cursor:pointer;
+}
+.slot-chip.is-selected{ background:var(--espresso); border-color:var(--espresso); color:var(--cream); }
+.slot-picker__hint{ font-size:12px; color:var(--espresso-60); margin:10px 0 0; }
+
+/* ============ FAVORITES (welcome screen) ============ */
+.returning-user__title--fav{ margin-top:14px; }
+.fav-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.fav-item{ display:flex; flex-direction:column; gap:6px; padding:10px 12px; background:#fff; border:1px solid var(--espresso-12); border-radius:var(--radius-s); }
+.fav-item__text{ display:flex; flex-direction:column; gap:2px; font-size:13px; }
+.fav-item__text span{ color:var(--espresso-60); }
+.fav-item__actions{ display:flex; gap:14px; align-items:center; }
+.fav-item__book{ font-size:12.5px; color:var(--gold-ink); font-weight:500; }
+.fav-item__remove{ font-family:var(--font-body); font-size:12.5px; color:var(--espresso-60); background:none; border:none; padding:0; text-decoration:underline; cursor:pointer; }
+
+/* ============ PRICE LIST ============ */
+.price-search{
+  width:100%; font-family:var(--font-body); font-size:15px; color:var(--espresso);
+  background:#fff; border:1px solid var(--espresso-30); border-radius:var(--radius-s);
+  padding:12px 14px; margin:4px 0 14px;
+}
+.price-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:22px; }
+.price-section{ background:var(--cream); border:1px solid var(--espresso-12); border-radius:var(--radius-m); padding:0 16px; }
+.price-section > summary{
+  display:flex; align-items:center; gap:10px; padding:14px 0; cursor:pointer; list-style:none;
+  font-family:var(--font-display); font-weight:600; font-size:15px;
+}
+.price-section > summary::-webkit-details-marker{ display:none; }
+.price-section > summary::after{ content:"＋"; margin-left:auto; color:var(--gold-ink); font-family:var(--font-body); }
+.price-section[open] > summary::after{ content:"－"; }
+.price-section__title{ flex:1; }
+.price-section__count{ font-family:var(--font-body); font-weight:400; font-size:12px; color:var(--espresso-60); }
+.price-section__note{ font-size:12.5px; color:var(--espresso-60); margin:0 0 10px; }
+.price-items{ list-style:none; margin:0; padding:0 0 8px; }
+.price-item{ padding:10px 0; border-top:1px solid var(--espresso-12); }
+.price-item__main{ display:flex; justify-content:space-between; gap:12px; align-items:baseline; }
+.price-item__name{ font-size:14px; font-weight:500; }
+.price-item__price{ font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--gold-ink); white-space:nowrap; }
+.price-item__meta{ font-size:12.5px; color:var(--espresso-60); margin-top:2px; }
+.price-item__note{ font-size:12px; color:var(--gold-ink); margin-top:3px; }
+.price-empty{ font-size:14px; color:var(--espresso-60); text-align:center; padding:18px 0; }
+.price-contact{ display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+.price-contact__title{ font-family:var(--font-display); font-weight:600; font-size:15px; margin:0; }
+.price-contact__hint{ font-size:12.5px; color:var(--espresso-60); margin:0; }
+
+/* ============ PRIVACY BLOCK (footer) ============ */
+.privacy-block{ text-align:left; background:var(--cream); border:1px solid var(--espresso-12); border-radius:var(--radius-m); padding:0 16px; margin:14px 0 4px; }
+.privacy-block > summary{ cursor:pointer; padding:12px 0; font-size:13px; font-weight:500; color:var(--espresso); list-style:none; }
+.privacy-block > summary::-webkit-details-marker{ display:none; }
+.privacy-block p{ font-size:12.5px; color:var(--espresso-60); margin:0 0 10px; text-align:left; }
+
+/* ============ LANGUAGE TOGGLE: three languages on narrow phones ============ */
+@media (max-width: 380px){
+  .lang-toggle{ gap:4px; }
+  .lang-btn{ padding:6px 9px; }
+}

@@ -298,8 +298,8 @@ const TREATMENTS_CATALOG = [
               en:"The well-known 'cupping marks' come from the suction the cups create on the skin — the darker the mark, the more intense the local reaction was. That's why we always target specific zones and never treat the entire body at once." },
     caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. De zon in mag gewoon na een lokale cupping massage.",
               en:"Cupping isn't suitable if you have a fever, a contagious skin condition, stomach or intestinal ulcers, a heart condition, or are underweight — please let us know beforehand if any of these apply to you. Sun exposure is fine after a local cupping massage." },
-    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Drink extra veel water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een zwembad- of strandmoment, trouwfeest of fotoshoot. Voor duurzaam onderhoud wordt een sessie om de 3 tot 6 weken aanbevolen.",
-                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. Drink plenty of water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a swimwear moment, a wedding, or a photoshoot. For long-term maintenance, a session every 3 to 6 weeks is recommended." } },
+    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Drink voldoende water, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een zwembad- of strandmoment, trouwfeest of fotoshoot. Voor duurzaam onderhoud wordt een sessie om de 3 tot 6 weken aanbevolen.",
+                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. Drink plenty of water, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a swimwear moment, a wedding, or a photoshoot. For long-term maintenance, a session every 3 to 6 weeks is recommended." } },
 
   { id:"cuppingpeeling", name:"Cupping Body Renewal", moods:["focus","relax"], genders:["vrouw","man"], sunSensitive:true, isMassage:true, pregnancyUnsafe:true, cuppingRelated:true, promoted:true, price:"€120 (120')",
     homecare:{ category:"body" },
@@ -309,8 +309,8 @@ const TREATMENTS_CATALOG = [
               en:"Because cupping is an intensive treatment, the whole body isn't cupped in a single session. A next body zone can, when suitable, be treated during a later appointment — the choice of zone and treatment plan is discussed during the intake." },
     caution:{ nl:"Cupping is niet geschikt bij koorts, besmettelijke huidziekten, maag- of darmzweren, hartaandoeningen of een te laag lichaamsgewicht — laat het ons vooraf weten als dit op jou van toepassing is. Ga je na deze behandeling in de zon? Dan raden we de peeling af vanwege verhoogde gevoeligheid.",
               en:"Cupping isn't suitable if you have a fever, a contagious skin condition, stomach or intestinal ulcers, a heart condition, or are underweight — please let us know beforehand if any of these apply to you. Planning sun exposure after this treatment? Then we'd advise against the peeling due to increased sensitivity." },
-    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Vermijd daarnaast de eerste 24 tot 48 uur directe zon, de zonnebank en sauna's op de behandelde zone — gebruik nadien een hoge SPF. Drink extra water om losgekomen afvalstoffen af te voeren, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een zwembad- of strandmoment, trouwfeest of fotoshoot.",
-                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. On top of that, avoid direct sun, tanning beds, and saunas on the treated zone for the first 24 to 48 hours — use a high SPF afterwards. Drink extra water to help flush out released toxins, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a swimwear moment, a wedding, or a photoshoot." } },
+    aftercare:{ nl:"Sommige mensen voelen zich na cupping behoorlijk moe en wat gevoelig — vergelijkbaar met na een pittige training. Plan er daarom het liefst niets meer na: ga rechtstreeks naar huis, vermijd werk of winkelen, en gun jezelf rust. Stel de behandelde huid ook niet meteen bloot aan een hete of koude douche/bad. Vermijd daarnaast de eerste 24 tot 48 uur directe zon, de zonnebank en sauna's op de behandelde zone — gebruik nadien een hoge SPF. Drink voldoende water, gebruik eventueel Arnica-olie tegen blauwe plekken, en houd er rekening mee dat de plekken tot ongeveer 7 dagen zichtbaar kunnen blijven — handig om te weten vóór een zwembad- of strandmoment, trouwfeest of fotoshoot.",
+                en:"Some people feel quite tired and a little sore after cupping — similar to how you'd feel after an intense workout. It's best not to plan anything else afterwards: head straight home, skip work or errands, and give yourself time to rest. Also don't expose the treated skin to a hot or cold shower/bath right away. On top of that, avoid direct sun, tanning beds, and saunas on the treated zone for the first 24 to 48 hours — use a high SPF afterwards. Drink enough water, optionally use Arnica oil to reduce bruising, and keep in mind the marks can stay visible for about 7 days — worth knowing ahead of a swimwear moment, a wedding, or a photoshoot." } },
 
   { id:"swedish", name:"Swedish Full Body Massage", moods:["relax"], genders:["vrouw"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, promoted:true, price:"€70 (60')",
     homecare:{ category:"body" },
@@ -696,3 +696,146 @@ function matchTreatment(mood, gender, sunExposed, healthFlags, complaintText){
 }
 
 function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ============================================================
+   CURRENT ACTIONS (shown on the result screen, above "Praktisch")
+   Add, edit or remove an entry here — nothing else needs to change.
+   Optional: from / until as "YYYY-MM-DD". Outside that window the
+   action hides itself automatically. Leave null for "no end date".
+   ============================================================ */
+const CURRENT_ACTIONS = [
+  { id:"grabbelton", icon:"🎁", from:null, until:null,
+    title:{ nl:"Grabbelton", en:"Lucky dip" },
+    text:{ nl:"Besteed je €75 of meer tijdens dezelfde afspraak? Dan mag je één keer grabbelen in de grabbelton.",
+           en:"Spend €75 or more during the same appointment and you get one grab from the lucky dip." } }
+];
+
+/* ============================================================
+   BOOKING SLOTS — chips shown above the booking buttons.
+   Currently weekend only (also in the evening). Add or remove
+   entries when your availability changes; (French text: lang-fr.js) the choice is added to the mail/WhatsApp text.
+   ============================================================ */
+const BOOKING_SLOTS = [
+  { id:"za-vm", nl:"Zaterdag voormiddag", en:"Saturday morning" },
+  { id:"za-nm", nl:"Zaterdag namiddag",   en:"Saturday afternoon" },
+  { id:"za-av", nl:"Zaterdagavond",       en:"Saturday evening" },
+  { id:"zo-vm", nl:"Zondag voormiddag",   en:"Sunday morning" },
+  { id:"zo-nm", nl:"Zondag namiddag",     en:"Sunday afternoon" },
+  { id:"zo-av", nl:"Zondagavond",         en:"Sunday evening" }
+];
+
+/* ============================================================
+   SALON STAMP PIN — a short code that only you know.
+   Leave "" to keep the old behaviour (client confirms herself).
+   Fill in e.g. "4821" to require the code before a stamp is added.
+   NB: this is a deterrent, not real security (the code sits in
+   this file). Good enough to stop casual self-stamping.
+   ============================================================ */
+const SALON_STAMP_PIN = "";
+
+/* ============================================================
+   PRICE LIST (tab "Prijslijst") — prices as on the website
+   "Vanaf 1/06/2026", plus the cupping treatments.
+   Fields per item: n = name, d = short description (optional),
+   time, price, note (optional). Everything is bilingual (nl/en).
+   ============================================================ */
+function PI(nl, en, time, price, dnl, den, nnl, nen){
+  return { n:{nl, en}, d: dnl ? {nl:dnl, en:den} : null, time, price, note: nnl ? {nl:nnl, en:nen} : null };
+}
+const PRICE_LIST = [
+  { id:"facial", icon:"🌿", title:{ nl:"Gelaatsverzorging", en:"Facials" }, items:[
+    PI("Express gelaatsverzorging","Express facial","30′","€60","Reiniging, dieptereiniging, crèmemasker & dagcrème.","Cleansing, deep cleansing, cream mask & day cream."),
+    PI("Acnécontrole – Équilibre Pureté Citron Vert","Acne control – Équilibre Pureté Citron Vert","60′","€65","Zuiverende behandeling, met huidanalyse bij de eerste behandeling.","Purifying treatment, with skin analysis at the first treatment."),
+    PI("Signature gelaatsverzorging","Signature facial","75′","€85","Uitgebreide verzorging met massage; ook voor gevoelige huid.","Full facial with massage; also suitable for sensitive skin."),
+    PI("Fill Me Micro Infusie Treatment","Fill Me Micro Infusion Treatment","45–60′","€99","Cleanser, tonic, Fill Me Serum, masker, LED-masker & UV-bescherming.","Cleanser, tonic, Fill Me Serum, mask, LED mask & UV protection."),
+    PI("Fruitzurenpeeling 4/26 Dr. Renaud","Fruit acid peel 4/26 Dr. Renaud","75′","€100","Voor een egalere teint. Enkel van september tot maart.","For a more even skin tone. Only from September to March."),
+    PI("Huidvernieuwende Hydra Peeling pH","Skin-renewing Hydra Peeling pH","90′","€100","Voor een frisse uitstraling en een egalere teint.","For a fresh glow and a more even skin tone."),
+    PI("Lift Summum","Lift Summum","70′","€120","Voor een strakker ogende huid, met massage en gelaatsmasker.","For firmer-looking skin, with massage and face mask."),
+    PI("Botanische Anti-Age","Botanical Anti-Age","90′","€125","Verzorgende anti-age behandeling met ampul, massage en masker.","Anti-age care with ampoule, massage and mask.")
+  ]},
+  { id:"facial-extra", icon:"✨", title:{ nl:"Extra’s bij je gelaatsverzorging", en:"Facial add-ons" }, items:[
+    PI("Handpeeling & -massage","Hand peeling & massage","10′","€10"),
+    PI("LED-therapie","LED therapy","10′","€10"),
+    PI("Ontharing wenkbrauwen","Eyebrow hair removal","15′","€15"),
+    PI("Ampul / serum","Ampoule / serum","5′","€5"),
+    PI("Peel-off masker","Peel-off mask","20′","€15"),
+    PI("Collageenvliesmasker","Collagen sheet mask","20′","€20"),
+    PI("Anti-aging paraffinemasker","Anti-aging paraffin mask","30′","€20"),
+    PI("Hot Stone gelaatsmassage","Hot Stone facial massage","20′","€20"),
+    PI("Touch-up dagmake-up na gelaatsverzorging","Day make-up touch-up after facial","25′","€25")
+  ]},
+  { id:"makeup", icon:"💄", title:{ nl:"Visagie (minerale / HD make-up)", en:"Make-up (mineral / HD)" }, items:[
+    PI("Touch-up dagmake-up na gelaatsverzorging","Day make-up touch-up after facial","25′","€25"),
+    PI("Avondmake-up / Party / Glam","Evening / Party / Glam make-up","60′","€60",null,null,"Valse wimpers? Breng zelf wimpers en wimperlijm mee; ik breng ze aan.","False lashes? Bring your own lashes and lash glue; I'll apply them."),
+    PI("Bridal proefmake-up","Bridal trial make-up","60′","€65"),
+    PI("Bridal proefmake-up & bruidsmake-up","Bridal trial & wedding-day make-up","2×60′","€135"),
+    PI("Huwelijksdag make-up, per persoon","Wedding-day make-up, per person","30′","€40")
+  ]},
+  { id:"brows", icon:"🪮", title:{ nl:"Brows (wenkbrauwen)", en:"Brows" }, items:[
+    PI("Brow Tinting (kleuren haar)","Brow tinting (hair colour)","15′","€20"),
+    PI("Shaping (mappen en ontharen)","Shaping (mapping & hair removal)","20′","€25"),
+    PI("Henna Brows","Henna Brows","60′","€50","Mappen, shapen, kleuren van haar en huid; tot 6 weken.","Mapping, shaping, colouring hair and skin; up to 6 weeks."),
+    PI("Brow Lift","Brow Lift","75′","€75","Mappen, shapen, lamineren, kleuren van haar en huid; tot 6 weken.","Mapping, shaping, lamination, colouring hair and skin; up to 6 weeks.")
+  ]},
+  { id:"lashes", icon:"👁️", title:{ nl:"Lashes (wimpers)", en:"Lashes" }, items:[
+    PI("Lash Tinting (kleuren wimpers)","Lash tinting","15′","€20"),
+    PI("Lash Lift met kleuring","Lash Lift with tint","75′","€75",null,null,"Tot 6 weken.","Up to 6 weeks.")
+  ]},
+  { id:"manicure", icon:"💅", title:{ nl:"Manicure (handverzorging)", en:"Manicure" }, items:[
+    PI("Express manicure","Express manicure","30′","€30","Knippen, vijlen, nagelriemen & verzorgende handcrème.","Trimming, filing, cuticles & nourishing hand cream."),
+    PI("Uitgebreide manicure","Full manicure","60′","€35","Knippen, vijlen, nagelriemen, polijsten, eelt & massage.","Trimming, filing, cuticles, buffing, hard skin & massage."),
+    PI("Kindermanicure","Children’s manicure","20′","€20","Vijlen en kindernagellak of peel-off.","Filing and children’s nail polish or peel-off."),
+    PI("Supplement SPA manicure","Add-on: SPA manicure","30′","€30","Peeling, masker, pakking, massage & verzorging.","Peeling, mask, wrap, massage & care."),
+    PI("Supplement verwijderen nagellak / gellak / BIAB","Add-on: removal of polish / gel / BIAB","40′","€20"),
+    PI("Supplement nagellak","Add-on: nail polish","30′","€5"),
+    PI("Supplement gellak (soak-off)","Add-on: gel polish (soak-off)","30′","€20"),
+    PI("Supplement BIAB (soak-off)","Add-on: BIAB (soak-off)","45′","€25")
+  ]},
+  { id:"pedicure", icon:"🦶", title:{ nl:"Pedicure (voetverzorging)", en:"Pedicure" }, items:[
+    PI("Express pedicure","Express pedicure","30′","€30","Knippen, vijlen, nagelwalreiniging & voetencrème (zonder eeltverwijdering, zonder massage).","Trimming, filing, nail-fold cleaning & foot cream (no hard-skin removal, no massage)."),
+    PI("Uitgebreide pedicure","Full pedicure","60′","€35","Knippen, vijlen, nagelwalreiniging, nagelriemen, normale eeltverwijdering & korte voetenmassage.","Trimming, filing, nail-fold cleaning, cuticles, standard hard-skin removal & short foot massage.","+ €10 per extra 15′ bij overmatige eeltbehandeling.","+ €10 per extra 15′ for heavy hard-skin treatment."),
+    PI("Supplement ingegroeide nagel / copoline, per nagel","Add-on: ingrown nail / copoline, per nail","+10′","€5","Plaatsen van een copoline-verband in de nagelwal.","Placing a copoline bandage in the nail fold."),
+    PI("Supplement drukvrij leggen / foambescherming, per teen","Add-on: pressure relief / foam protection, per toe","5′","€2,50","Een zacht foambeschermbuisje om wrijving en druk van de schoen te verlichten.","A soft foam tube to relieve friction and pressure from the shoe."),
+    PI("Supplement SPA pedicure","Add-on: SPA pedicure","+30′","€30","Peeling, masker, pakking, uitgebreide massage.","Peeling, mask, wrap, extended massage."),
+    PI("Supplement nagellak","Add-on: nail polish","30′","€5"),
+    PI("Supplement gellak (soak-off)","Add-on: gel polish (soak-off)","45′","€20"),
+    PI("Supplement verwijderen nagellak / gellak","Add-on: removal of polish / gel","40′","€20")
+  ]},
+  { id:"waxing", icon:"🌸", title:{ nl:"Ontharing (waxen / threading / epileren)", en:"Hair removal (waxing / threading / tweezing)" }, items:[
+    PI("Kin","Chin","10′","€10"),
+    PI("Bovenlip","Upper lip","10′","€10"),
+    PI("Wenkbrauwen (zonder mapping / opschonen)","Eyebrows (no mapping / tidy-up)","20′","€15"),
+    PI("Oksels","Underarms","20′","€15"),
+    PI("Schouders","Shoulders","25′","€15"),
+    PI("Buik","Stomach","45′","€20"),
+    PI("Borst","Chest","45′","€25"),
+    PI("Onderbenen","Lower legs","20′","€30"),
+    PI("Onderbenen & knieën","Lower legs & knees","35′","€40"),
+    PI("Rug","Back","60′","€40"),
+    PI("Borst & buik","Chest & stomach","90′","€40"),
+    PI("Volledige benen","Full legs","60′","€50")
+  ]},
+  { id:"body", icon:"🤍", title:{ nl:"Lichaamsverzorging & massage", en:"Body care & massage" }, items:[
+    PI("Cuppingmassage","Cupping massage","60′","€60","Gerichte cuppingmassage op specifieke zones.","Targeted cupping massage on specific zones."),
+    PI("Cupping Body Renewal","Cupping Body Renewal","120′","€120","Peeling, Thermo Body Pack en cupping voor één lichaamszone per sessie.","Peeling, Thermo Body Pack and cupping for one body zone per session."),
+    PI("Zweedse full body massage","Swedish full body massage","60′","€70","Relaxerend en spierversoepelend.","Relaxing and muscle-softening."),
+    PI("Zweedse rug-nek-schouder massage","Swedish back-neck-shoulder massage","30′","€40","Bij stress en verkrampte spieren.","For stress and tense muscles."),
+    PI("Zweedse benen-voeten massage","Swedish legs-feet massage","30′","€40","Bij vermoeide benen.","For tired legs."),
+    PI("Hot Stone Massage","Hot Stone Massage","90′","€90","Diepe relaxatie met warme stenen.","Deep relaxation with warm stones."),
+    PI("Afslankingsmassage","Slimming massage","60′","€55","Stimulerende massage, aanvullend bij gezonde voeding en beweging (ook voor mannen).","Stimulating massage, complementary to healthy eating and exercise (men welcome too)."),
+    PI("Zuiverende rugbehandeling","Purifying back treatment","60′","€70","Dieptereiniging, pakking en anti-stressmassage.","Deep cleansing, wrap and anti-stress massage."),
+    PI("Harmoniserende verzorging rug","Harmonising back care","30′","€35","Peeling en massage voor een zachte, gladde huid.","Peeling and massage for soft, smooth skin."),
+    PI("Harmoniserende verzorging full body","Harmonising full body care","70′","€70","Peeling en massage voor een zachte, gladde huid.","Peeling and massage for soft, smooth skin."),
+    PI("Energetische rugpakking","Energising back wrap","60′","€65","Verfrissende peeling, algenpakking en massage.","Refreshing peeling, seaweed wrap and massage."),
+    PI("Energetische lichaamspakking full body","Energising full body wrap","120′","€110","Verfrissende peeling, algenpakking en massage.","Refreshing peeling, seaweed wrap and massage.")
+  ]},
+  { id:"workshops", icon:"☕", title:{ nl:"Beauty & Koffie workshops", en:"Beauty & Coffee workshops" },
+    note:{ nl:"Privéworkshops in kleine groepen van 3–4 personen. Minstens 1 week op voorhand inschrijven.", en:"Private workshops in small groups of 3–4 people. Please register at least 1 week in advance." },
+    items:[
+    PI("Beauty Make-up Privéworkshop","Beauty Make-up Private Workshop","75′","€50",null,null,"3–4 personen: €35 p.p.","3–4 people: €35 p.p."),
+    PI("Beauty Gelaatsverzorging & Touch-up Make-up Privéworkshop","Beauty Facial & Touch-up Make-up Private Workshop","75′","€50",null,null,"3–4 personen: €35 p.p.","3–4 people: €35 p.p."),
+    PI("Koffieproeverij Basis","Coffee tasting – Basic","120′","€60 p.p.","Ontdek koffiearoma’s, het verhaal van boon tot specialty coffee en vergelijk meerdere koffies.","Discover coffee aromas, the story from bean to specialty coffee, and compare several coffees.",  "3–4 personen","3–4 people"),
+    PI("Koffieproeverij Verdiepend","Coffee tasting – Advanced","180′","€65 p.p.","Meer over verwerkingsprocessen, variëteiten, omgevingsfactoren, brandprofielen en smaken.","More on processing methods, varieties, growing conditions, roast profiles and flavours.","3–4 personen","3–4 people"),
+    PI("Barista Privéworkshop","Barista Private Workshop","120′","€175","Zet thuis zelf espresso, espresso-afgeleiden en slow coffees (V60, French Press, Phin, Mokapot).","Learn to make espresso, espresso-based drinks and slow coffees at home (V60, French Press, Phin, Moka pot).")
+  ]}
+];

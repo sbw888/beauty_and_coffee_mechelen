@@ -48,10 +48,12 @@
     <img src="assets/icon-192.png" alt="Beauty & Coffee logo" class="brand-mark__logo">
     <span class="brand-mark__text">Beauty <span class="amp">&amp;</span> Coffee</span>
   </div>
-  <div class="lang-toggle" role="group" aria-label="Language / Taal">
+  <div class="lang-toggle" role="group" aria-label="Language / Taal / Langue">
     <button type="button" class="lang-btn is-active" data-lang="nl" aria-pressed="true">NL</button>
     <span class="lang-toggle__divider" aria-hidden="true"></span>
     <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    <span class="lang-toggle__divider" aria-hidden="true"></span>
+    <button type="button" class="lang-btn" data-lang="fr" aria-pressed="false">FR</button>
   </div>
 </header>
 
@@ -72,6 +74,7 @@
     <div class="returning-user" id="returningUserBlock" hidden></div>
 
     <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
+    <button type="button" class="btn btn--gold-outline btn--wide welcome-pricelist" data-action="open-pricelist" data-i18n="pricelist_button">💶 Bekijk prijslijst</button>
     <button type="button" class="btn btn--text" id="changeProfileLink" data-action="change-profile" data-i18n="change_profile_link" hidden>Niet jij? Pas je profiel aan</button>
   </section>
 
@@ -316,15 +319,20 @@
     </div>
 
     <div class="result-details" id="resultDetails"></div>
+    <div class="match-tools" id="matchTools"></div>
     <div class="result-blocks" id="resultBlocks"></div>
 
     <div class="loyalty" id="loyaltyBlock"></div>
 
+    <div id="actionsBlock"></div>
+
     <div class="practical-info">
       <p class="practical-info__title" data-i18n="practical_info_title">📍 Praktisch om te weten</p>
-      <p data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend — geen avondafspraken en (tijdelijk) geen huisbezoeken, wegens avondopleiding.</p>
+      <p data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend, ook 's avonds — geen afspraken op weekdagen en (tijdelijk) geen huisbezoeken, wegens avondopleiding.</p>
       <p data-i18n="practical_info_parking">Parkeren: aan het begin van de straat (net vóór je links afslaat naar de woonhuizen) zijn parkeerplaatsen — vandaar is het maar 2 minuten stappen tot bij mij. Kom je met de bakfiets? Die mag je vastzetten bij de fietsen.</p>
     </div>
+
+    <div class="slot-picker" id="slotPicker"></div>
 
     <div class="result-actions" id="resultActionsSalon">
       <button type="button" class="btn btn--outline btn--wide" data-action="open-photo-share" data-i18n="add_photo_button">📸 Voeg een foto toe aan je moment</button>
@@ -333,8 +341,28 @@
       <a class="btn btn--primary btn--wide" id="bookWhatsappCta" href="#" target="_blank" rel="noopener" data-i18n="book_whatsapp_button">💬 Boek deze afspraak via WhatsApp</a>
       <button type="button" class="btn btn--outline btn--wide" data-action="download" data-i18n="download_button">Download afbeelding</button>
       <button type="button" class="btn btn--outline btn--wide" data-action="add-reminder" data-i18n="reminder_button">📅 Zet een herinnering in mijn agenda</button>
-      <a class="btn btn--gold-outline btn--wide" id="menuCta" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee" target="_blank" rel="noopener" data-i18n="menu_cta">Bekijk menu &amp; prijzen</a>
+      <button type="button" class="btn btn--gold-outline btn--wide" id="menuCta" data-action="open-pricelist" data-i18n="menu_cta">Bekijk menu &amp; prijzen</button>
       <button type="button" class="btn btn--text" data-action="restart" data-i18n="restart_button">Opnieuw beginnen</button>
+    </div>
+  </section>
+
+  <!-- PRICE LIST -->
+  <section class="step" data-step="pricelist">
+    <div class="step__head">
+      <h2 class="step__title" data-i18n="pricelist_title">Prijslijst</h2>
+      <p class="step__hint" data-i18n="pricelist_intro">Prijzen vanaf 1/06/2026. Behandelingen enkel op afspraak.</p>
+    </div>
+    <input type="search" id="priceSearch" class="price-search" autocomplete="off" aria-label="Search">
+    <div id="priceListBody" class="price-list"></div>
+    <div class="price-contact">
+      <p class="price-contact__title" data-i18n="pricelist_contact_title">Een afspraak maken?</p>
+      <p class="price-contact__hint" data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend.</p>
+      <a class="btn btn--primary btn--wide" id="priceWhatsapp" href="#" target="_blank" rel="noopener" data-i18n="pricelist_wa_button">💬 Stuur een WhatsApp</a>
+      <a class="btn btn--outline btn--wide" id="priceMail" href="#" data-i18n="pricelist_mail_button">📩 Stuur een mail</a>
+      <a class="btn btn--text" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee/" target="_blank" rel="noopener" data-i18n="pricelist_website_link">Volledige info op de website</a>
+    </div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
     </div>
   </section>
 
@@ -343,6 +371,13 @@
 <footer class="app-footer">
   <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
   <p data-i18n="footer_privacy">Jouw foto's blijven altijd op je eigen toestel — 100% privé.</p>
+  <details class="privacy-block">
+    <summary data-i18n="privacy_title">🔒 Privacy in het kort</summary>
+    <p data-i18n="privacy_p1"></p>
+    <p data-i18n="privacy_p2"></p>
+    <p data-i18n="privacy_p3"></p>
+    <p data-i18n="privacy_p4"></p>
+  </details>
   <button type="button" class="footer-reset-btn" data-action="reset-local-data" data-i18n="footer_reset_button">Wis mijn lokale gegevens</button>
 </footer>
 
@@ -350,6 +385,7 @@
 
 <script src="i18n.js"></script>
 <script src="data.js"></script>
+<script src="lang-fr.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

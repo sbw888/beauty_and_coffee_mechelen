@@ -20,6 +20,7 @@
     milk: "none",
     extras: [],
     context: null,        // 'salon' | 'thuis'
+    slots: [],            // preferred weekend moments for the booking message
     photoDataUrl: null,
     filter: "none",       // 'none' | 'glow' | 'warm' | 'bw' | 'vintage'
     cameraStream: null,
@@ -79,7 +80,11 @@
     renderExtrasOptions();
     renderContextOptions();
     renderFilterOptions();
-    if (state.match) { renderResultDetails(); renderResultBlocks(); }
+    if (state.match) { renderResultDetails(); renderResultBlocks(); renderMatchTools(); }
+    renderSlotPicker();
+    const ps = $("#priceSearch"); if (ps) ps.placeholder = t("pricelist_search", state.lang) || "";
+    if (typeof PRICE_LIST !== "undefined" && $('[data-step="pricelist"]').classList.contains("is-active")) renderPriceList();
+    if (typeof localData !== "undefined") renderReturningUserBlock();
   }
 
   function setLang(lang){
@@ -91,13 +96,16 @@
   function updateProgress(name){
     const w = STEP_WEIGHTS[name] ?? 0;
     $("#progressFill").style.width = w + "%";
-    $(".progress").style.visibility = (name==="welcome") ? "hidden" : "visible";
+    $(".progress").style.visibility = (name==="welcome" || name==="pricelist") ? "hidden" : "visible";
   }
 
   function showStep(name){
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
     updateProgress(name);
 
+    if (name === "pricelist") {
+      renderPriceList();
+    }
     if (name === "healthCheck") {
       renderHealthOptions();
     }
@@ -713,6 +721,10 @@
     aftercare: { nl:"Geen aceton of remover nodig — laat het laklaagje eerst goed drogen, daarna is het gewoon zelf af te pellen.",
                  en:"No acetone or remover needed — just let the polish dry first, then it simply peels off by hand." }
   };
+  // French text lives in lang-fr.js
+  if (window.KID_CONTENT_FR){
+    ["benefits","funfact","aftercare"].forEach(k => { KID_CONTENT[k].fr = window.KID_CONTENT_FR[k]; });
+  }
 
   function generateMatch(){
     if (state.profile === "kind"){
@@ -773,7 +785,8 @@
         ...treatmentObj,
         aftercare: {
           nl: treatmentObj.aftercare.nl + " " + t("lens_warning_note", "nl"),
-          en: treatmentObj.aftercare.en + " " + t("lens_warning_note", "en")
+          en: treatmentObj.aftercare.en + " " + t("lens_warning_note", "en"),
+          fr: (treatmentObj.aftercare.fr || treatmentObj.aftercare.en) + " " + t("lens_warning_note", "fr")
         }
       };
     }
@@ -837,26 +850,199 @@
 
   const BOOKING_EMAIL = "sandra.truong@ikmail.com";
   const BOOKING_WHATSAPP = "32499221901"; // wa.me format: country code + number, no + or spaces
+  function drinkFullFor(m){
+    if (!m) return "";
+    if (m.isKid){
+      const d = KIDS_DRINKS.find(x => x.id === m.drinkId) || KIDS_DRINKS[0];
+      return d.name[state.lang];
+    }
+    return m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
+  }
+
+  function slotsText(){
+    if (typeof BOOKING_SLOTS === "undefined") return "";
+    return state.slots
+      .map(id => BOOKING_SLOTS.find(s => s.id === id))
+      .filter(Boolean)
+      .map(s => s[state.lang] || s.nl)
+      .join(", ");
+  }
+
   function updateBookingLink(m, drinkFull){
     if (!m) return;
+    const slots = slotsText();
     const emailLink = $("#bookEmailCta");
     if (emailLink){
       const subject = t("book_email_subject", state.lang);
       const body = t("book_email_body", state.lang)
         .replace("{treatment}", m.treatment.name)
-        .replace("{drink}", drinkFull || "");
+        .replace("{drink}", drinkFull || "")
+        .replace("{slots}", slots);
       emailLink.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
     const waLink = $("#bookWhatsappCta");
     if (waLink){
       const waText = t("book_whatsapp_text", state.lang)
         .replace("{treatment}", m.treatment.name)
-        .replace("{drink}", drinkFull || "");
+        .replace("{drink}", drinkFull || "")
+        .replace("{slots}", slots)
+        .trim();
       waLink.href = `https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(waText)}`;
     }
   }
 
+  /* ---------------- slot picker (weekend preference) ---------------- */
+  function renderSlotPicker(){
+    const wrap = $("#slotPicker");
+    if (!wrap) return;
+    if (typeof BOOKING_SLOTS === "undefined" || !BOOKING_SLOTS.length){ wrap.innerHTML = ""; return; }
+    wrap.innerHTML = `
+      <p class="slot-picker__title">${t("slots_title", state.lang)}</p>
+      <div class="slot-picker__chips">
+        ${BOOKING_SLOTS.map(s => {
+          const on = state.slots.includes(s.id);
+          return `<button type="button" class="slot-chip${on ? " is-selected" : ""}" data-action="toggle-slot" data-slot="${s.id}" aria-pressed="${on}">${s[state.lang] || s.nl}</button>`;
+        }).join("")}
+      </div>
+      <p class="slot-picker__hint">${t("slots_hint", state.lang)}</p>`;
+  }
+
+  function toggleSlot(id){
+    const i = state.slots.indexOf(id);
+    if (i >= 0) state.slots.splice(i, 1); else state.slots.push(id);
+    renderSlotPicker();
+    if (state.match) updateBookingLink(state.match, drinkFullFor(state.match));
+  }
+
+  /* ---------------- favorites + "another match" ---------------- */
+  function favKey(m){
+    const tid = m.isKid ? "kindermanicure" : m.treatment.id;
+    return tid + "|" + drinkFullFor(m);
+  }
+  function isFavorite(m){
+    return (localData.favorites || []).some(f => f.key === favKey(m));
+  }
+  function favBookHref(f){
+    const text = t("fav_book_text", state.lang).replace("{treatment}", f.tname).replace("{drink}", f.drink).trim();
+    return `https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  }
+
+  function renderMatchTools(){
+    const wrap = $("#matchTools");
+    if (!wrap) return;
+    const m = state.match;
+    if (!m){ wrap.innerHTML = ""; return; }
+    const fav = isFavorite(m);
+    wrap.innerHTML = `
+      ${m.isKid ? "" : `<button type="button" class="btn btn--outline" data-action="another-match">${t("another_match_button", state.lang)}</button>`}
+      <button type="button" class="btn ${fav ? "btn--primary" : "btn--outline"}" data-action="toggle-fav" aria-pressed="${fav}">${t(fav ? "fav_saved" : "fav_add", state.lang)}</button>`;
+  }
+
+  function toggleFavorite(){
+    const m = state.match;
+    if (!m) return;
+    const key = favKey(m);
+    const list = localData.favorites || (localData.favorites = []);
+    const i = list.findIndex(f => f.key === key);
+    if (i >= 0){
+      list.splice(i, 1);
+      showToast(t("fav_removed_toast", state.lang));
+    } else {
+      list.unshift({ key, tname: m.treatment.name, drink: drinkFullFor(m) });
+      localData.favorites = list.slice(0, 8);
+      showToast(t("fav_added_toast", state.lang));
+    }
+    saveLocalData();
+    renderMatchTools();
+    renderReturningUserBlock();
+  }
+
+  function removeFavorite(index){
+    if (!localData.favorites) return;
+    localData.favorites.splice(index, 1);
+    saveLocalData();
+    renderReturningUserBlock();
+    renderMatchTools();
+  }
+
+  let rerolling = false;
+  async function rerollMatch(){
+    const prev = state.match;
+    if (!prev || prev.isKid || rerolling) return;
+    rerolling = true;
+    try {
+      let tries = 0;
+      do { generateMatch(); tries++; }
+      while (state.match.treatment.id === prev.treatment.id && tries < 10);
+      await drawResultCanvas();
+      renderResultDetails();
+      renderResultBlocks();
+      renderMatchTools();
+      const isNew = recordDiscovery();
+      renderLoyaltyBlock();
+      trackEvent("match-rerolled");
+      if (isNew) trackEvent("new-discovery");
+      const card = $("#resultCardWrap");
+      if (card) card.scrollIntoView({ behavior:"smooth", block:"start" });
+    } finally { rerolling = false; }
+  }
+
+  /* ---------------- price list (tab "Prijslijst") ---------------- */
+  function renderPriceList(){
+    const body = $("#priceListBody");
+    if (!body || typeof PRICE_LIST === "undefined") return;
+    const lang = state.lang;
+    const q = (($("#priceSearch") || {}).value || "").trim().toLowerCase();
+    const openIds = new Set($$("#priceListBody details[open]").map(d => d.dataset.sec));
+    let html = "";
+    PRICE_LIST.forEach(sec => {
+      const items = sec.items.filter(it => {
+        if (!q) return true;
+        const hay = [it.n.nl, it.n.en, it.n.fr, it.d && it.d.nl, it.d && it.d.en, it.d && it.d.fr, sec.title.nl, sec.title.en, sec.title.fr].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+      if (!items.length) return;
+      const open = (q || openIds.has(sec.id)) ? " open" : "";
+      html += `<details class="price-section" data-sec="${sec.id}"${open}>
+        <summary><span class="price-section__icon" aria-hidden="true">${sec.icon}</span><span class="price-section__title">${sec.title[lang]}</span><span class="price-section__count">${items.length}</span></summary>
+        ${sec.note ? `<p class="price-section__note">${sec.note[lang]}</p>` : ""}
+        <ul class="price-items">
+          ${items.map(it => `<li class="price-item">
+            <div class="price-item__main"><span class="price-item__name">${it.n[lang]}</span><span class="price-item__price">${it.price}</span></div>
+            <div class="price-item__meta">${it.time}${it.d ? " · " + it.d[lang] : ""}</div>
+            ${it.note ? `<div class="price-item__note">${it.note[lang]}</div>` : ""}
+          </li>`).join("")}
+        </ul>
+      </details>`;
+    });
+    body.innerHTML = html || `<p class="price-empty">${t("pricelist_empty", lang)}</p>`;
+
+    const wa = $("#priceWhatsapp");
+    if (wa) wa.href = `https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(t("pricelist_wa_text", lang))}`;
+    const mail = $("#priceMail");
+    if (mail) mail.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(t("pricelist_mail_subject", lang))}&body=${encodeURIComponent(t("pricelist_mail_body", lang))}`;
+  }
+
+  /* Current actions (data.js → CURRENT_ACTIONS): date-windowed, bilingual */
+  function renderActions(){
+    const wrap = $("#actionsBlock");
+    if (!wrap || typeof CURRENT_ACTIONS === "undefined") return;
+    const d = new Date();
+    const today = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    const lang = state.lang;
+    const active = CURRENT_ACTIONS.filter(a => (!a.from || today >= a.from) && (!a.until || today <= a.until));
+    wrap.innerHTML = active.map(a => `
+      <div class="action-card">
+        <span class="action-card__icon" aria-hidden="true">${a.icon || "🎁"}</span>
+        <div class="action-card__body">
+          <p class="action-card__title">${a.title[lang] || a.title.nl}</p>
+          <p class="action-card__text">${a.text[lang] || a.text.nl}</p>
+        </div>
+      </div>`).join("");
+  }
+
   function renderResultBlocks(){
+    renderActions();
     const wrap = $("#resultBlocks");
     const m = state.match;
     if (!m) { wrap.innerHTML = ""; return; }
@@ -876,6 +1062,8 @@
     if (HAIR_REMOVAL_IDS.includes(m.treatment.id)) {
       const sunTip = lang === "nl"
         ? "<br><br>⚠️ <strong>Zonadvies:</strong> vermijd directe zon of het solarium 24 uur na het ontharen, en gebruik nadien een hoge SPF om roodheid en pigmentvlekken te voorkomen."
+        : lang === "fr"
+        ? window.SUN_TIP_FR
         : "<br><br>⚠️ <strong>Sun advice:</strong> avoid direct sun or a sunbed for 24 hours after hair removal, and use a high SPF afterwards to prevent redness and pigmentation.";
       aftercareText += sunTip;
     }
@@ -1221,7 +1409,7 @@
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null; state.complaintText = "";
     const complaintEl = $("#complaintInput"); if (complaintEl) complaintEl.value = "";
     state.milk = "none"; state.extras = []; state.context = null;
-    state.photoDataUrl = null; state.filter = "none"; state.match = null;
+    state.photoDataUrl = null; state.filter = "none"; state.match = null; state.slots = [];
     retakePhoto();
     history = ["welcome"];
     applyI18n();
@@ -1235,7 +1423,7 @@
      is self-reported (shown in the salon for a manual stamp), not
      an automated discount system. */
   const LOCAL_KEY = "beautyCoffeeLocal_v1";
-  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], lastMatchAt:null, reviewPromptShownFor:null, savedProfile:null, savedAgeBracket:null };
+  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], favorites:[], lastMatchAt:null, reviewPromptShownFor:null, savedProfile:null, savedAgeBracket:null };
 
   function loadLocalData(){
     try {
@@ -1312,7 +1500,8 @@
     if (!block) return;
     const changeLink = $("#changeProfileLink");
     if (changeLink) changeLink.hidden = !localData.savedProfile;
-    const hasHistory = localData.stamps > 0 || localData.discoveredTreatments.length > 0;
+    const favs = localData.favorites || [];
+    const hasHistory = localData.stamps > 0 || localData.discoveredTreatments.length > 0 || favs.length > 0;
     const showReview = shouldShowReviewPrompt();
     block.hidden = !hasHistory && !showReview;
     if (!hasHistory && !showReview) return;
@@ -1330,7 +1519,18 @@
         <span>☕ ${Math.min(localData.stamps,10)}/10 ${t("stamps_label", state.lang)}</span>
         <span>✨ ${localData.discoveredTreatments.length}/${totalTreatments} ${t("treatments_discovered_label", state.lang)}</span>
         <span>🍵 ${localData.discoveredDrinks.length}/${totalDrinks} ${t("drinks_discovered_label", state.lang)}</span>
-      </div>` : "");
+      </div>
+      ${favs.length ? `
+      <p class="returning-user__title returning-user__title--fav">${t("fav_title", state.lang)}</p>
+      <ul class="fav-list">
+        ${favs.map((f, i) => `<li class="fav-item">
+          <div class="fav-item__text"><strong>${f.tname}</strong><span>☕ ${f.drink}</span></div>
+          <div class="fav-item__actions">
+            <a class="fav-item__book" href="${favBookHref(f)}" target="_blank" rel="noopener">${t("fav_book", state.lang)}</a>
+            <button type="button" class="fav-item__remove" data-action="remove-fav" data-fav-index="${i}">${t("fav_remove", state.lang)}</button>
+          </div>
+        </li>`).join("")}
+      </ul>` : ""}` : "");
   }
 
   function renderLoyaltyBlock(){
@@ -1357,11 +1557,15 @@
         <div class="collection-card__row"><span>${t("drinks_discovered_label", state.lang)}</span><span>${localData.discoveredDrinks.length}/${totalDrinks}</span></div>
         <div class="collection-card__bar"><div class="collection-card__fill" style="width:${dPct}%"></div></div>
       </div>
-      <p class="loyalty-privacy">🔒 ${t("loyalty_privacy_note", state.lang)}</p>`;
+      <p class="loyalty-privacy">🔒 ${t("loyalty_privacy_note", state.lang)} ${t("stamp_backup_tip", state.lang)}</p>`;
   }
 
   function addStamp(){
-    if (!confirm(t("stamp_confirm_text", state.lang))) return;
+    if (typeof SALON_STAMP_PIN === "string" && SALON_STAMP_PIN){
+      const entered = prompt(t("stamp_pin_prompt", state.lang));
+      if (entered === null) return;
+      if (entered.trim() !== SALON_STAMP_PIN){ showToast(t("stamp_pin_wrong", state.lang)); return; }
+    } else if (!confirm(t("stamp_confirm_text", state.lang))) return;
     localData.stamps++;
     saveLocalData();
     renderLoyaltyBlock();
@@ -1375,8 +1579,10 @@
     localData.stamps = 0;
     localData.discoveredTreatments = [];
     localData.discoveredDrinks = [];
+    localData.favorites = [];
     saveLocalData();
     renderReturningUserBlock();
+    renderMatchTools();
     renderLoyaltyBlock();
     showToast(t("reset_done_toast", state.lang));
   }
@@ -1466,6 +1672,11 @@
       if (action === "share") shareImage();
       if (action === "download") downloadImage();
       if (action === "restart") resetApp();
+      if (action === "open-pricelist") goTo("pricelist");
+      if (action === "toggle-slot") toggleSlot(el.dataset.slot);
+      if (action === "another-match") rerollMatch();
+      if (action === "toggle-fav") toggleFavorite();
+      if (action === "remove-fav") removeFavorite(Number(el.dataset.favIndex));
       if (action === "add-stamp") addStamp();
       if (action === "reset-local-data") resetLocalData();
       if (action === "add-reminder") addCalendarReminder();
@@ -1473,6 +1684,9 @@
     });
 
     $("#fileInput").addEventListener("change", e => handleFileUpload(e.target.files[0]));
+
+    const priceSearch = $("#priceSearch");
+    if (priceSearch) priceSearch.addEventListener("input", renderPriceList);
 
     const complaintEl = $("#complaintInput");
     if (complaintEl){
@@ -1487,6 +1701,8 @@
     await drawResultCanvas();
     renderResultDetails();
     renderResultBlocks();
+    renderMatchTools();
+    renderSlotPicker();
     const isNewDiscovery = recordDiscovery();
     renderLoyaltyBlock();
     goTo("result");
