@@ -125,6 +125,20 @@
   "privacy_p2": "Si vous envoyez un message de réservation par e-mail ou WhatsApp, il contient uniquement le soin, la boisson et les disponibilités choisis, ainsi que ce que vous y ajoutez vous-même.",
   "privacy_p3": "Les tampons, favoris et découvertes sont conservés uniquement sur cet appareil. Si vous effacez les données de votre navigateur, ils disparaissent. Vous pouvez aussi les effacer vous-même avec le bouton ci-dessous.",
   "privacy_p4": "Le contrôle de santé sert uniquement à vous proposer un match sûr et ne constitue pas un avis médical.",
+  "houserules_button": "📋 Consulter le règlement du salon",
+  "houserules_title": "Règlement du salon",
+  "houserules_intro": "Pour que votre rendez-vous se déroule de façon agréable et professionnelle.",
+  "houserules_teaser_title": "📋 À savoir avant votre rendez-vous",
+  "houserules_teaser_1": "Annulation ou report possible jusqu'à 1 heure à l'avance. Ensuite, 50 % du soin est facturé.",
+  "houserules_teaser_2": "Venez à l'heure, propre et sans parfum. En cas de plus de 15 minutes de retard, le soin peut être raccourci.",
+  "houserules_teaser_3": "Venez seul(e), sauf si vous êtes mineur(e).",
+  "houserules_teaser_more": "Lire tout le règlement →",
+  "houserules_cancel_title": "Annuler ou reporter ?",
+  "houserules_cancel_text": "Appelez ou envoyez un SMS au plus tard 1 heure avant votre rendez-vous :",
+  "houserules_thanks": "Merci pour votre compréhension et votre collaboration ! Grâce à ces règles, Beauty & Coffee veille à ce que chaque client soit accueilli dans un environnement hygiénique, détendu et professionnel.",
+  "skinfact_title": "💡 Le saviez-vous : peau, cheveux et pieds",
+  "skinfact_more": "🔄 Un autre fait",
+  "skinfact_disclaimer": "Information éducative, pas un avis médical.",
   "practical_info_title": "📍 Bon à savoir",
   "practical_info_hours": "Actuellement disponible uniquement le week-end, y compris en soirée — pas de rendez-vous en semaine et (temporairement) pas de visites à domicile, en raison de cours du soir.",
   "practical_info_parking": "Stationnement : il y a des places au début de la rue (juste avant de tourner à gauche vers les maisons) — de là, il n'y a que 2 minutes à pied jusqu'à chez moi. Vous venez en vélo cargo ? Vous pouvez l'attacher avec les vélos.",
@@ -1031,6 +1045,151 @@
     ]
    ]
   }
+ },
+ "houseRules": {
+  "appointments": {
+   "title": "Rendez-vous et annulations",
+   "intro": null,
+   "outro": null,
+   "groups": [
+    {
+     "title": null,
+     "items": [
+      "Les rendez-vous se prennent uniquement par téléphone, en personne ou par e-mail.",
+      "Annulation ou report possible jusqu'à 1 heure à l'avance au 0499 22 19 01.",
+      "En cas d'annulation moins d'1 heure à l'avance, 50 % du soin est facturé, sauf en cas de maladie (voir ci-dessous).",
+      "Après 3 rendez-vous manqués, il n'est plus possible de prendre rendez-vous chez Beauty & Coffee.",
+      "En cas de maladie : prévenez le plus vite possible. Si vous annulez au moins 1 heure avant le rendez-vous, aucun frais n'est facturé. En cas d'annulation tardive, la règle des 50 % s'applique.",
+      "Soyez à l'heure. En retard ? Prévenez immédiatement par téléphone ou SMS. En cas de plus de 15 minutes de retard, le soin peut être raccourci ou annulé aux conditions d'annulation.",
+      "En cas de non-paiement, il n'est plus possible de prendre rendez-vous chez Beauty & Coffee."
+     ]
+    }
+   ]
+  },
+  "hygiene": {
+   "title": "Hygiène et soins",
+   "intro": "Pour un soin agréable et professionnel, j'attends de chaque personne ce qui suit :",
+   "outro": null,
+   "groups": [
+    {
+     "title": "Hygiène des mains",
+     "items": [
+      "Mains et ongles propres : pas de saleté visible sous les ongles ni de décoloration foncée sur la peau.",
+      "Pas de mains collantes ou grasses (par exemple à cause de nourriture, d'huile ou de pommade).",
+      "Vous avez une infection ou des plaies ouvertes ? Signalez-le à l'avance pour la manucure. Il se peut que nous déplacions le rendez-vous à une autre date afin de ne pas aggraver la plaie."
+     ]
+    },
+    {
+     "title": "Hygiène des pieds (pour les soins des pieds)",
+     "items": [
+      "Les pieds sont lavés avant le rendez-vous.",
+      "Pas de saleté visible ni de forte odeur due à un manque d'hygiène.",
+      "En cas de transpiration excessive : l'usage d'une poudre pour pieds ou d'un déodorant est vivement conseillé.",
+      "Apportez des tongs si vous souhaitez un vernis ou un vernis gel lors de la pédicure.",
+      "Vous avez une infection ou des plaies ouvertes ? Signalez-le à l'avance pour la pédicure. Il se peut que nous déplacions le rendez-vous à une autre date afin de ne pas aggraver la plaie.",
+      "Les affections médicales comme l'hyperhidrose (transpiration excessive) ou les mycoses doivent être signalées à l'avance."
+     ]
+    },
+    {
+     "title": "Hygiène intime (pour les soins du corps comme l'épilation et le massage)",
+     "items": [
+      "La peau est propre et fraîchement lavée le jour du soin.",
+      "Pas d'odeurs désagréables dues à un manque d'hygiène.",
+      "En cas d'hygiène insuffisante, le soin peut être refusé sans remboursement.",
+      "Portez des vêtements amples pour l'épilation du corps.",
+      "Vous avez une infection ou des plaies ouvertes ? Signalez-le à l'avance pour le massage du corps."
+     ]
+    },
+    {
+     "title": "Politique des odeurs (tabac, cannabis, fortes odeurs corporelles)",
+     "items": [
+      "Fumer et consommer du cannabis juste avant le soin est déconseillé.",
+      "Si une forte odeur de tabac, de cannabis ou autre est perçue comme gênante, le soin peut être refusé sans remboursement.",
+      "Transpirer normalement n'est pas un problème, mais si l'odeur est gênante en raison d'un manque d'hygiène, le soin peut être raccourci ou refusé.",
+      "Le parfum et les crèmes fortement parfumées ne sont pas souhaités, car ils peuvent gêner la praticienne et les autres clients."
+     ]
+    },
+    {
+     "title": "Soin du visage, lash lift et brow styling",
+     "items": [
+      "Venez de préférence sans maquillage.",
+      "N'utilisez pas de crème pour le visage épaisse ni d'huile juste avant le soin.",
+      "Lentilles de contact : pour le lash lift et le soin du visage, évitez de porter des lentilles, ou apportez un étui et du liquide pour lentilles. N'oubliez surtout pas vos lunettes.",
+      "Portez de préférence un haut à fines bretelles."
+     ]
+    }
+   ]
+  },
+  "contra": {
+   "title": "Contre-indications",
+   "intro": "Pour des raisons médicales et d'hygiène, un soin ne peut pas avoir lieu en cas de :",
+   "outro": "En cas de doute, consultez d'abord un médecin.",
+   "groups": [
+    {
+     "title": null,
+     "items": [
+      "Plaies ouvertes, inflammations sévères ou cicatrices récentes dans la zone à traiter.",
+      "Peau récemment fortement brûlée par le soleil dans la zone à traiter.",
+      "Fièvre, grippe ou autres infections virales (voir « en cas de maladie » à la rubrique annulation)."
+     ]
+    }
+   ]
+  },
+  "practical": {
+   "title": "Modalités pratiques",
+   "intro": null,
+   "outro": null,
+   "groups": [
+    {
+     "title": null,
+     "items": [
+      "Venez seul(e) pour les soins, sauf si vous êtes mineur(e). Un atelier a lieu dans la cuisine ouverte et la salle à manger. Si vous êtes mineur(e), vous devez être accompagné(e) d'un parent.",
+      "Il est interdit de fumer dans le bâtiment pour des raisons d'hygiène et de sécurité incendie.",
+      "Laissez de préférence bijoux et accessoires à la maison pour éviter toute perte ou détérioration.",
+      "Mettez votre GSM en mode silencieux pendant le soin.",
+      "Tous les soins ont un caractère esthétique."
+     ]
+    }
+   ]
+  }
+ },
+ "facts": {
+  "A1": "Votre peau est le plus grand organe de votre corps.",
+  "A2": "En moyenne, vous avez un épiderme entièrement neuf toutes les 4 semaines : votre peau se renouvelle en permanence.",
+  "A3": "Votre peau remplit 9 fonctions, de la barrière protectrice et de la régulation de la chaleur à la production de vitamine D, à la réserve de graisse et au toucher.",
+  "A4": "Votre peau est aussi un moyen de communication : vous rougissez de honte, pâlissez à cause d'une maladie et avez la chair de poule quand vous avez froid ou peur.",
+  "A5": "Par votre peau, vous percevez des stimuli comme la température, le toucher, la position de vos membres et la douleur. C'est ainsi que vous reconnaissez des objets les yeux fermés.",
+  "B1": "La majeure partie de votre vitamine D est produite par votre corps lui-même sous l'effet de la lumière du soleil. L'alimentation, comme le poisson gras, les œufs, le lait ou le beurre, apporte le reste.",
+  "B2": "La mélanine de votre épiderme absorbe les rayons UV.",
+  "B3": "La couleur de votre peau est surtout déterminée par la taille et le nombre des grains de pigment dans la couche basale de votre épiderme.",
+  "B4": "Un grain de beauté est un amas bénin de mélanocytes (cellules pigmentaires).",
+  "C1": "Votre couche cornée se compose de nombreuses couches de cellules mortes, et ce sont justement ces cellules mortes qui constituent l'une des meilleures protections contre les intrus.",
+  "C2": "Un durillon se forme quand votre couche cornée subit énormément de frottements.",
+  "C3": "Les cellules de votre couche épineuse se tiennent entre elles grâce à de minuscules « épines » (desmosomes). Cela rend votre peau souple et solide.",
+  "C4": "Les cellules de Langerhans de votre peau sont des cellules ramifiées qui participent à vos défenses immunitaires.",
+  "D1": "Le collagène assure la fermeté de votre peau, l'élastine son élasticité et sa résilience.",
+  "D2": "Votre hypoderme est à la fois une réserve d'énergie, une couche d'isolation et un amortisseur.",
+  "D3": "Les mammifères ont une épaisse fourrure. Chez l'être humain, elle a disparu et c'est la graisse sous la peau qui a pris le relais de l'isolation.",
+  "E1": "La sueur apocrine est inodore tant qu'elle n'est pas arrivée sur votre peau. L'odeur typique de transpiration n'apparaît que lorsque des bactéries la transforment.",
+  "E2": "Vous avez de 2 à 5 millions de glandes sudoripares.",
+  "E3": "Le sébum forme avec la sueur votre film hydrolipidique acide, qui protège votre peau contre les bactéries et les agents pathogènes.",
+  "E4": "La quantité de sébum que vous produisez dépend de vos hormones et de votre âge, pas de votre système nerveux.",
+  "F1": "Vos plantes de pieds comptent parmi les zones du corps où la densité de glandes sudoripares est la plus élevée.",
+  "F2": "Aucun poil ne pousse sur la paume des mains et la plante des pieds, et il n'y a pas de glandes sébacées.",
+  "F3": "Sous la plante des pieds (et la paume des mains et les fesses), la graisse sert presque exclusivement d'amortisseur.",
+  "F4": "La paume des mains et la plante des pieds ont une couche de peau supplémentaire : la couche claire, qui n'existe que dans la peau épaisse.",
+  "G1": "La chair de poule : un petit muscle près du follicule pileux se contracte et redresse le poil. Ainsi, de l'air chaud reste piégé entre les poils comme isolant.",
+  "G2": "Chaque poil a son propre muscle érecteur, le muscle horripilateur.",
+  "G3": "Les poils ne sont pas que décoratifs : tous les follicules pileux sont reliés à des nerfs qui réagissent à la pression ou à la flexion de la tige du poil.",
+  "G4": "À partir du milieu de la tige, votre cheveu est constitué de matière morte : les cellules se remplissent de kératine et meurent.",
+  "G5": "La couleur de vos cheveux vient des mélanocytes de la racine, qui libèrent des grains de pigment.",
+  "G6": "La couche externe de votre cheveu (cuticule) est faite d'écailles qui se chevauchent comme des tuiles. Ces écailles gardent le cheveu lisse et le protègent contre les produits chimiques, les UV et la chaleur.",
+  "G7": "La couche fibreuse (cortex) détermine si vos cheveux sont raides ou bouclés.",
+  "G8": "On ne sait pas encore exactement à quoi sert la moelle (médulla) du cheveu. Tous les types de cheveux n'en ont pas.",
+  "G9": "2 à 3 glandes sébacées débouchent dans chaque follicule pileux.",
+  "G10": "Votre racine de cheveu est sensible aux hormones et peut être influencée par l'alimentation, le stress et la génétique.",
+  "H1": "On ne peut jamais rendre votre peau totalement stérile : des micro-organismes utiles y vivent en permanence et forment une première barrière contre les infections.",
+  "H2": "La flore cutanée transitoire s'élimine facilement en se lavant ou en se désinfectant les mains."
  }
 };
 
@@ -1074,6 +1233,22 @@
     });
   });
 
+  HOUSE_RULES.forEach(sec => {
+    const src = FR.houseRules[sec.id];
+    if (!src) { console.warn("FR: no translation for house rules section", sec.id); return; }
+    setFr(sec.title, src.title);
+    if (sec.intro) setFr(sec.intro, src.intro);
+    if (sec.outro) setFr(sec.outro, src.outro);
+    sec.groups.forEach((g, gi) => {
+      const sg = src.groups[gi];
+      if (!sg || sg.items.length !== g.items.length) { console.warn("FR: house rules group mismatch", sec.id, gi); return; }
+      if (g.title) setFr(g.title, sg.title);
+      g.items.forEach((it, ii) => setFr(it, sg.items[ii]));
+    });
+  });
+
+  SKIN_FACTS.forEach(f => setFr(f, FR.facts[f.code]));
+
   /* Fail-safe: anything still without French falls back to English,
      so the app never shows "undefined". */
   (function fill(o){
@@ -1083,5 +1258,5 @@
       return;
     }
     Object.keys(o).forEach(k => fill(o[k]));
-  })([TREATMENTS_CATALOG, PRODUCT_CATEGORIES, KIDS_DRINKS, PRICE_LIST, BOOKING_SLOTS, CURRENT_ACTIONS]);
+  })([TREATMENTS_CATALOG, PRODUCT_CATEGORIES, KIDS_DRINKS, PRICE_LIST, BOOKING_SLOTS, CURRENT_ACTIONS, HOUSE_RULES, SKIN_FACTS]);
 })();

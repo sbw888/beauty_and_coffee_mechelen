@@ -21,6 +21,8 @@
     extras: [],
     context: null,        // 'salon' | 'thuis'
     slots: [],            // preferred weekend moments for the booking message
+    skinFact: null,       // code of the skin fact shown on the result screen
+    sunFact: null,        // code of the fact shown on the sun-check step
     photoDataUrl: null,
     filter: "none",       // 'none' | 'glow' | 'warm' | 'bw' | 'vintage'
     cameraStream: null,
@@ -80,10 +82,12 @@
     renderExtrasOptions();
     renderContextOptions();
     renderFilterOptions();
-    if (state.match) { renderResultDetails(); renderResultBlocks(); renderMatchTools(); }
+    if (state.match) { renderResultDetails(); renderResultBlocks(); renderMatchTools(); renderLoyaltyBlock(); }
     renderSlotPicker();
     const ps = $("#priceSearch"); if (ps) ps.placeholder = t("pricelist_search", state.lang) || "";
     if (typeof PRICE_LIST !== "undefined" && $('[data-step="pricelist"]').classList.contains("is-active")) renderPriceList();
+    renderSunFact();
+    if (typeof HOUSE_RULES !== "undefined" && $('[data-step="houserules"]').classList.contains("is-active")) renderHouseRules();
     if (typeof localData !== "undefined") renderReturningUserBlock();
   }
 
@@ -96,7 +100,7 @@
   function updateProgress(name){
     const w = STEP_WEIGHTS[name] ?? 0;
     $("#progressFill").style.width = w + "%";
-    $(".progress").style.visibility = (name==="welcome" || name==="pricelist") ? "hidden" : "visible";
+    $(".progress").style.visibility = (name==="welcome" || name==="pricelist" || name==="houserules") ? "hidden" : "visible";
   }
 
   function showStep(name){
@@ -105,6 +109,13 @@
 
     if (name === "pricelist") {
       renderPriceList();
+    }
+    if (name === "houserules") {
+      renderHouseRules();
+    }
+    if (name === "sunCheck") {
+      state.sunFact = randomFactCode(SKIN_FACT_POOLS.sun);
+      renderSunFact();
     }
     if (name === "healthCheck") {
       renderHealthOptions();
@@ -974,6 +985,7 @@
       let tries = 0;
       do { generateMatch(); tries++; }
       while (state.match.treatment.id === prev.treatment.id && tries < 10);
+      state.skinFact = chooseSkinFact();
       await drawResultCanvas();
       renderResultDetails();
       renderResultBlocks();
@@ -985,6 +997,83 @@
       const card = $("#resultCardWrap");
       if (card) card.scrollIntoView({ behavior:"smooth", block:"start" });
     } finally { rerolling = false; }
+  }
+
+  /* ---------------- skin facts ("Weetje: huid, haar en voeten") ---------------- */
+  function factPoolFor(m){
+    const themes = m.isKid ? SKIN_FACT_POOLS.kids : (SKIN_FACT_POOLS.byTreatment[m.treatment.id] || null);
+    return themes ? SKIN_FACTS.filter(f => themes.includes(f.theme)) : SKIN_FACTS.slice();
+  }
+  function randomFrom(pool, avoidCode){
+    let f, n = 0;
+    do { f = pool[Math.floor(Math.random() * pool.length)]; n++; }
+    while (f.code === avoidCode && pool.length > 1 && n < 20);
+    return f.code;
+  }
+  function chooseSkinFact(){
+    if (!state.match) return null;
+    return randomFrom(factPoolFor(state.match), state.skinFact);
+  }
+  function randomFactCode(themes){
+    return randomFrom(SKIN_FACTS.filter(f => themes.includes(f.theme)), state.sunFact);
+  }
+  function renderSkinFact(){
+    const wrap = $("#skinFactCard");
+    if (!wrap) return;
+    const fact = SKIN_FACTS.find(f => f.code === state.skinFact);
+    if (!state.match || !fact){ wrap.innerHTML = ""; return; }
+    const lang = state.lang;
+    const canMore = factPoolFor(state.match).length > 1;
+    wrap.innerHTML = `
+      <p class="skinfact__title">${t("skinfact_title", lang)}</p>
+      <p class="skinfact__text">${fact[lang] || fact.nl}</p>
+      ${canMore ? `<button type="button" class="skinfact__more" data-action="another-fact">${t("skinfact_more", lang)}</button>` : ""}
+      <p class="skinfact__disclaimer">${t("skinfact_disclaimer", lang)}</p>`;
+  }
+  function anotherFact(){
+    state.skinFact = chooseSkinFact();
+    renderSkinFact();
+  }
+  function renderSunFact(){
+    const el = $("#sunFact");
+    if (!el) return;
+    const fact = SKIN_FACTS.find(f => f.code === state.sunFact);
+    el.innerHTML = fact ? `💡 ${fact[state.lang] || fact.nl}` : "";
+  }
+
+  /* ---------------- house rules (screen "Huisregels") ---------------- */
+  function renderHouseRulesTeaser(){
+    const wrap = $("#houseRulesTeaser");
+    if (!wrap) return;
+    const lang = state.lang;
+    wrap.innerHTML = `
+      <p class="rules-teaser__title">${t("houserules_teaser_title", lang)}</p>
+      <ul class="rules-teaser__list">
+        <li>${t("houserules_teaser_1", lang)}</li>
+        <li>${t("houserules_teaser_2", lang)}</li>
+        <li>${t("houserules_teaser_3", lang)}</li>
+      </ul>
+      <button type="button" class="rules-teaser__more" data-action="open-houserules">${t("houserules_teaser_more", lang)}</button>`;
+  }
+
+  function renderHouseRules(){
+    const body = $("#houseRulesBody");
+    if (!body || typeof HOUSE_RULES === "undefined") return;
+    const lang = state.lang;
+    const openIds = new Set($$("#houseRulesBody details[open]").map(d => d.dataset.sec));
+    const first = openIds.size === 0 && !body.dataset.rendered;
+    body.dataset.rendered = "1";
+    body.innerHTML = HOUSE_RULES.map((sec, idx) => {
+      const open = (openIds.has(sec.id) || (first && idx === 0)) ? " open" : "";
+      return `<details class="price-section" data-sec="${sec.id}"${open}>
+        <summary><span class="price-section__icon" aria-hidden="true">${sec.icon}</span><span class="price-section__title">${sec.title[lang]}</span></summary>
+        ${sec.intro ? `<p class="rules-intro">${sec.intro[lang]}</p>` : ""}
+        ${sec.groups.map(g => `
+          ${g.title ? `<h3 class="rules-group">${g.title[lang]}</h3>` : ""}
+          <ul class="rules-list">${g.items.map(it => `<li>${it[lang]}</li>`).join("")}</ul>`).join("")}
+        ${sec.outro ? `<p class="rules-intro rules-outro">${sec.outro[lang]}</p>` : ""}
+      </details>`;
+    }).join("");
   }
 
   /* ---------------- price list (tab "Prijslijst") ---------------- */
@@ -1042,7 +1131,9 @@
   }
 
   function renderResultBlocks(){
+    renderSkinFact();
     renderActions();
+    renderHouseRulesTeaser();
     const wrap = $("#resultBlocks");
     const m = state.match;
     if (!m) { wrap.innerHTML = ""; return; }
@@ -1409,7 +1500,7 @@
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null; state.complaintText = "";
     const complaintEl = $("#complaintInput"); if (complaintEl) complaintEl.value = "";
     state.milk = "none"; state.extras = []; state.context = null;
-    state.photoDataUrl = null; state.filter = "none"; state.match = null; state.slots = [];
+    state.photoDataUrl = null; state.filter = "none"; state.match = null; state.slots = []; state.skinFact = null; state.sunFact = null;
     retakePhoto();
     history = ["welcome"];
     applyI18n();
@@ -1673,6 +1764,8 @@
       if (action === "download") downloadImage();
       if (action === "restart") resetApp();
       if (action === "open-pricelist") goTo("pricelist");
+      if (action === "open-houserules") goTo("houserules");
+      if (action === "another-fact") anotherFact();
       if (action === "toggle-slot") toggleSlot(el.dataset.slot);
       if (action === "another-match") rerollMatch();
       if (action === "toggle-fav") toggleFavorite();
@@ -1697,6 +1790,7 @@
   async function runGeneration(){
     goTo("loading");
     generateMatch();
+    state.skinFact = chooseSkinFact();
     await new Promise(r => setTimeout(r, 1600));
     await drawResultCanvas();
     renderResultDetails();

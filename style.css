@@ -505,3 +505,41 @@ body{
   .lang-toggle{ gap:4px; }
   .lang-btn{ padding:6px 9px; }
 }
+
+
+/* ============ HOUSE RULES ============ */
+.welcome-houserules{ margin-top:2px; }
+.rules-teaser{
+  background:var(--cream); border:1px solid var(--espresso-12); border-radius:var(--radius-m);
+  padding:14px 18px; margin-bottom:16px;
+}
+.rules-teaser__title{ font-family:var(--font-display); font-weight:600; font-size:14px; margin:0 0 8px; }
+.rules-teaser__list{ margin:0 0 8px; padding-left:18px; font-size:13px; color:var(--espresso); }
+.rules-teaser__list li{ margin-bottom:5px; }
+.rules-teaser__more{
+  font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--gold-ink);
+  background:none; border:none; padding:0; cursor:pointer; text-decoration:underline;
+}
+.rules-intro{ font-size:13px; color:var(--espresso-60); margin:0 0 8px; }
+.rules-outro{ margin-top:8px; font-weight:500; color:var(--espresso); }
+.rules-group{ font-family:var(--font-display); font-weight:600; font-size:13.5px; margin:12px 0 6px; color:var(--gold-ink); }
+.rules-list{ margin:0 0 10px; padding-left:18px; font-size:13.5px; line-height:1.5; }
+.rules-list li{ margin-bottom:6px; }
+.rules-thanks{ font-size:12.5px; color:var(--espresso-60); margin:6px 0 0; }
+
+
+/* ============ SKIN FACTS ============ */
+.skinfact{ margin:0 0 16px; }
+.skinfact:not(:empty){
+  background:var(--cream); border:1px solid var(--espresso-12); border-left:4px solid var(--gold);
+  border-radius:var(--radius-m); padding:14px 18px;
+}
+.skinfact__title{ font-family:var(--font-display); font-weight:600; font-size:14px; margin:0 0 6px; }
+.skinfact__text{ font-size:14px; line-height:1.55; margin:0 0 8px; }
+.skinfact__more{
+  font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--gold-ink);
+  background:none; border:none; padding:0; cursor:pointer; text-decoration:underline;
+}
+.skinfact__disclaimer{ font-size:11.5px; color:var(--espresso-60); margin:8px 0 0; }
+.sun-fact{ font-size:13px; line-height:1.5; color:var(--espresso-60); margin:14px 2px 0; }
+.sun-fact:empty{ display:none; }

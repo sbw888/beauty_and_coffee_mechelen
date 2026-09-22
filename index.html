@@ -75,6 +75,7 @@
 
     <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
     <button type="button" class="btn btn--gold-outline btn--wide welcome-pricelist" data-action="open-pricelist" data-i18n="pricelist_button">💶 Bekijk prijslijst</button>
+    <button type="button" class="btn btn--text welcome-houserules" data-action="open-houserules" data-i18n="houserules_button">📋 Lees de huisregels</button>
     <button type="button" class="btn btn--text" id="changeProfileLink" data-action="change-profile" data-i18n="change_profile_link" hidden>Niet jij? Pas je profiel aan</button>
   </section>
 
@@ -110,6 +111,7 @@
       <p class="step__hint" data-i18n="step_sun_hint">Zo houden we het veilig voor je huid.</p>
     </div>
     <div class="options options--row" id="sunOptions"></div>
+    <p class="sun-fact" id="sunFact"></p>
     <div class="step__nav">
       <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
     </div>
@@ -321,6 +323,7 @@
     <div class="result-details" id="resultDetails"></div>
     <div class="match-tools" id="matchTools"></div>
     <div class="result-blocks" id="resultBlocks"></div>
+    <div class="skinfact" id="skinFactCard"></div>
 
     <div class="loyalty" id="loyaltyBlock"></div>
 
@@ -331,6 +334,8 @@
       <p data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend, ook 's avonds — geen afspraken op weekdagen en (tijdelijk) geen huisbezoeken, wegens avondopleiding.</p>
       <p data-i18n="practical_info_parking">Parkeren: aan het begin van de straat (net vóór je links afslaat naar de woonhuizen) zijn parkeerplaatsen — vandaar is het maar 2 minuten stappen tot bij mij. Kom je met de bakfiets? Die mag je vastzetten bij de fietsen.</p>
     </div>
+
+    <div class="rules-teaser" id="houseRulesTeaser"></div>
 
     <div class="slot-picker" id="slotPicker"></div>
 
@@ -343,6 +348,24 @@
       <button type="button" class="btn btn--outline btn--wide" data-action="add-reminder" data-i18n="reminder_button">📅 Zet een herinnering in mijn agenda</button>
       <button type="button" class="btn btn--gold-outline btn--wide" id="menuCta" data-action="open-pricelist" data-i18n="menu_cta">Bekijk menu &amp; prijzen</button>
       <button type="button" class="btn btn--text" data-action="restart" data-i18n="restart_button">Opnieuw beginnen</button>
+    </div>
+  </section>
+
+  <!-- HOUSE RULES -->
+  <section class="step" data-step="houserules">
+    <div class="step__head">
+      <h2 class="step__title" data-i18n="houserules_title">Huisregels</h2>
+      <p class="step__hint" data-i18n="houserules_intro">Zodat we samen zorgen voor een aangename en professionele afspraak.</p>
+    </div>
+    <div id="houseRulesBody" class="price-list"></div>
+    <div class="price-contact">
+      <p class="price-contact__title" data-i18n="houserules_cancel_title">Annuleren of verplaatsen?</p>
+      <p class="price-contact__hint" data-i18n="houserules_cancel_text">Bel of sms uiterlijk 1 uur voor je afspraak:</p>
+      <a class="btn btn--primary btn--wide" id="rulesPhone" href="tel:+32499221901">📞 +32 499 22 19 01</a>
+      <p class="rules-thanks" data-i18n="houserules_thanks"></p>
+    </div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
     </div>
   </section>
 
@@ -359,6 +382,7 @@
       <p class="price-contact__hint" data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend.</p>
       <a class="btn btn--primary btn--wide" id="priceWhatsapp" href="#" target="_blank" rel="noopener" data-i18n="pricelist_wa_button">💬 Stuur een WhatsApp</a>
       <a class="btn btn--outline btn--wide" id="priceMail" href="#" data-i18n="pricelist_mail_button">📩 Stuur een mail</a>
+      <button type="button" class="btn btn--text" data-action="open-houserules" data-i18n="houserules_button">📋 Lees de huisregels</button>
       <a class="btn btn--text" href="https://sanmakeupstudio.wordpress.com/prijslijst-beauty-coffee/" target="_blank" rel="noopener" data-i18n="pricelist_website_link">Volledige info op de website</a>
     </div>
     <div class="step__nav">

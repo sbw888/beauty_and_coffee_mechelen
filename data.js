@@ -839,3 +839,145 @@ const PRICE_LIST = [
     PI("Barista Privéworkshop","Barista Private Workshop","120′","€175","Zet thuis zelf espresso, espresso-afgeleiden en slow coffees (V60, French Press, Phin, Mokapot).","Learn to make espresso, espresso-based drinks and slow coffees at home (V60, French Press, Phin, Moka pot).")
   ]}
 ];
+
+/* ============================================================
+   HOUSE RULES (screen "Huisregels") — taken from the website.
+   Structure: sections → groups → items. Every text is bilingual
+   (nl/en); French lives in lang-fr.js. Home-visit clauses are left
+   out on purpose while home visits are paused.
+   ============================================================ */
+function R(nl, en){ return { nl, en }; }
+const HOUSE_RULES = [
+  { id:"appointments", icon:"📅", title:R("Afspraken en annuleringen","Appointments and cancellations"), intro:null, outro:null,
+    groups:[{ title:null, items:[
+      R("Afspraken worden enkel telefonisch, persoonlijk of via e-mail vastgelegd.","Appointments are only made by phone, in person or by email."),
+      R("Annuleren of verplaatsen kan tot 1 uur vooraf via 0499 22 19 01.","You can cancel or reschedule up to 1 hour in advance via 0499 22 19 01."),
+      R("Bij annulatie minder dan 1 uur op voorhand wordt 50% van de behandeling aangerekend, tenzij bij ziekte (zie hieronder).","If you cancel less than 1 hour in advance, 50% of the treatment is charged, except in case of illness (see below)."),
+      R("Na 3 keer niet opdagen is het niet meer mogelijk om een afspraak te maken bij Beauty & Coffee.","After 3 no-shows it is no longer possible to make an appointment at Beauty & Coffee."),
+      R("Bij ziekte: verwittig zo snel mogelijk. Annuleer je minstens 1 uur vóór de afspraak, dan worden er geen kosten aangerekend. Bij laattijdige annulatie geldt de 50%-regel.","In case of illness: let me know as soon as possible. If you cancel at least 1 hour before the appointment, no costs are charged. For late cancellations the 50% rule applies."),
+      R("Kom op tijd. Te laat? Verwittig meteen per telefoon of sms. Bij meer dan 15 minuten vertraging kan de behandeling ingekort of geannuleerd worden tegen de annulatiekost.","Please be on time. Running late? Let me know immediately by phone or text. With more than 15 minutes delay the treatment may be shortened or cancelled, subject to the cancellation fee."),
+      R("Bij wanbetaling is het niet meer mogelijk om een afspraak te maken bij Beauty & Coffee.","In case of non-payment it is no longer possible to make an appointment at Beauty & Coffee.")
+    ]}] },
+  { id:"hygiene", icon:"🧼", title:R("Hygiëne en verzorging","Hygiene and care"),
+    intro:R("Voor een aangename en professionele behandeling verwacht ik van elke klant het volgende:","For a pleasant and professional treatment I expect the following from every client:"), outro:null,
+    groups:[
+      { title:R("Handhygiëne","Hand hygiene"), items:[
+        R("Propere handen en nagels: geen zichtbaar vuil onder de nagels of donkere verkleuring op de huid.","Clean hands and nails: no visible dirt under the nails or dark discolouration on the skin."),
+        R("Geen plakkerige of vettige handen (bv. van eten, olie of zalf).","No sticky or greasy hands (e.g. from food, oil or ointment)."),
+        R("Heb je infecties of open wonden? Geef dit vooraf aan voor de manicure. Mogelijk verplaatsen we de afspraak naar een andere datum om de wonde niet te verergeren.","Do you have infections or open wounds? Please tell me in advance for the manicure. We may move the appointment to another date so the wound doesn't get worse.")
+      ]},
+      { title:R("Voethygiëne (bij voetverzorging)","Foot hygiene (for foot care)"), items:[
+        R("Voeten zijn gewassen voor de afspraak.","Feet are washed before the appointment."),
+        R("Geen zichtbaar vuil of sterke geur door gebrek aan hygiëne.","No visible dirt or strong odour due to lack of hygiene."),
+        R("Bij overmatig zweten: het gebruik van voetpoeder of deodorant wordt sterk aangeraden.","In case of excessive sweating: using foot powder or deodorant is strongly recommended."),
+        R("Neem teenslippers mee als je nagellak of gellak wilt bij de pedicure.","Bring flip-flops if you would like nail polish or gel polish with your pedicure."),
+        R("Heb je infecties of open wonden? Geef dit vooraf aan voor de pedicure. Mogelijk verplaatsen we de afspraak naar een andere datum om de wonde niet te verergeren.","Do you have infections or open wounds? Please tell me in advance for the pedicure. We may move the appointment to another date so the wound doesn't get worse."),
+        R("Medische aandoeningen zoals hyperhidrosis (overmatige zweetproductie) of schimmelinfecties moeten vooraf gemeld worden.","Medical conditions such as hyperhidrosis (excessive sweating) or fungal infections must be reported in advance.")
+      ]},
+      { title:R("Intieme hygiëne (bij lichaamsbehandelingen zoals lichaamsontharing en -massage)","Intimate hygiene (for body treatments such as body hair removal and massage)"), items:[
+        R("De huid is proper en fris gewassen op de dag van de behandeling.","Skin is clean and freshly washed on the day of the treatment."),
+        R("Geen onaangename geuren door gebrek aan hygiëne.","No unpleasant odours due to lack of hygiene."),
+        R("Bij onvoldoende hygiëne kan de behandeling geweigerd worden zonder terugbetaling.","In case of insufficient hygiene the treatment may be refused without refund."),
+        R("Draag losse kledij voor de lichaamsontharing.","Wear loose clothing for body hair removal."),
+        R("Heb je infecties of open wonden? Geef dit vooraf aan voor de lichaamsmassage.","Do you have infections or open wounds? Please tell me in advance for the body massage.")
+      ]},
+      { title:R("Geurbeleid (roken, cannabis, sterke lichaamsgeuren)","Odour policy (smoking, cannabis, strong body odours)"), items:[
+        R("Roken en cannabisgebruik vlak voor de behandeling zijn afgeraden.","Smoking and cannabis use right before the treatment are discouraged."),
+        R("Heb je een sterke tabaks-, wiet- of andere geur die als storend wordt ervaren, dan kan de behandeling geweigerd worden zonder terugbetaling.","If you have a strong tobacco, cannabis or other smell that is experienced as disturbing, the treatment may be refused without refund."),
+        R("Normaal transpireren is geen probleem. Is de geur hinderlijk door gebrek aan hygiëne, dan kan de behandeling ingekort of geweigerd worden.","Normal perspiration is not a problem. If the odour is bothersome due to lack of hygiene, the treatment may be shortened or refused."),
+        R("Parfum en sterk geparfumeerde crèmes zijn niet gewenst, omdat die hinderlijk kunnen zijn voor de behandelaar en andere klanten.","Perfume and strongly scented creams are not wanted, as they can be bothersome for the practitioner and other clients.")
+      ]},
+      { title:R("Gelaatsverzorging, lash lifts en brow styling","Facials, lash lifts and brow styling"), items:[
+        R("Kom bij voorkeur zonder make-up.","Preferably come without make-up."),
+        R("Gebruik geen zware gezichtscrème of olie vlak voor de behandeling.","Don't use heavy face cream or oil right before the treatment."),
+        R("Contactlenzen: draag voor de lashlift en gelaatsverzorging liefst geen lenzen, of neem een lenzenpotje en -vloeistof mee. Vergeet zeker je bril niet.","Contact lenses: for the lash lift and facial, preferably don't wear lenses, or bring a lens case and solution. Definitely don't forget your glasses."),
+        R("Draag bij voorkeur een topje met spaghettibandjes.","Preferably wear a top with spaghetti straps.")
+      ]}
+    ] },
+  { id:"contra", icon:"⚠️", title:R("Contra-indicaties","Contraindications"),
+    intro:R("Om medische en hygiënische redenen kan een behandeling niet doorgaan bij:","For medical and hygiene reasons a treatment cannot go ahead in case of:"),
+    outro:R("Twijfel je? Raadpleeg dan eerst een arts.","In doubt? Please consult a doctor first."),
+    groups:[{ title:null, items:[
+      R("Open wonden, ernstige ontstekingen of verse littekens in het behandelgebied.","Open wounds, severe inflammation or fresh scars in the treatment area."),
+      R("Huid die recent sterk verbrand is door de zon in het behandelgebied.","Skin that was recently badly sunburnt in the treatment area."),
+      R("Koorts, griep of andere virale infecties (zie “bij ziekte” bij annuleren).","Fever, flu or other viral infections (see “in case of illness” under cancelling).")
+    ]}] },
+  { id:"practical", icon:"🌿", title:R("Praktische afspraken","Practical arrangements"), intro:null, outro:null,
+    groups:[{ title:null, items:[
+      R("Kom alleen voor behandelingen, tenzij je minderjarig bent. Een workshop vindt plaats in de open keuken en eetruimte. Ben je minderjarig, dan word je vergezeld door een ouder.","Please come alone for treatments, unless you are a minor. A workshop takes place in the open kitchen and dining area. If you are a minor, you must be accompanied by a parent."),
+      R("Roken is verboden in het gebouw om hygiënische en brandveiligheidsredenen.","Smoking is not allowed in the building for hygiene and fire-safety reasons."),
+      R("Laat sieraden en accessoires best thuis om verlies of beschadiging te vermijden.","Best leave jewellery and accessories at home to avoid loss or damage."),
+      R("Zet je gsm op stil tijdens de behandeling.","Please put your phone on silent during the treatment."),
+      R("Alle behandelingen hebben een esthetisch karakter.","All treatments are aesthetic in nature.")
+    ]}] }
+];
+
+/* ============================================================
+   SKIN FACTS ("Weetjes over huid, haar en voeten")
+   36 short facts from the anatomy e-learnings (B1 skin, B2 hair).
+   theme: A skin in short · B sun, colour, vitamin D · C epidermis ·
+   D below the surface · E sweat, sebum, odour · F feet and hands ·
+   G goosebumps and hair · H skin flora.
+   French text lives in lang-fr.js (by code). Informational only:
+   no treatment promises. Figures should be checked against the
+   original e-learning before publishing.
+   Softened until verified: C1 (was "25 to 30 layers") and F1 (was
+   "up to 620 per cm2"). A2 got "on average". Restore the figures here
+   (and in lang-fr.js for French) once checked.
+   ============================================================ */
+const SKIN_FACTS = [
+  { code:"A1", theme:"A", nl:"Je huid is het grootste orgaan van je lichaam.", en:"Your skin is the largest organ of your body." },
+  { code:"A2", theme:"A", nl:"Gemiddeld heb je elke 4 weken een volledig nieuwe opperhuid: je huid vernieuwt zichzelf voortdurend.", en:"On average you get a completely new epidermis every 4 weeks: your skin constantly renews itself." },
+  { code:"A3", theme:"A", nl:"Je huid heeft 9 functies, van barrière en warmteregulatie tot vitamine D-productie, vetreserve en tast.", en:"Your skin has 9 functions, from barrier and temperature regulation to vitamin D production, fat storage and touch." },
+  { code:"A4", theme:"A", nl:"Je huid is ook een communicatiemiddel: je wordt rood van schaamte, wit door ziekte en krijgt kippenvel bij koude of angst.", en:"Your skin is also a means of communication: you blush with embarrassment, turn pale from illness and get goosebumps from cold or fear." },
+  { code:"A5", theme:"A", nl:"Via je huid neem je prikkels op zoals temperatuur, tast, de positie van je ledematen en pijn. Zo kun je met gesloten ogen voorwerpen herkennen.", en:"Through your skin you pick up stimuli such as temperature, touch, the position of your limbs and pain. That's how you can recognise objects with your eyes closed." },
+  { code:"B1", theme:"B", nl:"Het grootste deel van je vitamine D maakt je lichaam zelf aan onder invloed van zonlicht. Voeding zoals vette vis, eieren, melk of boter levert de rest.", en:"Most of your vitamin D is made by your body itself under the influence of sunlight. Food such as oily fish, eggs, milk or butter provides the rest." },
+  { code:"B2", theme:"B", nl:"Melanine in je opperhuid absorbeert UV-stralen.", en:"Melanin in your epidermis absorbs UV rays." },
+  { code:"B3", theme:"B", nl:"Je huidskleur wordt vooral bepaald door de grootte en het aantal pigmentkorrels in de basale laag van je opperhuid.", en:"Your skin colour is mainly determined by the size and number of pigment granules in the basal layer of your epidermis." },
+  { code:"B4", theme:"B", nl:"Een moedervlek is een goedaardige ophoping van melanocyten (pigmentcellen).", en:"A mole is a benign cluster of melanocytes (pigment cells)." },
+  { code:"C1", theme:"C", nl:"Je hoornlaag bestaat uit vele lagen dode cellen, en juist die dode cellen zijn een van de beste beschermingen tegen indringers.", en:"Your horny layer consists of many layers of dead cells, and it is precisely those dead cells that are one of the best protections against intruders." },
+  { code:"C2", theme:"C", nl:"Eelt ontstaat wanneer je hoornlaag extreem veel wrijving ondervindt.", en:"Calluses form when your horny layer is exposed to extreme friction." },
+  { code:"C3", theme:"C", nl:"De cellen in je stekellaag houden elkaar vast met kleine “stekeltjes” (desmosomen). Dat maakt je huid flexibel en stevig.", en:"The cells in your spinous layer hold on to each other with tiny “spines” (desmosomes). That makes your skin flexible and strong." },
+  { code:"C4", theme:"C", nl:"Langerhanscellen in je huid zijn vertakte cellen die meehelpen aan je afweer.", en:"Langerhans cells in your skin are branched cells that help your immune defence." },
+  { code:"D1", theme:"D", nl:"Collageen zorgt voor de stevigheid van je huid, elastine voor de rekbaarheid en veerkracht.", en:"Collagen gives your skin its firmness, elastin its stretch and resilience." },
+  { code:"D2", theme:"D", nl:"Je onderhuid is tegelijk energieopslag, isolatielaag en stootkussen.", en:"Your subcutaneous layer is energy storage, insulation and shock absorber all in one." },
+  { code:"D3", theme:"D", nl:"Zoogdieren hebben een dikke vacht. Bij de mens ging die verloren en nam het vet onder je huid de isolatie over.", en:"Mammals have thick fur. In humans it was lost, and the fat under your skin took over the insulation." },
+  { code:"E1", theme:"E", nl:"Apocrien zweet is geurloos tot het op je huid komt. De typische zweetgeur ontstaat pas wanneer bacteriën het omzetten.", en:"Apocrine sweat is odourless until it reaches your skin. The typical sweat smell only arises when bacteria break it down." },
+  { code:"E2", theme:"E", nl:"Je hebt 2 tot 5 miljoen zweetklieren.", en:"You have 2 to 5 million sweat glands." },
+  { code:"E3", theme:"E", nl:"Talg vormt samen met zweet je zuurmantel, die je huid beschermt tegen bacteriën en ziekteverwekkers.", en:"Sebum and sweat together form your acid mantle, which protects your skin against bacteria and pathogens." },
+  { code:"E4", theme:"E", nl:"Hoeveel talg je aanmaakt hangt af van je hormonen en je leeftijd, niet van je zenuwstelsel.", en:"How much sebum you produce depends on your hormones and your age, not on your nervous system." },
+  { code:"F1", theme:"F", nl:"Je voetzolen hebben een van de hoogste dichtheden aan zweetklieren van je lichaam.", en:"Your soles have one of the highest densities of sweat glands in your body." },
+  { code:"F2", theme:"F", nl:"Op je handpalmen en voetzolen groeien geen haren en zitten geen talgklieren.", en:"No hair grows on your palms and soles, and there are no sebaceous glands." },
+  { code:"F3", theme:"F", nl:"Onder je voetzolen (en handpalmen en zitvlak) dient het vet bijna uitsluitend als stootkussen.", en:"Under the soles of your feet (and palms and buttocks) the fat serves almost exclusively as a shock absorber." },
+  { code:"F4", theme:"F", nl:"Handpalmen en voetzolen hebben een extra huidlaag: de doorschijnende laag, die enkel in dikke huid voorkomt.", en:"Palms and soles have an extra skin layer: the translucent layer, which only occurs in thick skin." },
+  { code:"G1", theme:"G", nl:"Kippenvel: een klein spiertje bij het haarzakje trekt samen en zet het haar rechtop. Zo blijft er warme lucht tussen de haartjes hangen als isolatie.", en:"Goosebumps: a tiny muscle at the hair follicle contracts and makes the hair stand upright. That traps warm air between the hairs as insulation." },
+  { code:"G2", theme:"G", nl:"Elk haartje heeft zijn eigen haaroprichter, de kippenvelspier.", en:"Every hair has its own arrector pili, the goosebump muscle." },
+  { code:"G3", theme:"G", nl:"Haren zijn meer dan sier: alle haarfollikels hebben zenuwen die reageren op druk of buiging van de haarschacht.", en:"Hairs are more than decoration: all hair follicles have nerves that respond to pressure or bending of the hair shaft." },
+  { code:"G4", theme:"G", nl:"Vanaf halverwege de schacht bestaat je haar uit dood materiaal: de haarcellen vullen zich met keratine en sterven af.", en:"From halfway up the shaft, your hair consists of dead material: the hair cells fill with keratin and die off." },
+  { code:"G5", theme:"G", nl:"De kleur van je haar komt van melanocyten in de haarwortel die pigmentkorrels afgeven.", en:"The colour of your hair comes from melanocytes in the hair root that release pigment granules." },
+  { code:"G6", theme:"G", nl:"De buitenste laag van je haar (cuticula) ligt als dakpannen over elkaar. Die schubben houden het haar glad en beschermen tegen chemicaliën, UV-straling en hitte.", en:"The outer layer of your hair (cuticle) overlaps like roof tiles. Those scales keep the hair smooth and protect against chemicals, UV radiation and heat." },
+  { code:"G7", theme:"G", nl:"De vezellaag (cortex) bepaalt of je haar steil of krullend is.", en:"The fibre layer (cortex) determines whether your hair is straight or curly." },
+  { code:"G8", theme:"G", nl:"Wat het merg (medulla) van je haar precies doet, is nog niet bekend. Niet elk haartype heeft er een.", en:"What exactly the medulla (core) of your hair does is not yet known. Not every hair type has one." },
+  { code:"G9", theme:"G", nl:"In elke haarfollikel monden 2 tot 3 talgklieren uit.", en:"2 to 3 sebaceous glands open into each hair follicle." },
+  { code:"G10", theme:"G", nl:"Je haarwortel is gevoelig voor hormonen en kan beïnvloed worden door voeding, stress en genetica.", en:"Your hair root is sensitive to hormones and can be influenced by nutrition, stress and genetics." },
+  { code:"H1", theme:"H", nl:"Je huid kan nooit volledig steriel gemaakt worden: nuttige micro-organismen leven er permanent en vormen een eerste barrière tegen besmetting.", en:"Your skin can never be made completely sterile: useful micro-organisms live there permanently and form a first barrier against infection." },
+  { code:"H2", theme:"H", nl:"Tijdelijke (transiënte) huidflora verwijder je gemakkelijk door je handen te wassen of te ontsmetten.", en:"Temporary (transient) skin flora is easily removed by washing or disinfecting your hands." }
+];
+/* Which themes are shown for which treatment (null = any fact). */
+const SKIN_FACT_POOLS = {
+  kids: ["A","G","H"],
+  byTreatment: {
+    pedicure:["F","E","C"], pedicureexpress:["F","E","C"],
+    manipedispa:["F","C","H"], manicure:["F","H","C"],
+    oksel:["G","E"], been:["G"], rug:["G"], buik:["G"], borst:["G"],
+    browlift:["G"], hennabrows:["G"], lashlift:["G"],
+    hydrapeel:["A","B","C","D"], signaturefacial:["A","B","C","D"], fillme:["A","B","C","D"],
+    fruitacid:["A","B","C","D"], liftsummere:["A","B","C","D"], antiagefacial:["A","B","C","D"],
+    glammakeup:["A","B"], makeupworkshop:["A","B","C"], facialworkshop:["A","B","C"],
+    hotstone:["A","D","E"], cupping:["A","D","E"], cuppingpeeling:["A","D","E"],
+    swedish:["A","D","E"], swedishbackneck:["A","D","E"], swedishlegs:["A","D","E"],
+    backwrap:["A","D","E"], harmonizingbody:["A","D","E"], fullbodywrap:["A","D","E"],
+    slimmassage:["A","D","E"], detoxback:["A","D","E"]
+  },
+  sun: ["B"]
+};
