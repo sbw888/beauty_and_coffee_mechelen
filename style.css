@@ -535,6 +535,7 @@ body{
   border-radius:var(--radius-m); padding:14px 18px;
 }
 .skinfact__title{ font-family:var(--font-display); font-weight:600; font-size:14px; margin:0 0 6px; }
+.skinfact__kop{ font-family:var(--font-display); font-weight:600; font-size:13.5px; color:var(--gold-ink); margin:0 0 3px; }
 .skinfact__text{ font-size:14px; line-height:1.55; margin:0 0 8px; }
 .skinfact__more{
   font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--gold-ink);

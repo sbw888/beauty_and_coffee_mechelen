@@ -10,7 +10,7 @@
     profile: null,        // 'kind' | 'man' | 'vrouw'
     ageBracket: null,     // '16-24' | '25-34' | '35-44' | '45plus'
     sunExposed: null,     // bool
-    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false },
+    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     complaintText: "",
@@ -215,7 +215,8 @@
       const items = [
         ["phlebitis", "🩸"],
         ["contactLenses", "👓"],
-        ["musclePain", "💪"]
+        ["musclePain", "💪"],
+        ["roaccutane", "💊"]
       ];
       if (state.profile === "vrouw") items.push(["menstruation", "🌙"], ["pregnant", "🤰"]);
       items.forEach(([key, icon]) => {
@@ -229,6 +230,17 @@
         });
         checkWrap.appendChild(chip);
       });
+      let rNotice = checkWrap.parentElement.querySelector(".roaccutane-notice");
+      if (state.healthFlags.roaccutane){
+        if (!rNotice){
+          rNotice = document.createElement("div");
+          rNotice.className = "sun-notice roaccutane-notice";
+          checkWrap.insertAdjacentElement("afterend", rNotice);
+        }
+        rNotice.innerHTML = `<span class="sun-notice__icon">💊</span><span>${t("roaccutane_filtered_notice", state.lang)}</span>`;
+      } else if (rNotice){
+        rNotice.remove();
+      }
     }
 
     const dietWrap = $("#dietOptions");
@@ -793,11 +805,11 @@
     let treatment = treatmentObj;
     if (treatmentObj.lensWarning && state.healthFlags.contactLenses){
       treatment = {
-        ...treatmentObj,
+        ...treatment,
         aftercare: {
-          nl: treatmentObj.aftercare.nl + " " + t("lens_warning_note", "nl"),
-          en: treatmentObj.aftercare.en + " " + t("lens_warning_note", "en"),
-          fr: (treatmentObj.aftercare.fr || treatmentObj.aftercare.en) + " " + t("lens_warning_note", "fr")
+          nl: treatment.aftercare.nl + " " + t("lens_warning_note", "nl"),
+          en: treatment.aftercare.en + " " + t("lens_warning_note", "en"),
+          fr: (treatment.aftercare.fr || treatment.aftercare.en) + " " + t("lens_warning_note", "fr")
         }
       };
     }
@@ -1000,9 +1012,20 @@
   }
 
   /* ---------------- skin facts ("Weetje: huid, haar en voeten") ---------------- */
+  const ALL_FACTS = SKIN_FACTS
+    .concat(typeof CONDITION_FACTS !== "undefined" ? CONDITION_FACTS : [])
+    .concat(typeof PRACTICE_FACTS !== "undefined" ? PRACTICE_FACTS : []);
   function factPoolFor(m){
-    const themes = m.isKid ? SKIN_FACT_POOLS.kids : (SKIN_FACT_POOLS.byTreatment[m.treatment.id] || null);
-    return themes ? SKIN_FACTS.filter(f => themes.includes(f.theme)) : SKIN_FACTS.slice();
+    if (m.isKid) return SKIN_FACTS.filter(f => SKIN_FACT_POOLS.kids.includes(f.theme));
+    const skinThemes = SKIN_FACT_POOLS.byTreatment[m.treatment.id] || null;
+    const condThemes = (typeof CONDITION_FACT_POOLS !== "undefined") ? (CONDITION_FACT_POOLS.byTreatment[m.treatment.id] || null) : null;
+    const pracThemes = (typeof PRACTICE_FACT_POOLS !== "undefined") ? (PRACTICE_FACT_POOLS.byTreatment[m.treatment.id] || null) : null;
+    if (!skinThemes && !condThemes && !pracThemes) return SKIN_FACTS.slice();
+    const pool = [];
+    if (skinThemes) pool.push(...SKIN_FACTS.filter(f => skinThemes.includes(f.theme)));
+    if (condThemes) pool.push(...CONDITION_FACTS.filter(f => condThemes.includes(f.theme)));
+    if (pracThemes) pool.push(...PRACTICE_FACTS.filter(f => pracThemes.includes(f.theme)));
+    return pool.length ? pool : ALL_FACTS.slice();
   }
   function randomFrom(pool, avoidCode){
     let f, n = 0;
@@ -1015,17 +1038,22 @@
     return randomFrom(factPoolFor(state.match), state.skinFact);
   }
   function randomFactCode(themes){
-    return randomFrom(SKIN_FACTS.filter(f => themes.includes(f.theme)), state.sunFact);
+    const pool = SKIN_FACTS.filter(f => themes.includes(f.theme));
+    if (typeof CONDITION_FACT_POOLS !== "undefined" && CONDITION_FACT_POOLS.sun) {
+      pool.push(...CONDITION_FACTS.filter(f => CONDITION_FACT_POOLS.sun.includes(f.theme)));
+    }
+    return randomFrom(pool, state.sunFact);
   }
   function renderSkinFact(){
     const wrap = $("#skinFactCard");
     if (!wrap) return;
-    const fact = SKIN_FACTS.find(f => f.code === state.skinFact);
+    const fact = ALL_FACTS.find(f => f.code === state.skinFact);
     if (!state.match || !fact){ wrap.innerHTML = ""; return; }
     const lang = state.lang;
     const canMore = factPoolFor(state.match).length > 1;
     wrap.innerHTML = `
       <p class="skinfact__title">${t("skinfact_title", lang)}</p>
+      ${fact.kop ? `<p class="skinfact__kop">${lang === "nl" ? fact.kop : (lang === "en" ? (fact.kopEn || fact.kop) : (fact.kopFr || fact.kopEn || fact.kop))}</p>` : ""}
       <p class="skinfact__text">${fact[lang] || fact.nl}</p>
       ${canMore ? `<button type="button" class="skinfact__more" data-action="another-fact">${t("skinfact_more", lang)}</button>` : ""}
       <p class="skinfact__disclaimer">${t("skinfact_disclaimer", lang)}</p>`;
@@ -1037,7 +1065,7 @@
   function renderSunFact(){
     const el = $("#sunFact");
     if (!el) return;
-    const fact = SKIN_FACTS.find(f => f.code === state.sunFact);
+    const fact = ALL_FACTS.find(f => f.code === state.sunFact);
     el.innerHTML = fact ? `💡 ${fact[state.lang] || fact.nl}` : "";
   }
 
@@ -1496,7 +1524,7 @@
     stopCamera();
     cameraFacing = "user";
     state.profile = null; state.ageBracket = null; state.sunExposed = null; state.kidsDrink = null;
-    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, dietExercise:false };
+    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false };
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null; state.complaintText = "";
     const complaintEl = $("#complaintInput"); if (complaintEl) complaintEl.value = "";
     state.milk = "none"; state.extras = []; state.context = null;

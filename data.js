@@ -555,7 +555,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Drink de eerste 24 uur extra water om de afvoer van afvalstoffen te ondersteunen.",
                 en:"Drink extra water for the first 24 hours to support the removal of waste products." } },
 
-  { id:"oksel", name:"Okselontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, price:"€15 (20')",
+  { id:"oksel", name:"Okselontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"€15 (20')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer","syndet"] },
     benefits:{ nl:"Wekenlang zachte, gladde oksels zonder dagelijks scheren.",
                en:"Weeks of soft, smooth armpits without daily shaving." },
@@ -564,7 +564,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, deodorant, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
                 en:"Avoid direct sun exposure, tanning beds, deodorant, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
 
-  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, price:"vanaf €30 (Onderbenen, 20')",
+  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"vanaf €30 (Onderbenen, 20')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Wekenlang gladde benen met een fijnere, langzamere hergroei dan bij scheren.",
                en:"Weeks of smooth legs, with finer, slower regrowth than shaving." },
@@ -573,7 +573,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
                 en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
 
-  { id:"rug", name:"Rugontharing", moods:["energetic","focus"], genders:["man"], sunSensitive:true, price:"€40 (60')",
+  { id:"rug", name:"Rugontharing", moods:["energetic","focus"], genders:["man"], sunSensitive:true, waxing:true, price:"€40 (60')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een gladde, verzorgde rug zonder de moeite van zelf scheren op een moeilijk bereikbare plek.",
                en:"A smooth, groomed back without the hassle of shaving a hard-to-reach area yourself." },
@@ -582,7 +582,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
                 en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
 
-  { id:"buik", name:"Buikontharing", moods:["energetic"], genders:["man"], sunSensitive:true, price:"€20 (45')",
+  { id:"buik", name:"Buikontharing", moods:["energetic"], genders:["man"], sunSensitive:true, waxing:true, price:"€20 (45')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een gladde buik met langdurig resultaat en fijnere hergroei.",
                en:"A smooth stomach with long-lasting results and finer regrowth." },
@@ -591,7 +591,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
                 en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
 
-  { id:"borst", name:"Borstontharing", moods:["energetic"], genders:["man"], sunSensitive:true, price:"€25 (45')",
+  { id:"borst", name:"Borstontharing", moods:["energetic"], genders:["man"], sunSensitive:true, waxing:true, price:"€25 (45')",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Een verzorgde, gladde borstkas met resultaat dat weken meegaat.",
                en:"A groomed, smooth chest with results that last for weeks." },
@@ -648,6 +648,7 @@ function matchTreatment(mood, gender, sunExposed, healthFlags, complaintText){
   const dietOk = (item) => !item.requiresDietExercise || healthFlags.dietExercise;
   const menstruationOk = (item) => !healthFlags.menstruation || !item.cuppingRelated;
   const pregnancyOk = (item) => !healthFlags.pregnant || !item.pregnancyUnsafe;
+  const roaccutaneOk = (item) => !healthFlags.roaccutane || !item.waxing;
   const ageOk = (item) => (!item.minAge45 || healthFlags.age45Plus) && (!item.minAge30 || healthFlags.age30Plus);
 
   const currentHour = new Date().getHours();
@@ -658,7 +659,7 @@ function matchTreatment(mood, gender, sunExposed, healthFlags, complaintText){
   const seasonOk = (item) => !item.excludeSummer || !isSummer;
   const monthRangeOk = (item) => !item.monthRange || item.monthRange.includes(currentMonth);
 
-  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item) && pregnancyOk(item) && ageOk(item) && seasonOk(item) && monthRangeOk(item);
+  const allOk = (item) => genderOk(item) && sunOk(item) && timeOk(item) && phlebitisOk(item) && dietOk(item) && menstruationOk(item) && pregnancyOk(item) && roaccutaneOk(item) && ageOk(item) && seasonOk(item) && monthRangeOk(item);
 
   let pool = TREATMENTS_CATALOG.filter(item => item.moods.includes(mood) && allOk(item));
 
@@ -980,4 +981,206 @@ const SKIN_FACT_POOLS = {
     slimmassage:["A","D","E"], detoxback:["A","D","E"]
   },
   sun: ["B"]
+};
+
+/* ============================================================
+   CONDITION FACTS ("Weetjes: huid, zon en gezondheid")
+   62 facts from the pathology e-learnings (skin cancer, benign
+   growths, pigmentation, acne, feet, dry skin, infections,
+   allergy/irritation, sweat disorders). Separate from SKIN_FACTS
+   (anatomy) because the source and register differ; both render
+   through the same skin-fact card.
+   theme codes: SH zon & huidkanker · TU huidgezwellen ·
+   PI pigment & vlekken · AC acne & talg · PE voeten & pedicure ·
+   DR droge huid & verhoorning · IN infecties ·
+   AL allergie & irritatie · ZW zweet.
+   Some facts touch real conditions (skin cancer, herpes, HPV,
+   diabetes). Kept factual and non-alarming; never shown as medical
+   advice — see skinfact_disclaimer in i18n.js. French text lives in
+   lang-fr.js (by code).
+   ============================================================ */
+const CONDITION_FACTS = [
+  { code:"SH1", theme:"SH", kop:"80 – 15 – 5", nl:"Van alle huidkankers is 80% een basaalcelcarcinoom, 15% een plaveiselcelcarcinoom en 5% een melanoom. Het melanoom is het zeldzaamst, maar wel de meest agressieve vorm.", en:"Of all skin cancers, 80% are basal cell carcinoma, 15% squamous cell carcinoma and 5% melanoma. Melanoma is the rarest, but the most aggressive form.", kopEn:"80 – 15 – 5" },
+  { code:"SH2", theme:"SH", kop:"De ABCDE-regel", nl:"Check je moedervlekken op Asymmetrie, Boordgroei (onregelmatige rand), Color change (2 of meer kleuren), Diameter (meer dan 6 mm) en Evolutie (verandert, jeukt of bloedt).", en:"Check your moles for Asymmetry, Border irregularity, Colour change (2 or more colours), Diameter (more than 6 mm) and Evolution (changes, itches or bleeds).", kopEn:"The ABCDE rule" },
+  { code:"SH3", theme:"SH", kop:"Kinderhuid en zon", nl:"Een ernstige zonverbranding bij kinderen jonger dan 5 jaar kan later melanomen doen ontstaan. Regelmatig zonnen en de zonnebank verhogen het risico ook.", en:"A severe sunburn in children under 5 can lead to melanoma later in life. Regular sunbathing and sunbeds also increase the risk.", kopEn:"Child skin and sun" },
+  { code:"SH4", theme:"SH", kop:"Zonnekeratose", nl:"Actinische keratose is een voorstadium van huidkanker: ruwe, schilferige plekjes door te veel UV van zon of zonnebank, vooral op handruggen, onderarmen, gelaat en schedelhuid. Je voelt ze vaak eerder dan je ze ziet.", en:"Actinic keratosis is a precursor to skin cancer: rough, scaly patches caused by too much UV from sun or sunbeds, mostly on the backs of the hands, forearms, face and scalp. You often feel them before you see them.", kopEn:"Actinic keratosis" },
+  { code:"SH5", theme:"SH", kop:"Steeds jonger", nl:"Het basaalcelcarcinoom zie je steeds vaker bij jongere mensen, al vanaf ongeveer 30 jaar. Een licht huidtype (type 1 of 2) heeft het grootste risico.", en:"Basal cell carcinoma is increasingly seen in younger people, from around age 30. A fair skin type (type 1 or 2) carries the highest risk.", kopEn:"Getting younger" },
+  { code:"SH6", theme:"SH", kop:"Een wondje dat blijft", nl:"Een niet-genezend wondje of zweertje met permanent een korstje kan een teken zijn van een basaalcelcarcinoom. Dat groeit traag en zaait (vrijwel) nooit uit.", en:"A wound or sore that won't heal and keeps a permanent scab can be a sign of basal cell carcinoma. It grows slowly and (almost) never spreads.", kopEn:"A wound that won't heal" },
+  { code:"SH7", theme:"SH", kop:"Verdachte vlek", nl:"Een vlek die verandert, asymmetrisch is, een grillige rand of meerdere kleurschakeringen heeft, groter is dan 6 mm of jeukt, ontsteekt of bloedt: een reden om een arts te raadplegen.", en:"A spot that changes, is asymmetrical, has an irregular border or several shades of colour, is bigger than 6 mm, or itches, becomes inflamed or bleeds: a reason to see a doctor.", kopEn:"A suspicious spot" },
+  { code:"TU1", theme:"TU", kop:"Spider naevi", nl:"Spider naevi (kleine bloedvaatjes die als een spinnetje uitstralen) ontstaan vaak op zonblootgestelde plekken zoals gezicht, nek en benen. Kleine, oppervlakkige exemplaren kunnen met elektrocoagulatie of fulguratie behandeld worden.", en:"Spider naevi (tiny blood vessels radiating out like a spider) often appear on sun-exposed areas such as the face, neck and legs. Small, superficial ones can be treated with electrocoagulation or fulguration.", kopEn:"Spider naevi" },
+  { code:"TU2", theme:"TU", kop:"Steelwratjes", nl:"Iedereen van 30 jaar of ouder heeft wel ergens een of meer fibromen (steelwratjes). Ze gaan niet vanzelf weg, maar kunnen bij cosmetisch bezwaar goed en veilig verwijderd worden.", en:"Almost everyone aged 30 or older has one or more skin tags (fibromas) somewhere. They don't disappear on their own, but if they bother you cosmetically they can be removed safely.", kopEn:"Skin tags" },
+  { code:"TU3", theme:"TU", kop:"Ouderdomswratten", nl:"Ouderdomswratten zijn verheven bruine of zwarte, vaak ruwe vlekken die vooral bij oudere mensen voorkomen. Ze zijn goedaardig.", en:"Seborrhoeic warts are raised brown or black, often rough patches that mainly occur in older people. They are benign.", kopEn:"Seborrhoeic warts" },
+  { code:"TU4", theme:"TU", kop:"Zwarte huidbultjes", nl:"Zwarte huidbultjes (dermatosis papulosa nigra) zijn kleine, donkere bultjes die vooral voorkomen bij mensen met een donkere huidskleur, meestal in het gezicht.", en:"Dermatosis papulosa nigra are small, dark bumps that mainly occur in people with darker skin, usually on the face.", kopEn:"Dark bumps" },
+  { code:"TU5", theme:"TU", kop:"Bloedvatgezwel bij baby's", nl:"Een hemangioom (verheven bloedvatgezwel) is een goedaardige ophoping van bloedvaten die eruitziet als een rood of blauw knobbeltje. Het komt vaak voor bij baby's en kinderen.", en:"A haemangioma (a raised cluster of blood vessels) is a benign growth that looks like a red or blue bump. It is common in babies and young children.", kopEn:"Baby blood-vessel growth" },
+  { code:"PI1", theme:"PI", kop:"Parfum + zon = vlekken", nl:"Berloque dermatitis: parfum, bodylotion of deodorant (vaak met bergamot) kan donkere vlekken of strepen geven, klassiek in de vorm van druppels. Vaak verdwijnt het vanzelf; zonbescherming is belangrijk.", en:"Berloque dermatitis: perfume, body lotion or deodorant (often containing bergamot) combined with sun can leave dark spots or streaks, classically drop-shaped. It often fades on its own; sun protection matters.", kopEn:"Perfume + sun = spots" },
+  { code:"PI2", theme:"PI", kop:"Moedervlekken", nl:"Moedervlekken kunnen al voor de geboorte bestaan of later ontstaan. Erfelijkheid en verbranding tijdens de jeugd spelen een rol.", en:"Moles can be present from before birth or develop later in life. Heredity and sunburn during childhood both play a role.", kopEn:"Moles" },
+  { code:"PI3", theme:"PI", kop:"Ouderdomsvlekken", nl:"Levervlekken (ouderdomsvlekken) zijn goedaardig en verschijnen bijna altijd na je 50e à 60e, vooral op gelaat, decolleté en handruggen.", en:"Age spots (liver spots) are benign and almost always appear after age 50 to 60, mainly on the face, décolletage and backs of the hands.", kopEn:"Age spots" },
+  { code:"PI4", theme:"PI", kop:"Vitiligo", nl:"Bij vitiligo verdwijnen de pigmentcellen uit de huid. Het kan op elke leeftijd plots ontstaan; bij 70 à 80% van de mensen begint het voor hun 30e. Extra zonbescherming is nodig.", en:"In vitiligo, pigment cells disappear from the skin. It can start suddenly at any age; in 70 to 80% of people it begins before age 30. Extra sun protection is needed.", kopEn:"Vitiligo" },
+  { code:"PI5", theme:"PI", kop:"Albinisme", nl:"Albinisme is aangeboren: melanine ontbreekt gedeeltelijk of volledig, wat een (gedeeltelijk) witte huid met rode ogen geeft.", en:"Albinism is congenital: melanin is partly or completely absent, resulting in (partly) white skin and often reddish eyes.", kopEn:"Albinism" },
+  { code:"PI6", theme:"PI", kop:"Na de puist", nl:"Na acne blijven rode vlekjes 3 tot 9 maanden zichtbaar en donkere vlekjes kunnen tot 3 jaar blijven, vooral bij een donkerder huidtype en zonblootstelling.", en:"After acne, red marks can remain visible for 3 to 9 months, and dark marks can last up to 3 years, especially in darker skin types and with sun exposure.", kopEn:"After the pimple" },
+  { code:"AC1", theme:"AC", kop:"Mythe: chocolade", nl:"Volgens de e-learning veroorzaken slechte hygiëne, vitaminetekort, voedselallergieën, chocolade en mayonaise geen acne. Wél: talg, hormonen, verstopte follikels, bacteriën en erfelijkheid.", en:"According to the course material, poor hygiene, vitamin deficiency, food allergies, chocolate and mayonnaise do not cause acne. What does: sebum, hormones, clogged follicles, bacteria and heredity.", kopEn:"Myth: chocolate" },
+  { code:"AC2", theme:"AC", kop:"Hormonen", nl:"Vooral mannelijke hormonen (androgenen) prikkelen de talgklieren, bij jongens én meisjes. Niet de hoeveelheid hormonen telt, maar het onevenwicht en de gevoeligheid van de talgkliertjes.", en:"Mainly male hormones (androgens) stimulate the sebaceous glands, in both boys and girls. It's not the amount of hormones that counts, but the imbalance and the sensitivity of the glands.", kopEn:"Hormones" },
+  { code:"AC3", theme:"AC", kop:"Geduld loont", nl:"Acne reageert traag: de eerste maand is er meestal weinig verbetering, na zes maanden behandeling minstens 80% verbetering van de letsels.", en:"Acne responds slowly: there is usually little improvement in the first month, but after six months of treatment at least 80% improvement of the lesions.", kopEn:"Patience pays off" },
+  { code:"AC4", theme:"AC", kop:"Deppen, niet wrijven", nl:"Wrijven stimuleert de talgproductie. Reinig acnehuid met milde zeep en dep hem droog. Sterk ontvettende producten kunnen de talgproductie juist stimuleren.", en:"Rubbing stimulates sebum production. Cleanse acne-prone skin with a mild soap and pat it dry. Strongly degreasing products can actually stimulate sebum production.", kopEn:"Pat, don't rub" },
+  { code:"AC5", theme:"AC", kop:"Goed ontschminken", nl:"Make-up mag bij acne, maar vergroot de verstopping van de poriën als je niet goed ontschminkt. Een katoenen kussensloop absorbeert beter.", en:"Make-up is fine with acne, but it worsens clogged pores if you don't remove it properly. A cotton pillowcase absorbs better.", kopEn:"Remove make-up well" },
+  { code:"AC6", theme:"AC", kop:"Mallorca acne", nl:"Zon in combinatie met zonnebrand of cosmetica met comedogene ingrediënten kan kleine, rode, jeukende bultjes geven. Kies een niet-comedogene, olievrije zonnebrand.", en:"Sun combined with sunscreen or cosmetics containing comedogenic ingredients can cause small, red, itchy bumps. Choose a non-comedogenic, oil-free sunscreen.", kopEn:"Mallorca acne" },
+  { code:"AC7", theme:"AC", kop:"Rosacea is geen acne", nl:"\"Acne rosacea\" heeft ondanks de puistjes niets met acne te maken. Het is een chronische roodheid van het gelaat, vooral bij een lichte huid.", en:"\"Acne rosacea\", despite the pimples, has nothing to do with acne. It is a chronic redness of the face, mainly in fair skin.", kopEn:"Rosacea isn't acne" },
+  { code:"AC8", theme:"AC", kop:"Roaccutane en waxen", nl:"Tijdens een behandeling met Roaccutane en de twee maanden erna mag je niet epileren met was: er kunnen stukken huid meekomen. De huid is ook zongevoelig.", en:"During treatment with Roaccutane and for two months afterwards, you should not wax: pieces of skin can be pulled off with the wax. The skin is also sun-sensitive.", kopEn:"Roaccutane and waxing" },
+  { code:"AC9", theme:"AC", kop:"Baby-acne", nl:"Baby-acne verdwijnt meestal vanzelf. Niet uitknijpen of manipuleren!", en:"Baby acne usually disappears on its own. Don't squeeze or pick at it!", kopEn:"Baby acne" },
+  { code:"PE1", theme:"PE", kop:"Wrat of likdoorn?", nl:"Bij een likdoorn lopen de huidlijnen over het letsel heen. Bij een voetzoolwrat wijken de huidlijnen rondom de wrat af.", en:"With a corn, the skin lines run straight across the lesion. With a plantar wart, the skin lines deviate around the wart.", kopEn:"Wart or corn?" },
+  { code:"PE2", theme:"PE", kop:"Wratten overleven buiten het lichaam", nl:"HPV kan lang overleven in een vochtige omgeving zoals gemeenschappelijke douches, zwembadvloeren en natte handdoeken. Draag daar eigen slippers.", en:"HPV can survive for a long time in a damp environment such as communal showers, pool floors and wet towels. Wear your own flip-flops there.", kopEn:"Warts survive outside the body" },
+  { code:"PE3", theme:"PE", kop:"Wratten gaan vaak vanzelf weg", nl:"Wratten verdwijnen vaak vanzelf na een 2-tal jaar. Bevriezen met vloeibare stikstof vraagt meestal meerdere beurten, met telkens ongeveer 3 weken ertussen.", en:"Warts often disappear on their own after about 2 years. Freezing with liquid nitrogen usually takes several sessions, roughly 3 weeks apart.", kopEn:"Warts often go away on their own" },
+  { code:"PE4", theme:"PE", kop:"Voetschimmel houdt van warm en vochtig", nl:"Schimmels zitten graag op warme, vochtige plekken zoals voeten en tussen de tenen. Droog goed tussen de tenen, draag katoenen of wollen sokken en ruime, liefst lederen schoenen.", en:"Fungi love warm, moist places such as feet and between the toes. Dry well between your toes, wear cotton or wool socks and roomy, preferably leather shoes.", kopEn:"Fungus loves warm and damp" },
+  { code:"PE5", theme:"PE", kop:"Hardnekkig", nl:"Schimmelinfecties zijn hardnekkig en komen vaak terug. Een langdurige behandeling van weken tot maanden is vaak nodig.", en:"Fungal infections are stubborn and often come back. A prolonged treatment of weeks to months is often needed.", kopEn:"Stubborn" },
+  { code:"PE6", theme:"PE", kop:"Blaartjes op de voetzool", nl:"Blaartjes op de handpalmen of voetzolen zijn meestal een overgevoeligheidsreactie op een schimmelinfectie elders op het lichaam.", en:"Small blisters on the palms or soles are usually a hypersensitivity reaction to a fungal infection elsewhere on the body.", kopEn:"Blisters on the sole" },
+  { code:"PE7", theme:"PE", kop:"Zweetvoeten", nl:"Tegen zweetvoeten helpen dagelijks schone (katoenen) kousen, schoenen meermaals per dag wisselen en lederen schoenen die de voet niet afsluiten. Minder koffie, alcohol en scherpe kruiden helpt ook.", en:"For sweaty feet, clean (cotton) socks every day, changing shoes several times a day, and leather shoes that let the foot breathe all help. Less coffee, alcohol and spicy food helps too.", kopEn:"Sweaty feet" },
+  { code:"PE8", theme:"PE", kop:"Diabetes en de huid", nl:"Bij diabetes is er een verhoogde kans op schimmelinfecties (verminderde weerstand) en op fibromen (steelwratjes).", en:"With diabetes there is an increased risk of fungal infections (reduced resistance) and of skin tags (fibromas).", kopEn:"Diabetes and skin" },
+  { code:"PE9", theme:"PE", kop:"Geen steenpuist op de voetzool", nl:"Steenpuisten komen nooit voor op de voetzool of handpalm: daar zitten geen haarzakjes.", en:"Boils never occur on the sole of the foot or the palm: there are no hair follicles there.", kopEn:"No boils on the sole" },
+  { code:"PE10", theme:"PE", kop:"Teek verwijderen", nl:"Pak een teek met een pincet bij de kop en trek hem langzaam recht omhoog. Zorg dat ook de monddelen mee zijn.", en:"Grip a tick with tweezers at the head and pull it slowly and straight upward. Make sure the mouthparts come out too.", kopEn:"Removing a tick" },
+  { code:"DR1", theme:"DR", kop:"Herstel in een week", nl:"Een uitgedroogde huid maakt zelf extra huidvetten aan. Met rust en een beschermende vette crème is de barrière na ongeveer 1 week hersteld.", en:"Dehydrated skin produces extra skin lipids itself. With rest and a protective, rich cream the barrier is usually restored after about 1 week.", kopEn:"Healed in a week" },
+  { code:"DR2", theme:"DR", kop:"Vette crème voor het slapen", nl:"Vaselinehoudende crèmes werken heel goed bij een droge huid, maar trekken langzaam in. Daarom zijn ze vooral praktisch voor het slapengaan.", en:"Vaseline-based creams work very well for dry skin, but absorb slowly. That's why they're especially practical at bedtime.", kopEn:"Rich cream at bedtime" },
+  { code:"DR3", theme:"DR", kop:"Katoen onder rubber", nl:"Draag onder rubberen of PVC handschoenen bij voorkeur katoenen verbandhandschoenen. Zo bescherm je je handen tegen uitdroging.", en:"Wear cotton liner gloves underneath rubber or PVC gloves whenever possible. That protects your hands against drying out.", kopEn:"Cotton under rubber" },
+  { code:"DR4", theme:"DR", kop:"Psoriasis: snelle huid", nl:"Een normale huid vernieuwt zich elke 28 dagen, een psoriasishuid al in 4 tot 6 dagen. Psoriasis is niet besmettelijk.", en:"Normal skin renews itself every 28 days; skin with psoriasis renews in just 4 to 6 days. Psoriasis is not contagious.", kopEn:"Psoriasis: fast skin" },
+  { code:"DR5", theme:"DR", kop:"Stress en psoriasis", nl:"Psoriasis is stressgevoelig: bij meer stress kan het opflakkeren. Bij ongeveer 30% van de patiënten heeft een ouder of kind het ook.", en:"Psoriasis is sensitive to stress: it can flare up with more stress. In about 30% of patients, a parent or child also has it.", kopEn:"Stress and psoriasis" },
+  { code:"DR6", theme:"DR", kop:"Schubbenhuid", nl:"Het woord ichthyosis komt van het Griekse \"ichthys\", vis, vanwege de schubachtige huid. Het is een groep erfelijke aandoeningen.", en:"The word ichthyosis comes from the Greek \"ichthys\", fish, because of the scaly skin. It is a group of hereditary conditions.", kopEn:"Scaly skin" },
+  { code:"DR7", theme:"DR", kop:"Ruwe bultjes", nl:"Bij keratosis pilaris blokkeert opgehoopt keratine de haarfollikels en ontstaan kleine harde bultjes. De klachten verbeteren vaak met de tijd, vooral op volwassen leeftijd.", en:"In keratosis pilaris, built-up keratin blocks the hair follicles, causing small hard bumps. The symptoms often improve over time, especially into adulthood.", kopEn:"Rough little bumps" },
+  { code:"AL1", theme:"AL", kop:"Irritatie of allergie?", nl:"Irritatie beschadigt rechtstreeks de huidbarrière en kan iedereen overkomen. Bij een allergie speelt het immuunsysteem mee en reageert niet iedereen.", en:"Irritation directly damages the skin barrier and can happen to anyone. With an allergy, the immune system is involved and not everyone reacts.", kopEn:"Irritation or allergy?" },
+  { code:"AL2", theme:"AL", kop:"Plots allergisch", nl:"Een contactallergie kan pas optreden na lange tijd probleemloos gebruik van hetzelfde product, bijvoorbeeld bij iemand die jarenlang kunstnagels droeg.", en:"A contact allergy can develop only after a long period of trouble-free use of the same product, for example in someone who wore acrylic nails for years.", kopEn:"Suddenly allergic" },
+  { code:"AL3", theme:"AL", kop:"4 tot 24 uur later", nl:"Allergisch contacteczeem is pas 4 à 24 uur na het contact merkbaar en kan ook op andere plaatsen verschijnen, vooral op dunne huid zoals de oogleden.", en:"Allergic contact eczema only becomes noticeable 4 to 24 hours after contact and can also appear elsewhere, especially on thin skin such as the eyelids.", kopEn:"4 to 24 hours later" },
+  { code:"AL4", theme:"AL", kop:"Bekende irritantia", nl:"Vaak voorkomende irritantia zijn zeep, vloeibare zeep, shampoo, badschuim, oogmake-up, geurstoffen, ontharingsproducten, anti-transpirant en zonneproducten.", en:"Common irritants include soap, liquid soap, shampoo, bubble bath, eye make-up, fragrances, hair removal products, antiperspirant and sun products.", kopEn:"Common irritants" },
+  { code:"AL5", theme:"AL", kop:"Na het ontharen", nl:"Bultjes met een rood stipje rond de haarzakjes na ontharen zijn meestal een histaminereactie, geen allergie. Een koud kompres kalmeert de huid.", en:"Small bumps with a red dot around the hair follicles after hair removal are usually a histamine reaction, not an allergy. A cold compress soothes the skin.", kopEn:"After hair removal" },
+  { code:"AL6", theme:"AL", kop:"Bij- of wespensteek", nl:"Bijen laten hun angel achter en sterven, wespen en hoornaars kunnen herhaaldelijk steken. Verwijder een angel met een pincet en knijp er niet in: dat geeft extra gif vrij.", en:"Bees leave their stinger behind and die; wasps and hornets can sting repeatedly. Remove a stinger with tweezers and don't squeeze it: that releases extra venom.", kopEn:"Bee or wasp sting" },
+  { code:"AL7", theme:"AL", kop:"Zonneallergie", nl:"Een zonneallergie is geen echte allergie, want het immuunsysteem is er niet bij betrokken.", en:"A sun allergy is not a true allergy, as the immune system is not involved.", kopEn:"Sun allergy" },
+  { code:"AL8", theme:"AL", kop:"Netelroos-triggers", nl:"Netelroos kan ontstaan door wrijven of krabben, druk, zweet, koude, warmte, licht of zelfs water.", en:"Hives can be triggered by rubbing or scratching, pressure, sweat, cold, heat, light or even water.", kopEn:"Hives triggers" },
+  { code:"ZW1", theme:"ZW", kop:"Deo of zweetremmer?", nl:"Deodorants doden of remmen bacteriën en bedekken geur. Zweetremmende producten vernauwen de afvoerbuisjes van de zweetklieren.", en:"Deodorants kill or slow bacteria and mask odour. Antiperspirants narrow the ducts of the sweat glands.", kopEn:"Deodorant or antiperspirant?" },
+  { code:"ZW2", theme:"ZW", kop:"Een familiekwestie", nl:"Bij 30 à 50% van de mensen met hyperhidrosis (overmatig zweten) komt het ook in de familie voor.", en:"In 30 to 50% of people with hyperhidrosis (excessive sweating), it also runs in the family.", kopEn:"A family matter" },
+  { code:"ZW3", theme:"ZW", kop:"Helemaal geen zweet", nl:"Bij anhydrosis is er geen zweetproductie. De lichaamstemperatuur kan daardoor oplopen tot koorts.", en:"In anhidrosis there is no sweat production at all. Because of this, body temperature can rise to fever levels.", kopEn:"No sweat at all" }
+];
+/* Extra pools, added to the ones in SKIN_FACT_POOLS.byTreatment /
+   .sun / .kids above. A treatment listed here gets these condition
+   themes IN ADDITION to its existing skin-fact themes. */
+const CONDITION_FACT_POOLS = {
+  sun: ["SH"],
+  byTreatment: {
+    pedicure:["PE","ZW"], pedicureexpress:["PE","ZW"], manipedispa:["PE"],
+    hotstone:["ZW"], swedish:["ZW"], swedishbackneck:["ZW"], swedishlegs:["ZW","PE"],
+    detoxback:["ZW"], slimmassage:["ZW"],
+    hydrapeel:["PI","DR"], signaturefacial:["PI","DR"], fillme:["PI"],
+    fruitacid:["PI","DR"], liftsummere:["PI"], antiagefacial:["PI","TU"],
+    glammakeup:["AL"], facialworkshop:["AC","PI"], makeupworkshop:["AL"],
+    hennabrows:["AL"], browlift:["AL"], lashlift:["AL"],
+    oksel:["AL"], been:["AL","PE"], rug:["AL","TU"], buik:["AL"], borst:["AL"]
+  }
+};
+
+/* ============================================================
+   PRACTICE FACTS ("Weetjes: wellness, voeten en massage")
+   Three more sources, kept separate from SKIN_FACTS/CONDITION_FACTS
+   because they come from different course material:
+   - WED/WEW/WEH/WEG/WEC: 39 wellness & SPA facts (Jansen, Wellness
+     en verzorging, Syntra AB) — drinken · water&warmte · huid&lichaam
+     · geur&kleur · cultuur.
+   - PEDX: 14 extra pedicure facts (Simsons, Cosmetische
+     voetverzorging, Syntra AB) — anatomy, foot conditions, folklore.
+   - MA/MT/MV/MR: 28 massage facts, already delivered NL/EN/FR
+     (Syntra AB, Basis Lichaamsmassage) — massage & lichaam · tijdens
+     en na · veilig masseren · aromatherapie.
+   French text lives in lang-fr.js (by code), same pattern as
+   SKIN_FACTS/CONDITION_FACTS.
+   ============================================================ */
+const PRACTICE_FACTS = [
+  { code:"WED1", theme:"WED", nl:"Waterverlies merk je vanaf ongeveer 1% (dorst); bij 2% daalt je werkkracht, bij 4% word je slaperig, lusteloos, humeurig en misselijk.", en:"You notice water loss from about 1% (thirst); at 2% your performance drops, at 4% you become drowsy, listless, irritable and nauseous." },
+  { code:"WED2", theme:"WED", nl:"Symptomen van uitdroging (droge huid, donkere urine, minder concentratie) zijn er al vóórdat je dorst hebt.", en:"Symptoms of dehydration (dry skin, dark urine, less concentration) appear even before you feel thirsty." },
+  { code:"WED3", theme:"WED", nl:"Je hebt ongeveer 2 liter water per dag nodig; op warme dagen best elk uur een glas.", en:"You need about 2 litres of water a day; on hot days, a glass every hour is a good idea." },
+  { code:"WED4", theme:"WED", nl:"Voldoende drinken geeft volgens de cursus meer energie, een glanzendere huid en betere concentratie.", en:"According to the course, drinking enough gives you more energy, a glossier skin and better concentration." },
+  { code:"WED5", theme:"WED", nl:"Thee en koffie werken vochtafdrijvend.", en:"Tea and coffee have a diuretic effect." },
+  { code:"WED6", theme:"WED", nl:"Te veel zout en zoet prikkelt de weefsels om vocht vast te houden; zout helemaal schrappen mag niet.", en:"Too much salt and sugar stimulates the tissues to retain fluid; cutting out salt completely is not advised." },
+  { code:"WED7", theme:"WED", nl:"Bij vochtophoping is minder drinken een fout idee: 1 liter water tussen de maaltijden helpt.", en:"With fluid retention, drinking less is the wrong idea: 1 litre of water between meals helps." },
+  { code:"WED8", theme:"WED", nl:"Gedestilleerd water is af te raden als drinkwater: het bevat geen belangrijke zouten.", en:"Distilled water is not recommended as drinking water: it contains no important salts." },
+  { code:"WEW1", theme:"WEW", nl:"Warm water van 35 tot 40 °C kalmeert en ontspant de spieren.", en:"Warm water of 35 to 40 °C calms and relaxes the muscles." },
+  { code:"WEW2", theme:"WEW", nl:"Koud water van 10 tot 15 °C stimuleert, werkt pijnstillend en verbetert de immuniteit.", en:"Cold water of 10 to 15 °C stimulates, has a pain-relieving effect and improves immunity." },
+  { code:"WEW3", theme:"WEW", nl:"Wisselbad: 5 minuten warm, dan 40 seconden koud; herhalen en eindigen met koud.", en:"Contrast bath: 5 minutes warm, then 40 seconds cold; repeat and finish with cold." },
+  { code:"WEW4", theme:"WEW", nl:"Stoom laat de poriën openen en stimuleert de huid.", en:"Steam opens the pores and stimulates the skin." },
+  { code:"WEW5", theme:"WEW", nl:"Een stoombad is 40 à 60 °C met ongeveer 98% luchtvochtigheid; verblijf 10 à 20 minuten.", en:"A steam bath is 40 to 60 °C with about 98% humidity; stay for 10 to 20 minutes." },
+  { code:"WEW6", theme:"WEW", nl:"Een Finse sauna is 70 à 90 °C en droog (minder dan 35% vochtigheid); één gang duurt ongeveer 15 minuten.", en:"A Finnish sauna is 70 to 90 °C and dry (less than 35% humidity); one session lasts about 15 minutes." },
+  { code:"WEW7", theme:"WEW", nl:"Word je in de sauna onwel, ga dan naar buiten: je kunt een flauwte krijgen.", en:"If you feel unwell in the sauna, step outside: you could faint." },
+  { code:"WEW8", theme:"WEW", nl:"Een infraroodcabine werkt met stralingswarmte van 50 à 60 °C; opwarmen duurt 20 à 30 minuten en afkoelen is niet nodig.", en:"An infrared cabin uses radiant heat of 50 to 60 °C; warming up takes 20 to 30 minutes and no cooling down is needed." },
+  { code:"WEW9", theme:"WEW", nl:"Zeewater verwarmd tot 33 °C wordt beschreven als gunstig: de huid neemt de werkzame stoffen dan makkelijker op.", en:"Seawater warmed to 33 °C is described as beneficial: the skin absorbs the active substances more easily." },
+  { code:"WEW10", theme:"WEW", nl:"Watsu is een ontspanningsmethode in ongeveer 35 °C warm zoutwater, populair tijdens zwangerschap en bevalling.", en:"Watsu is a relaxation method in about 35 °C warm salt water, popular during pregnancy and childbirth." },
+  { code:"WEW11", theme:"WEW", nl:"Hot stone gebruikt basaltstenen tot 60 °C, afgewisseld met koude marmeren stenen.", en:"Hot stone uses basalt stones up to 60 °C, alternated with cold marble stones." },
+  { code:"WEH1", theme:"WEH", nl:"Cosmetische 'cellulitis' heet vakmatig panniculose; medische cellulitis is een ontsteking met roodheid, zwelling, pijn en koorts.", en:"Cosmetic 'cellulite' is technically called panniculopathy; medical cellulitis is an infection with redness, swelling, pain and fever." },
+  { code:"WEH2", theme:"WEH", nl:"Een vetcel kan tot 30 keer zijn eigen volume opnemen.", en:"A fat cell can expand to up to 30 times its own volume." },
+  { code:"WEH3", theme:"WEH", nl:"Bij vrouwen bestaat het vetweefsel uit 50 à 60 miljard vetcellen.", en:"In women, fat tissue consists of 50 to 60 billion fat cells." },
+  { code:"WEH4", theme:"WEH", nl:"Cellulitis verdwijnt niet volledig; een kuur van 10 à 20 behandelingen maakt de huid wel gladder.", en:"Cellulite doesn't disappear completely; a course of 10 to 20 treatments does make the skin smoother." },
+  { code:"WEH5", theme:"WEH", nl:"Striae bevatten geen haar en geen zweetklieren meer.", en:"Stretch marks no longer contain hair or sweat glands." },
+  { code:"WEH6", theme:"WEH", nl:"Horizontale striae wijzen op snelle groei, verticale op gewichtstoename.", en:"Horizontal stretch marks point to rapid growth, vertical ones to weight gain." },
+  { code:"WEH7", theme:"WEH", nl:"Een normale vrouwenborst weegt ongeveer 200 gram.", en:"A normal female breast weighs about 200 grams." },
+  { code:"WEH8", theme:"WEH", nl:"Tijdens de zwangerschap groeit de tepelhof van 3 à 5 cm naar 7 à 8 cm.", en:"During pregnancy the areola grows from 3 to 5 cm to 7 to 8 cm." },
+  { code:"WEH9", theme:"WEH", nl:"Ook bij kleine borsten is een beha nodig, zeker tijdens sport en menstruatie.", en:"Even with small breasts a bra is needed, especially during exercise and menstruation." },
+  { code:"WEH10", theme:"WEH", nl:"Na ongeveer 10 minuten op de trilplaat ben je minder moe en bezweet dan na een gelijkaardige training op step of loopband.", en:"After about 10 minutes on a vibration plate you feel less tired and sweaty than after a similar workout on a step or treadmill." },
+  { code:"WEG1", theme:"WEG", nl:"Etherische oliën (uit destillatie van planten) gebruik je in massageoliën, baden, pakkingen of om in te ademen, tegen stress en angst.", en:"Essential oils (distilled from plants) are used in massage oils, baths, wraps or for inhaling, against stress and anxiety." },
+  { code:"WEG2", theme:"WEG", nl:"Bergamot, basilicum en jasmijn worden genoemd tegen een sombere stemming; cipres en sandelhout tegen nervositeit.", en:"Bergamot, basil and jasmine are mentioned for a low mood; cypress and sandalwood for nervousness." },
+  { code:"WEG3", theme:"WEG", nl:"Etherische oliën voeg je pas op het laatst aan het badwater toe, omdat ze snel vervliegen.", en:"Add essential oils to bath water only at the very end, as they evaporate quickly." },
+  { code:"WEG4", theme:"WEG", nl:"Aufguss: de saunakachel wordt opgegoten met water en etherische olie, bv. pepermunt, sinaasappel, jasmijn of lavendel.", en:"Aufguss: water and essential oil (e.g. peppermint, orange, jasmine or lavender) are poured over the sauna stove." },
+  { code:"WEG5", theme:"WEG", nl:"Blauw werkt rustgevend, rood stimulerend, groen evenwichtsherstellend, geel opwekkend. De cursus zegt zelf dat de waarde van chromotherapie niet altijd op een stevig fundament rust.", en:"Blue is calming, red stimulating, green balancing, yellow uplifting. The course itself notes that the value of chromotherapy doesn't always rest on solid ground." },
+  { code:"WEC1", theme:"WEC", nl:"SPA komt van het Latijn 'salus per aquam': gezondheid door water.", en:"SPA comes from the Latin 'salus per aquam': health through water." },
+  { code:"WEC2", theme:"WEC", nl:"Wellness is een levensstijl waarbij je kiest voor een gezond lichaam en een gezonde geest.", en:"Wellness is a lifestyle in which you choose a healthy body and a healthy mind." },
+  { code:"WEC3", theme:"WEC", nl:"Lulur was in Indonesië een traditioneel onderdeel van de verlovingsceremonie.", en:"Lulur was traditionally part of the engagement ceremony in Indonesia." },
+  { code:"WEC4", theme:"WEC", nl:"Volgens de overlevering nam Cleopatra melkbaden met ezelinnenmelk.", en:"According to legend, Cleopatra took milk baths with donkey's milk." },
+  { code:"WEC5", theme:"WEC", nl:"Een loofah-spons of -zeep wordt gemaakt van een pompoenachtige vrucht.", en:"A loofah sponge or soap is made from a gourd-like fruit." },
+  { code:"PEDX1", theme:"PEDX", nl:"Elke voet heeft 26 beenderen; de stevigheid komt van bindweefselbanden (ligamenten) van collagene vezels.", en:"Each foot has 26 bones; its strength comes from connective-tissue bands (ligaments) made of collagen fibres." },
+  { code:"PEDX2", theme:"PEDX", nl:"Een teen heeft 3 kootjes, behalve de grote teen (2).", en:"A toe has 3 bones (phalanges), except the big toe, which has 2." },
+  { code:"PEDX3", theme:"PEDX", nl:"In de voetzolen zitten 72 000 zenuwuiteinden – vandaar dat kietelen zo gevoelig is.", en:"The soles of the feet contain 72,000 nerve endings — which is why they're so ticklish." },
+  { code:"PEDX4", theme:"PEDX", nl:"Je zet ongeveer 8 000–10 000 stappen per dag: ca. 185 000 km in je leven.", en:"You take about 8,000 to 10,000 steps a day: roughly 185,000 km over a lifetime." },
+  { code:"PEDX5", theme:"PEDX", nl:"Mensen worden geboren met platvoeten; door de ontwikkeling krijg je een normale voet.", en:"People are born with flat feet; a normal foot develops as they grow." },
+  { code:"PEDX6", theme:"PEDX", nl:"Spreidvoet komt vaker voor bij vrouwen; spitse schoenen met hoge hak werken het in de hand.", en:"Splay foot is more common in women; pointed shoes with high heels contribute to it." },
+  { code:"PEDX7", theme:"PEDX", nl:"Een likdoorn heet ook eksteroog en ontstaat uit eelt.", en:"A corn is also called a clavus and develops from callus." },
+  { code:"PEDX8", theme:"PEDX", nl:"Voetschimmel = zwemmerseczeem = atleetvoeten; overdracht in warm, vochtig klimaat (douche, kleedkamer, zwembad).", en:"Athlete's foot = swimmer's eczema = tinea pedis; it spreads in warm, damp environments (showers, changing rooms, swimming pools)." },
+  { code:"PEDX9", theme:"PEDX", nl:"Wratten: minstens 30 virussen bekend; 3–6 maanden (of langer) tussen besmetting en wrat; vaak spontane genezing binnen 2–3 jaar.", en:"Warts: at least 30 known viruses; 3 to 6 months (or longer) between infection and the wart appearing; often heal spontaneously within 2 to 3 years." },
+  { code:"PEDX10", theme:"PEDX", nl:"Niet aan een wrat krabben: dat verspreidt het virus.", en:"Don't scratch a wart: that spreads the virus." },
+  { code:"PEDX11", theme:"PEDX", nl:"Groene klei is steriel, bacteriewerend, hydraterend en regenererend.", en:"Green clay is sterile, antibacterial, hydrating and regenerating." },
+  { code:"PEDX12", theme:"PEDX", nl:"Bij diabetes stroomt minder bloed naar de voeten en is er minder gevoel; kleine wondjes kunnen tot amputatie leiden.", en:"With diabetes, less blood flows to the feet and sensation is reduced; small wounds can lead to amputation." },
+  { code:"PEDX13", theme:"PEDX", nl:"Fysiologisch eelt is beschermend en laat je gedeeltelijk zitten; enkel pathologisch eelt (hyperkeratose) is storend.", en:"Physiological callus is protective and is partly left in place; only pathological callus (hyperkeratosis) is a problem." },
+  { code:"PEDX14", theme:"PEDX", nl:"Spreekwoorden: op goede/gespannen voet staan, voet bij stuk houden, een wit voetje halen…", en:"Feet even show up in language: to put your best foot forward, to stand your ground, to get in someone's good books…" },
+  { code:"MA1", theme:"MA", nl:"Massage verbetert de doorbloeding, zodat spieren en huid beter van zuurstof en voedingsstoffen worden voorzien.", en:"Massage improves blood flow, so muscles and skin get more oxygen and nutrients." },
+  { code:"MA2", theme:"MA", nl:"Het lymfestelsel heeft, anders dan de bloedsomloop, geen eigen pomp. Massage kan de doorstroming van de lymfe ondersteunen.", en:"Unlike the blood circulation, the lymphatic system has no pump of its own. Massage can help support lymph flow." },
+  { code:"MA3", theme:"MA", nl:"Een ontspanningsmassage kan een hoge bloeddruk doen dalen dankzij het ontspannende effect op lichaam en geest.", en:"A relaxation massage can lower high blood pressure thanks to its calming effect on body and mind." },
+  { code:"MA4", theme:"MA", nl:"Op een warme, veilige manier aangeraakt worden is een basisbehoefte van de mens.", en:"Being touched in a warm, safe way is a basic human need." },
+  { code:"MA5", theme:"MA", nl:"Aan armen en benen strijkt de masseur naar het hart toe om bloed- en lymfestroom te ondersteunen.", en:"On the arms and legs, the masseur strokes towards the heart to support blood and lymph flow." },
+  { code:"MA6", theme:"MA", nl:"Op termijn verbetert regelmatig masseren de soepelheid van je spieren en de elasticiteit van je huid.", en:"Over time, regular massage improves the flexibility of your muscles and the elasticity of your skin." },
+  { code:"MA7", theme:"MA", nl:"Door het strijken en wrijven komen dode huidcellen sneller los, waardoor je huid er frisser uitziet.", en:"Stroking and rubbing help loosen dead skin cells faster, giving your skin a fresher look." },
+  { code:"MA8", theme:"MA", nl:"Spierknopen ontstaan door een plaatselijk verminderde doorbloeding. Een gerichte, ontspannende massage kan helpen ze los te maken.", en:"Muscle knots form due to locally reduced blood flow. A targeted, relaxing massage can help release them." },
+  { code:"MA9", theme:"MA", nl:"Lage rugpijn komt meestal door overbelasting, en ook stress of emoties spelen mee. Massage van de lage rugspieren geeft vaak diepe ontspanning.", en:"Low back pain is usually caused by overload, and stress or emotions can play a role too. Massaging the lower back muscles often brings deep relaxation." },
+  { code:"MA10", theme:"MA", nl:"Massage kan je slaap en spijsvertering verbeteren.", en:"Massage can improve your sleep and digestion." },
+  { code:"MA11", theme:"MA", nl:"Langzame, lange strijkingen ontspannen; meer druk, dieper werken en tapoteren stimuleren.", en:"Slow, long strokes are relaxing; more pressure, deeper work and tapping are stimulating." },
+  { code:"MT1", theme:"MT", nl:"Handen blijven tijdens een massage in contact met je lichaam: loskomen haalt je uit de ontspanning.", en:"During a massage, the therapist's hands stay in contact with your body: breaking contact pulls you out of the relaxation." },
+  { code:"MT2", theme:"MT", nl:"Na een massage kun je hoofdpijn, dorst, veel plassen of slaperigheid ervaren. Dat hoort bij de werking.", en:"After a massage you may feel headache, thirst, needing to urinate more, or drowsiness. This is a normal part of how it works." },
+  { code:"MT3", theme:"MT", nl:"Drink na je massage veel water: dat helpt hoofdpijn voorkomen.", en:"Drink plenty of water after your massage: it helps prevent headaches." },
+  { code:"MT4", theme:"MT", nl:"Massage bevordert de urineproductie, waardoor afvalstoffen en overtollig vocht makkelijker worden afgevoerd.", en:"Massage promotes urine production, making it easier to remove waste products and excess fluid." },
+  { code:"MV1", theme:"MV", nl:"Koorts? Verplaats je afspraak: bij koorts wordt er niet gemasseerd.", en:"Have a fever? Reschedule your appointment: massage is not given when you have a fever." },
+  { code:"MV2", theme:"MV", nl:"Bij een ontsteking van een ader (flebitis) wordt niet gemasseerd: er is gevaar voor trombose.", en:"If a vein is inflamed (phlebitis), massage is not given: there is a risk of thrombosis." },
+  { code:"MV3", theme:"MV", nl:"Zwanger? Massage kan alleen na toestemming van je arts en bij een masseur die daarvoor is opgeleid.", en:"Pregnant? Massage is only possible with your doctor's approval and from a masseur trained for it." },
+  { code:"MV4", theme:"MV", nl:"Psoriasis is niet besmettelijk en geen reden om massage te vermijden; een zachte massage kan juist deugd doen.", en:"Psoriasis is not contagious and no reason to avoid massage; a gentle massage can actually feel very good." },
+  { code:"MV5", theme:"MV", nl:"Blauwe plekken, wondjes, zonnebrand of ontstoken huid blijven ongemoeid.", en:"Bruises, small wounds, sunburn or inflamed skin are left untouched." },
+  { code:"MV6", theme:"MV", nl:"Verandert een moedervlek van vorm, kleur of grootte? Laat ze bekijken door de huisarts (ABCDE-regel).", en:"Has a mole changed shape, colour or size? Have it checked by your doctor (the ABCDE rule)." },
+  { code:"MV7", theme:"MV", nl:"Bij fibromyalgie past een rustgevende massage in plaats van een diepe.", en:"For fibromyalgia, a gentle, calming massage is more suitable than a deep one." },
+  { code:"MV8", theme:"MV", nl:"Bij een acute reumatische aanval wordt niet gemasseerd; erna kan massage gewrichten en spieren soepel houden.", en:"During an acute rheumatic flare-up, massage is not given; afterwards it can help keep joints and muscles supple." },
+  { code:"MR1", theme:"MR", nl:"Essentiële oliën worden altijd verdund: 2% is de gebruikelijke sterkte voor het lichaam, 1% voor het gezicht.", en:"Essential oils are always diluted: 2% is the usual strength for the body, 1% for the face." },
+  { code:"MR2", theme:"MR", nl:"Geur is sterk verbonden met emotie en herinnering. Daarom kies je de geur samen met de cliënt.", en:"Scent is strongly linked to emotion and memory. That's why you choose the scent together with the client." },
+  { code:"MR3", theme:"MR", nl:"Citrusoliën (citroen, sinaas, mandarijn, bergamot) kunnen huidverkleuring geven bij zon of zonnebank.", en:"Citrus oils (lemon, orange, mandarin, bergamot) can cause skin discolouration in sun or on a sunbed." },
+  { code:"MR4", theme:"MR", nl:"Etherische oliën bewaar je donker, koel en droog, en niet in de badkamer.", en:"Store essential oils in a dark, cool, dry place, and not in the bathroom." },
+  { code:"MR5", theme:"MR", nl:"Voor een volledige lichaamsmassage is gemiddeld 20 à 25 ml massageolie nodig.", en:"A full body massage typically needs about 20 to 25 ml of massage oil." }
+];
+const PRACTICE_FACT_POOLS = {
+  byTreatment: {
+    hotstone:["WEW","MA","MT","MV","MR"],
+    cupping:["MA","MT","MV","MR"], cuppingpeeling:["MA","MT","MV","MR"],
+    swedish:["MA","MT","MV","MR"], swedishbackneck:["MA","MT","MV","MR"], swedishlegs:["MA","MT","MV","MR"],
+    backwrap:["MA","MT","MV","MR","WEH"], detoxback:["MA","MT","MV","MR","WEH"],
+    harmonizingbody:["MA","MT","MV","MR","WEC"], fullbodywrap:["MA","MT","MV","MR","WEC"],
+    slimmassage:["MA","MT","MV","MR","WEH"],
+    pedicure:["PEDX"], pedicureexpress:["PEDX"], manipedispa:["PEDX","MA"],
+    makeupworkshop:["WEC","WEG"], facialworkshop:["WEC","WEG","WEH"],
+    tastingbasic:["WEC"], tastingadvanced:["WEC"], baristaworkshop:["WEC"]
+  }
 };
