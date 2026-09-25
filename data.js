@@ -1184,3 +1184,180 @@ const PRACTICE_FACT_POOLS = {
     tastingbasic:["WEC"], tastingadvanced:["WEC"], baristaworkshop:["WEC"]
   }
 };
+
+/* ============================================================
+   MORE FACTS (added 22/9/2026): cell/tissue theory, nail anatomy,
+   lash-styling client tips, and two facial/skin-knowledge sets.
+   Kept as separate arrays, same pattern as PRACTICE_FACTS.
+   - CELL_FACTS (CW): 12 facts, atoms to organism (e-learning C).
+     Generic "intro" facts -- attached broadly.
+   - NAIL_FACTS (NA/NB/NC/ND/NE/NF): 28 facts, nail anatomy
+     (e-learning N) -- why/colour/composition/structure/growth/
+     protective membranes.
+   - LASH_FACTS (LL/LT): 14 client-facing lash lift and tint tips
+     (Wimperstyling en lifting, Syntra AB).
+   - FACIAL_FACTS (GV): 38 facts from the Gelaatsverzorging course
+     (skin types, couperose, cleansing, massage, devices, diet).
+   - SKINKNOW_FACTS (SK): 41 facts from the Dermatologie en
+     Cosmetologie course (skin science, sun, ingredients, scent).
+     5 near-duplicate facts with FACIAL_FACTS were left out (ideal
+     pH, balanced-skin ratio, skin type vs condition, jojoba/sebum).
+   French text lives in lang-fr.js (by code).
+   ============================================================ */
+const CELL_FACTS = [
+  { code:"CW1", theme:"CW", nl:"Je lichaam is opgebouwd als een puzzel: kleine stukjes vormen samen telkens een groter geheel.", en:"Your body is built like a puzzle: small pieces combine to form an ever bigger whole." },
+  { code:"CW2", theme:"CW", nl:"Er zijn 6 niveaus in je lichaam: atomen, moleculen, cellen, weefsels, organen en stelsels.", en:"There are 6 levels in your body: atoms, molecules, cells, tissues, organs and systems." },
+  { code:"CW3", theme:"CW", nl:"Een atoom is de kleinste chemische bouwsteen waaruit alles bestaat wat je je kan inbeelden.", en:"An atom is the smallest chemical building block that everything you can imagine is made of." },
+  { code:"CW4", theme:"CW", nl:"Een molecuul ontstaat wanneer atomen samen een verbinding aangaan.", en:"A molecule forms when atoms bond together." },
+  { code:"CW5", theme:"CW", nl:"Een cel is de kleinste levende eenheid van je lichaam.", en:"A cell is the smallest living unit of your body." },
+  { code:"CW6", theme:"CW", nl:"Je lichaam bestaat uit cellen in aantallen tot in de miljarden.", en:"Your body consists of cells numbering in the billions." },
+  { code:"CW7", theme:"CW", nl:"Bijna elk celtype in je lichaam is gespecialiseerd naar vorm, grootte, functie en levenscyclus.", en:"Almost every cell type in your body is specialised in shape, size, function and life cycle." },
+  { code:"CW8", theme:"CW", nl:"Een weefsel ontstaat wanneer cellen met dezelfde vorm en functie samenkomen.", en:"A tissue forms when cells with the same shape and function come together." },
+  { code:"CW9", theme:"CW", nl:"Niet elk levend wezen heeft weefsels: sommige levensvormen bestaan uit slechts één cel.", en:"Not every living creature has tissues: some life forms consist of just a single cell." },
+  { code:"CW10", theme:"CW", nl:"Een orgaan bestaat uit verschillende soorten weefsels die samen één specifiek doel dienen.", en:"An organ consists of several kinds of tissue that together serve one specific purpose." },
+  { code:"CW11", theme:"CW", nl:"Een orgaanstelsel bestaat uit meerdere organen die samen een vitale functie van je lichaam waarmaken.", en:"An organ system consists of several organs that together carry out a vital function of your body." },
+  { code:"CW12", theme:"CW", nl:"Verschillende orgaanstelsels samen vormen jou als organisme.", en:"Different organ systems together make up you as an organism." }
+];
+const NAIL_FACTS = [
+  { code:"NA1", theme:"NA", nl:"Zonder nagels zou er eelt op je vingertoppen groeien – en dan zou je juist minder goed kunnen voelen.", en:"Without nails, calluses would form on your fingertips — and you'd actually feel less well, not more." },
+  { code:"NA2", theme:"NA", nl:"Je nagels maken het makkelijker om vooral kleine voorwerpen vast te nemen.", en:"Your nails make it easier to pick up especially small objects." },
+  { code:"NA3", theme:"NA", nl:"Je nagels beschermen je lichaam tegen het binnendringen van vreemde stoffen en bacteriën.", en:"Your nails protect your body against foreign substances and bacteria getting in." },
+  { code:"NA4", theme:"NA", nl:"Verzorgde of onverzorgde nagels dragen bij aan hoe je overkomt op anderen.", en:"Well-groomed or neglected nails affect how you come across to others." },
+  { code:"NB1", theme:"NB", nl:"Roze nagels wijzen op een gezonde, normale doorbloeding.", en:"Pink nails indicate healthy, normal blood flow." },
+  { code:"NB2", theme:"NB", nl:"Blauwe nagels kunnen wijzen op een slechte doorbloeding of te weinig zuurstof.", en:"Blue nails can indicate poor circulation or too little oxygen." },
+  { code:"NB3", theme:"NB", nl:"Witte nagels kunnen wijzen op een tekort aan vitaminen.", en:"White nails can indicate a vitamin deficiency." },
+  { code:"NB4", theme:"NB", nl:"Rode nagels kunnen wijzen op hoge bloeddruk of bloedstoornissen.", en:"Red nails can indicate high blood pressure or blood disorders." },
+  { code:"NC1", theme:"NC", nl:"Je nagel bestaat uit honderden laagjes keratinecellen – net als de hoornlaag van je huid, maar dan veel harder.", en:"Your nail consists of hundreds of layers of keratin cells — just like your skin's horny layer, but much harder." },
+  { code:"NC2", theme:"NC", nl:"Anders dan huidcellen schilferen de dode keratinecellen van je nagel niet af.", en:"Unlike skin cells, the dead keratin cells of your nail don't flake off." },
+  { code:"NC3", theme:"NC", nl:"Cystine, het hoofdbestanddeel van keratine, vormt zwavelbruggen die je nagel stevigheid geven.", en:"Cystine, the main component of keratin, forms sulphur bridges that give your nail its strength." },
+  { code:"NC4", theme:"NC", nl:"Zink zit niet in je nagel zelf, maar helpt wel mee aan de aanmaak van keratine.", en:"Zinc isn't in your nail itself, but it does help with keratin production." },
+  { code:"NC5", theme:"NC", nl:"Calcium en selenium dragen allebei bij aan de stevigheid van je nagels.", en:"Calcium and selenium both contribute to the strength of your nails." },
+  { code:"ND1", theme:"ND", nl:"Je nagel rust met de nagelplaat op het nagelbed – zoals je lichaam op een bed rust.", en:"Your nail plate rests on the nail bed — the way your body rests on a bed." },
+  { code:"ND2", theme:"ND", nl:"De rozige kleur van je nagel komt van de bloedvaten in het nagelbed eronder; de nagel zelf is doorzichtig.", en:"The pinkish colour of your nail comes from the blood vessels in the nail bed underneath; the nail itself is transparent." },
+  { code:"ND3", theme:"ND", nl:"Je nagelplaat bestaat uit 3 lagen: de epitheellaag (hechting), de sponslaag (stevigheid) en de hoornlaag (bescherming).", en:"Your nail plate consists of 3 layers: the epithelial layer (attachment), the spongy layer (strength) and the horny layer (protection)." },
+  { code:"ND4", theme:"ND", nl:"De sponslaag van je nagel bevat piepkleine poriën die voedingsstoffen, vocht en vet vasthouden.", en:"The spongy layer of your nail contains tiny pores that hold nutrients, moisture and fat." },
+  { code:"ND5", theme:"ND", nl:"De lunula, het halve maantje aan de basis van je nagel, is nog niet volledig verhoornd en dus minder hard dan de rest.", en:"The lunula, the little half-moon at the base of your nail, isn't fully keratinised yet, so it's softer than the rest." },
+  { code:"ND6", theme:"ND", nl:"De nagelriem (cuticula) beschermt je nagelwortel tegen vreemde stoffen en micro-organismen.", en:"The cuticle protects your nail root against foreign substances and micro-organisms." },
+  { code:"NE1", theme:"NE", nl:"Nieuwe nagelcellen ontstaan in je nagelwortel, niet in je nagelbed.", en:"New nail cells form in your nail root, not in your nail bed." },
+  { code:"NE2", theme:"NE", nl:"Je nagels groeien gemiddeld 3 mm per maand.", en:"Your nails grow about 3 mm a month on average." },
+  { code:"NE3", theme:"NE", nl:"Je nagels groeien sneller in de zomer dan in de winter.", en:"Your nails grow faster in summer than in winter." },
+  { code:"NE4", theme:"NE", nl:"Een vingernagel groeit 4x sneller dan een teennagel.", en:"A fingernail grows 4 times faster than a toenail." },
+  { code:"NE5", theme:"NE", nl:"Een vingernagel vernieuwt zich gemiddeld in 4 tot 6 maanden; een teennagel kan daar tot 18 maanden over doen.", en:"A fingernail fully renews itself in about 4 to 6 months; a toenail can take up to 18 months." },
+  { code:"NE6", theme:"NE", nl:"Nieuwe nagelcellen ontstaan door mitoseceldeling: uit 1 moedercel ontstaan 2 identieke dochtercellen.", en:"New nail cells form through mitosis: 1 mother cell produces 2 identical daughter cells." },
+  { code:"NF1", theme:"NF", nl:"Drie dunne vliesjes houden je nagel op zijn plaats: het eponychium, het perionychium en het hyponychium.", en:"Three thin membranes hold your nail in place: the eponychium, the perionychium and the hyponychium." },
+  { code:"NF2", theme:"NF", nl:"Het eponychium verbindt je proximale nagelwal met je nagelplaat.", en:"The eponychium connects your proximal nail fold to your nail plate." },
+  { code:"NF3", theme:"NF", nl:"Het hyponychium verbindt de vrije rand van je nagel met je nagelbed.", en:"The hyponychium connects the free edge of your nail to your nail bed." }
+];
+const LASH_FACTS = [
+  { code:"LL1", theme:"LL", nl:"Een lash lift geeft je eigen wimpers een natuurlijke krul en opent je blik – zonder extensions.", en:"A lash lift gives your own lashes a natural curl and opens up your eyes — no extensions needed." },
+  { code:"LL2", theme:"LL", nl:"Het resultaat blijft ongeveer 8 weken mooi, afhankelijk van hoe snel je wimpers groeien.", en:"The result stays nice for about 8 weeks, depending on how fast your lashes grow." },
+  { code:"LL3", theme:"LL", nl:"De eerste 24 uur na je lash lift: geen water op je wimpers, zo zet de krul zich goed vast.", en:"The first 24 hours after your lash lift: no water on your lashes, so the curl sets properly." },
+  { code:"LL4", theme:"LL", nl:"Slaap je op je buik? Boek je lash lift dan liefst in de voormiddag. Een zijden kussensloop helpt ook.", en:"Do you sleep on your stomach? Book your lash lift in the morning if you can. A silk pillowcase helps too." },
+  { code:"LL5", theme:"LL", nl:"Olie is de vijand van je krul: gebruik een olievrije make-up remover of zachte foamreiniger.", en:"Oil is the enemy of your curl: use an oil-free make-up remover or a gentle foam cleanser." },
+  { code:"LL6", theme:"LL", nl:"Borstel je wimpers elke dag even in model met een wimperborsteltje.", en:"Brush your lashes into shape every day with a lash brush." },
+  { code:"LL7", theme:"LL", nl:"Na een lift heb je eigenlijk geen mascara meer nodig.", en:"After a lift, you don't really need mascara any more." },
+  { code:"LT1", theme:"LT", nl:"Lichte, blonde of grijze wimpers? Een tint geeft definitie zonder dagelijkse mascara.", en:"Light, blonde or grey lashes? A tint gives definition without daily mascara." },
+  { code:"LT2", theme:"LT", nl:"Een wimpertint gaat meestal 4 tot 6 weken mee.", en:"A lash tint usually lasts 4 to 6 weeks." },
+  { code:"LT3", theme:"LT", nl:"De eerste keer kiezen we een tint dicht bij je natuurlijke kleur – geen schrikeffect.", en:"The first time, we choose a shade close to your natural colour — no surprises." },
+  { code:"LT4", theme:"LT", nl:"Nieuw bij ons? We doen 24–48 uur vooraf een kleine allergietest (patchtest).", en:"New to us? We do a small allergy test (patch test) 24 to 48 hours beforehand." },
+  { code:"LT5", theme:"LT", nl:"Kom zonder mascara en zonder wimperextensions naar je afspraak.", en:"Come to your appointment without mascara and without lash extensions." },
+  { code:"LT6", theme:"LT", nl:"Tussen twee lash lifts laten we minstens 8 weken.", en:"We leave at least 8 weeks between two lash lifts." },
+  { code:"LT7", theme:"LT", nl:"Zwanger of borstvoeding? Dan wachten we uit voorzorg liever met lift en tint.", en:"Pregnant or breastfeeding? As a precaution, we prefer to wait with lift and tint." }
+];
+const FACIAL_FACTS = [
+  { code:"GV1", theme:"GV", nl:"Een gezonde huid is licht zuur: de ideale pH ligt rond 5,5.", en:"Healthy skin is slightly acidic: the ideal pH is around 5.5." },
+  { code:"GV2", theme:"GV", nl:"Een echt evenwichtige huid is zeldzaam – die stralende filterhuid op Instagram is eerder uitzondering dan realiteit.", en:"A truly balanced skin is rare — that glowing 'Instagram filter' skin is the exception rather than the rule." },
+  { code:"GV3", theme:"GV", nl:"In een evenwichtige huid zijn talg en vocht in balans: ongeveer 25% talg en 75% vocht.", en:"In balanced skin, sebum and moisture are in balance: about 25% sebum and 75% moisture." },
+  { code:"GV4", theme:"GV", nl:"Huidtype is aangeboren en vrij constant; een huidconditie (acné, uitdroging, gevoeligheid …) is tijdelijk en kun je wél verbeteren.", en:"Skin type is inborn and fairly constant; a skin condition (acne, dehydration, sensitivity...) is temporary and can be improved." },
+  { code:"GV5", theme:"GV", nl:"Een droge huid kan een vettekort (sebostase) of een vochttekort (gedehydrateerd) zijn – de eerste moet je voeden, de tweede hydrateren.", en:"Dry skin can mean a lack of fat (sebostasis) or a lack of moisture (dehydrated) — the first needs nourishing, the second hydrating." },
+  { code:"GV6", theme:"GV", nl:"Sebo-stase = te weinig talg, seborr-hee = te veel talg.", en:"Sebostasis = too little sebum, seborrhoea = too much sebum." },
+  { code:"GV7", theme:"GV", nl:"Na de zomer of na de zonnebank wordt de huid vaak vetter.", en:"After summer or a sunbed, skin often becomes oilier." },
+  { code:"GV8", theme:"GV", nl:"Een vette huid kan er droog uitzien: bij seborrhee sicca zit de talg vast in de porie en vormt met huidschilfers korstjes, vooral op neus en wenkbrauwen.", en:"Oily skin can look dry: with seborrhoea sicca the sebum gets stuck in the pore and forms little crusts with skin flakes, mainly on the nose and eyebrows." },
+  { code:"GV9", theme:"GV", nl:"Een vette huid bruint goed en rimpelt minder snel.", en:"Oily skin tans well and wrinkles less quickly." },
+  { code:"GV10", theme:"GV", nl:"Een “potje voor gemengde huid” is volgens de cursus nooit ideaal: het potje weet niet waar je huid vet of droog is. Verzorg elke zone apart.", en:"A 'one jar for combination skin' is never ideal: the jar doesn't know which zones of your skin are oily or dry. Treat each zone separately." },
+  { code:"GV11", theme:"GV", nl:"Jojoba-olie (plantaardig) en lanoline (wolvet) lijken het meest op onze eigen huidtalg.", en:"Jojoba oil (plant-based) and lanolin (wool fat) most closely resemble our own skin sebum." },
+  { code:"GV12", theme:"GV", nl:"Rond 45 jaar werken collageen- en elastinevezels minder optimaal en zit het vochttekort dieper in de huid.", en:"Around age 45, collagen and elastin fibres work less optimally and moisture loss sits deeper in the skin." },
+  { code:"GV13", theme:"GV", nl:"Er zijn 6 fototypes: van type I (bleke huid, rood/blond haar, verbrandt zeer snel) tot type VI (bruint zeer goed, verbrandt nooit).", en:"There are 6 skin phototypes: from type I (pale skin, red/blond hair, burns very fast) to type VI (tans very well, never burns)." },
+  { code:"GV14", theme:"GV", nl:"Couperose wordt ook wel “spataderen van het gezicht” genoemd.", en:"Couperose is sometimes called 'varicose veins of the face'." },
+  { code:"GV15", theme:"GV", nl:"Hete dranken, pikante gerechten, wijn, kruiden en wisselen tussen warm en koud kunnen couperose uitlokken.", en:"Hot drinks, spicy food, wine, herbs and switching between hot and cold can trigger couperose." },
+  { code:"GV16", theme:"GV", nl:"Actieve couperose is warm en rood, passieve couperose eerder violet en koud.", en:"Active couperose is warm and red, passive couperose is more violet and cold." },
+  { code:"GV17", theme:"GV", nl:"Bij couperose: geen hete kompressen, geen alcohol en liefst geen sauna of stoombad. Lauw of koel is de boodschap.", en:"For couperose: no hot compresses, no alcohol, and preferably no sauna or steam bath. Lukewarm or cool is the way to go." },
+  { code:"GV18", theme:"GV", nl:"Kalmerend bij couperose: linde, azuleen, kaolien en melkproducten. Vaatwandversterkend: hamamelis, muisdoorn en wilde wingerd.", en:"Calming for couperose: lime blossom, azulene, kaolin and milk-based products. Vein-strengthening: witch hazel, butcher's broom and Virginia creeper." },
+  { code:"GV19", theme:"GV", nl:"Een toner herstelt de pH na het reinigen – vooral schuimende reinigers maken de huid basischer.", en:"A toner restores the pH after cleansing — foaming cleansers especially make the skin more alkaline." },
+  { code:"GV20", theme:"GV", nl:"Een vochtige, verweekte huid neemt verzorging beter op; een enzympeeling werkt pas optimaal op een bevochtigde huid.", en:"Moist, softened skin absorbs skincare better; an enzyme peel only works optimally on damp skin." },
+  { code:"GV21", theme:"GV", nl:"Hoeveel peeling of crème? Ongeveer zo groot als een okkernoot.", en:"How much peeling or cream? About the size of a walnut." },
+  { code:"GV22", theme:"GV", nl:"Een kleimasker laat je niet volledig uitdrogen: blijf het bevochtigen.", en:"Don't let a clay mask dry out completely: keep it damp." },
+  { code:"GV23", theme:"GV", nl:"Een professionele gelaatsverzorging plan je idealiter om de 5 weken.", en:"A professional facial is ideally planned every 5 weeks." },
+  { code:"GV24", theme:"GV", nl:"Rijpe huid thuis: panthenol, hyaluronzuur en wijngistextract, en Q10 als antioxidant.", en:"For mature skin at home: panthenol, hyaluronic acid and wine yeast extract, plus Q10 as an antioxidant." },
+  { code:"GV25", theme:"GV", nl:"Een drukpuntmassage is verwant aan shiatsu en acupressuur: gericht drukken op specifieke punten, zonder olie – fijn bij spanning, vermoeidheid en hoofdpijn.", en:"A pressure-point massage is related to shiatsu and acupressure: targeted pressure on specific points, without oil — great for tension, fatigue and headaches." },
+  { code:"GV26", theme:"GV", nl:"Tijdens een gelaatsverzorging lig je op je rug met de knieën net iets hoger dan je heupen: dat ontspant en helpt het bloed terug naar het hart.", en:"During a facial you lie on your back with your knees slightly higher than your hips: this relaxes you and helps blood flow back to the heart." },
+  { code:"GV27", theme:"GV", nl:"Een verzorging start met een welkomsmassage van nek, haargrens en hoofdhuid – het eerste contact met de klant.", en:"A treatment starts with a welcome massage of the neck, hairline and scalp — the first contact with the client." },
+  { code:"GV28", theme:"GV", nl:"Bij lymfedrainage verschuif je de bovenhuid ten opzichte van de onderhuid om lymfe af te voeren.", en:"In lymphatic drainage, you shift the upper skin layer relative to the layer underneath to help move lymph." },
+  { code:"GV29", theme:"GV", nl:"Een ultrasone spatel trilt aan 25.000 tot 30.000 hertz; de microscopisch kleine belletjes (cavitatie) maken de poriën schoon.", en:"An ultrasonic spatula vibrates at 25,000 to 30,000 hertz; microscopic bubbles (cavitation) clean out the pores." },
+  { code:"GV30", theme:"GV", nl:"De ultrasone spatel is pijnloos en ook geschikt voor een gevoelige huid.", en:"The ultrasonic spatula is painless and also suitable for sensitive skin." },
+  { code:"GV31", theme:"GV", nl:"Een vapozone gebruik je op ongeveer 20 cm van het gezicht, 10 à 15 minuten.", en:"A facial steamer is used about 20 cm from the face, for 10 to 15 minutes." },
+  { code:"GV32", theme:"GV", nl:"Een huidanalysetoestel maakt 12 à 15 foto’s in verschillende lichtspectra en meet de hydratatie – huidveranderingen ontstaan diep en worden vaak pas later zichtbaar.", en:"A skin analysis device takes 12 to 15 photos in different light spectra and measures hydration — skin changes start deep down and often only become visible later." },
+  { code:"GV33", theme:"GV", nl:"Drink voldoende water: een vochtarme huid heeft baat bij hydratatie van binnenuit.", en:"Drink enough water: dehydrated skin benefits from hydration from the inside out." },
+  { code:"GV34", theme:"GV", nl:"De cursus noemt koffie en alcohol waterafdrijvend. Tip voor de app: drink bij je koffie een glaasje water.", en:"Coffee and alcohol are diuretics. Tip: have a glass of water alongside your coffee." },
+  { code:"GV35", theme:"GV", nl:"Antioxidanten tegen vrije radicalen vind je onder meer in rode wijn, broccoli en fondantchocolade.", en:"Antioxidants against free radicals are found in, among others, red wine, broccoli and dark chocolate." },
+  { code:"GV36", theme:"GV", nl:"Een te eiwitrijk dieet is volgens de cursus niet goed voor een vetarme huid.", en:"A diet too high in protein is not good for skin lacking in fat, according to the course." },
+  { code:"GV37", theme:"GV", nl:"Geef een beautypas mee: uitgevoerde behandeling, aangeraden producten en wanneer de volgende afspraak best plaatsvindt.", en:"Give a beauty card: the treatment done, recommended products and when the next appointment is best." },
+  { code:"GV38", theme:"GV", nl:"Brandwonde, bijvoorbeeld door stoom? Water, water, water … en de rest komt later.", en:"A burn, for example from steam? Water, water, water… everything else comes later." }
+];
+const SKINKNOW_FACTS = [
+  { code:"SK1", theme:"SK", nl:"Na de vochtarme (gedehydrateerde) huid is de gemengde huid het meest voorkomende huidtype.", en:"After dehydrated skin, combination skin is the most common skin type." },
+  { code:"SK2", theme:"SK", nl:"Je huid bestaat voor zo’n 70 tot 72% uit water.", en:"Your skin is made up of about 70 to 72% water." },
+  { code:"SK3", theme:"SK", nl:"Op je huid leven samen zo’n 1,5 kilo micro-organismen, tien keer meer dan je eigen lichaamscellen.", en:"About 1.5 kg of micro-organisms live on your skin together — ten times more than your own body cells." },
+  { code:"SK4", theme:"SK", nl:"Zweet ruikt op zich niet. De geur ontstaat pas als het in contact komt met huidbacteriën.", en:"Sweat itself doesn't smell. The odour only appears once it contacts skin bacteria." },
+  { code:"SK5", theme:"SK", nl:"Je neus is het drukst bevolkte stukje van je gezicht; in je oksels leven zo’n 2,5 miljoen micro-organismen per cm².", en:"Your nose is the most densely populated spot on your face; about 2.5 million micro-organisms live per cm² in your armpits." },
+  { code:"SK6", theme:"SK", nl:"De opperhuid heeft geen bloedvaten of zenuwen: ze wordt gevoed vanuit de lederhuid eronder.", en:"The epidermis has no blood vessels or nerves: it is nourished from the dermis underneath." },
+  { code:"SK7", theme:"SK", nl:"Vochtverlies van de huid begint al ongeveer 15 minuten na de geboorte.", en:"Skin moisture loss already begins about 15 minutes after birth." },
+  { code:"SK8", theme:"SK", nl:"Expressierimpels verschijnen vanaf ongeveer 35 jaar, diepere plooien zoals de neus-mondplooi vanaf ongeveer 45 jaar.", en:"Expression lines appear from about age 35, deeper folds like the nasolabial fold from about age 45." },
+  { code:"SK9", theme:"SK", nl:"Rond de ogen is de huid dun en heeft ze weinig talgklieren. Daarom is een poedermasker daar geen goed idee.", en:"The skin around the eyes is thin and has few sebaceous glands. That's why a powder mask isn't a good idea there." },
+  { code:"SK10", theme:"SK", nl:"Handpalmen en voetzolen nemen producten het minst op; gezicht en oksels het meest.", en:"Palms and soles absorb products the least; the face and armpits the most." },
+  { code:"SK11", theme:"SK", nl:"Een warme, vochtige en goed doorbloede huid neemt verzorging beter op dan een koude, droge huid.", en:"Warm, moist, well-perfused skin absorbs skincare better than cold, dry skin." },
+  { code:"SK12", theme:"SK", nl:"Meer crème is niet beter: als de hoornlaag verzadigd is, dringt de rest niet meer door.", en:"More cream isn't better: once the horny layer is saturated, the rest can't penetrate any further." },
+  { code:"SK13", theme:"SK", nl:"Collageen in een crème is te groot om door te dringen. Gehydrolyseerd collageen (in stukjes) kan dat wel.", en:"Collagen in a cream is too large to penetrate. Hydrolysed collagen (broken into pieces) can." },
+  { code:"SK14", theme:"SK", nl:"Hyaluronzuur kan tot zes liter water per gram vasthouden, maar voegt zelf geen vocht toe: het houdt het bestaande vocht vast.", en:"Hyaluronic acid can hold up to six litres of water per gram, but doesn't add moisture itself: it locks in existing moisture." },
+  { code:"SK15", theme:"SK", nl:"Bij een droge huid zit er tot 50% minder ureum (een natuurlijke vochtvasthouder) in de huid.", en:"Dry skin can contain up to 50% less urea (a natural moisture-retaining substance)." },
+  { code:"SK16", theme:"SK", nl:"UVA = A van Aging (veroudering), UVB = B van Branden, UVC = C van Catastrofe.", en:"UVA = A for Ageing, UVB = B for Burning, UVC = C for Catastrophe." },
+  { code:"SK17", theme:"SK", nl:"UVA is 95% van de UV die ons bereikt, is er het hele jaar en gaat dwars door wolken en ramen.", en:"UVA makes up 95% of the UV that reaches us, is present all year round and passes straight through clouds and windows." },
+  { code:"SK18", theme:"SK", nl:"SPF-klassen: laag 6-10, gemiddeld 15-25, hoog 30-50, zeer hoog 50+.", en:"SPF classes: low 6-10, medium 15-25, high 30-50, very high 50+." },
+  { code:"SK19", theme:"SK", nl:"Het UVA-logo betekent dat de UVA-bescherming minstens een derde van de SPF bedraagt.", en:"The UVA logo means the UVA protection is at least a third of the SPF value." },
+  { code:"SK20", theme:"SK", nl:"Voor kinderen: minimaal SPF 30 met UVA-bescherming. Een betaalbare crème die je royaal smeert, is beter dan een dure die je spaarzaam gebruikt.", en:"For children: at least SPF 30 with UVA protection. An affordable cream applied generously beats an expensive one used sparingly." },
+  { code:"SK21", theme:"SK", nl:"Zelfbruiner en bruinversnellers geven kleur, maar géén bescherming tegen UV.", en:"Self-tanner and tan accelerators give colour, but no protection against UV." },
+  { code:"SK22", theme:"SK", nl:"Kies een zonnebril met CE-keurmerk, liefst CE-3 voor kinderen. Donkere glazen zonder UV-filter maken je pupillen groter en laten zo meer UV binnen.", en:"Choose sunglasses with a CE mark, preferably CE-3 for children. Dark lenses without a UV filter make your pupils widen and let in more UV." },
+  { code:"SK23", theme:"SK", nl:"Donkere, strak geweven kleding beschermt beter dan lichte. De UPF-waarde van kleding verdwijnt niet in de was.", en:"Dark, tightly woven clothing protects better than light clothing. The UPF value of clothing doesn't wash out." },
+  { code:"SK24", theme:"SK", nl:"Parfum op huid die in de zon komt, kan pigmentvlekken geven.", en:"Perfume on skin that goes into the sun can cause pigmentation spots." },
+  { code:"SK25", theme:"SK", nl:"Zon helpt je lichaam vitamine D aanmaken, maar te veel zon droogt de huid uit en kan couperose verergeren.", en:"Sun helps your body produce vitamin D, but too much sun dries out the skin and can worsen couperose." },
+  { code:"SK26", theme:"SK", nl:"Vitamine C en E versterken elkaar in de strijd tegen vrije radicalen.", en:"Vitamin C and E reinforce each other in the fight against free radicals." },
+  { code:"SK27", theme:"SK", nl:"Fruitzuren (AHA’s) werk je best als kuur: na 14 dagen een zachtere huid, maar niet langer dan 4 weken na elkaar.", en:"Fruit acids (AHAs) work best as a course: softer skin after 14 days, but not longer than 4 weeks in a row." },
+  { code:"SK28", theme:"SK", nl:"Azuleen is het blauwe, kalmerende stofje uit kamille.", en:"Azulene is the blue, soothing compound from chamomile." },
+  { code:"SK29", theme:"SK", nl:"Er bestaan meer dan 200 soorten aloë, maar maar één echte aloë vera (‘vera’ betekent ‘echt’).", en:"There are more than 200 species of aloe, but only one true aloe vera ('vera' means 'true')." },
+  { code:"SK30", theme:"SK", nl:"Paraffine en vaseline geven meteen een zacht gevoel, maar te vaak gebruikt kunnen ze de natuurlijke vochtregeling van de huid verstoren.", en:"Paraffin and vaseline give an instant soft feeling, but used too often they can disrupt the skin's natural moisture regulation." },
+  { code:"SK31", theme:"SK", nl:"Natuurlijk is niet altijd allergievrij: kamille, arnica, aloë vera en etherische oliën kunnen ook allergie geven.", en:"Natural doesn't always mean allergy-free: chamomile, arnica, aloe vera and essential oils can also cause allergies." },
+  { code:"SK32", theme:"SK", nl:"Hypoallergeen betekent ‘minder kans op allergie’, geen garantie.", en:"Hypoallergenic means 'lower chance of allergy', not a guarantee." },
+  { code:"SK33", theme:"SK", nl:"Op het etiket staan ingrediënten van meeste naar minste. Staat ‘aqua’ eerst, dan is het product vooral water.", en:"Ingredients are listed from most to least on the label. If 'aqua' comes first, the product is mostly water." },
+  { code:"SK34", theme:"SK", nl:"‘Cruelty-free’ is niet hetzelfde als ‘vegan’: niet getest op dieren kan nog steeds honing bevatten.", en:"'Cruelty-free' isn't the same as 'vegan': not tested on animals can still mean it contains honey." },
+  { code:"SK35", theme:"SK", nl:"Gooi een geopend product na een jaar weg, of eerder als geur of kleur verandert. Schep uit een pot met een spatel.", en:"Throw away an opened product after a year, or sooner if the smell or colour changes. Scoop from a jar with a spatula." },
+  { code:"SK36", theme:"SK", nl:"Plastic scrubkorrels (microbeads) belanden in zee. Natuurlijke alternatieven: gemalen abrikozenpit, zout of suiker.", en:"Plastic scrub beads (microbeads) end up in the sea. Natural alternatives: ground apricot kernel, salt or sugar." },
+  { code:"SK37", theme:"SK", nl:"Parfum bevat 20-40% geurconcentraat, eau de parfum 10-20%, eau de toilette 5-10%, eau de cologne 2-3%.", en:"Perfume contains 20-40% fragrance concentrate, eau de parfum 10-20%, eau de toilette 5-10%, eau de cologne 2-3%." },
+  { code:"SK38", theme:"SK", nl:"Beoordeel een parfum pas na zo’n kwartier op je huid: dan komen de hartnoten naar boven.", en:"Only judge a perfume after about fifteen minutes on your skin: that's when the heart notes come through." },
+  { code:"SK39", theme:"SK", nl:"Rozenwater is het ‘bijproduct’ van de distillatie van rozenolie: een hydrolaat.", en:"Rose water is the 'by-product' of distilling rose oil: a hydrosol." },
+  { code:"SK40", theme:"SK", nl:"Etherische oliën zijn heel krachtig en gebruik je altijd verdund: een beetje gaat een lange weg.", en:"Essential oils are very potent and are always used diluted: a little goes a long way." },
+  { code:"SK41", theme:"SK", nl:"Na bergamot- of sinaasappelolie op de huid minstens 12 uur uit de zon blijven, anders kunnen bruine vlekken ontstaan.", en:"After bergamot or orange oil on the skin, stay out of the sun for at least 12 hours, or brown spots can appear." }
+];
+const MORE_FACT_POOLS = {
+  cellIntro: true,
+  byTreatment: {
+    manicure:["NA","NB","NC","ND","NE","NF"], manipedispa:["NA","NB","NC","ND","NE","NF"],
+    pedicure:["NA","NB","NC","ND","NE","NF"], pedicureexpress:["NA","NB","NC","ND","NE","NF"],
+    lashlift:["LL","LT"],
+    hydrapeel:["GV","SK"], signaturefacial:["GV","SK"], fillme:["GV","SK"],
+    fruitacid:["GV","SK"], liftsummere:["GV","SK"], antiagefacial:["GV","SK"],
+    detoxback:["GV","SK"], harmonizingbody:["GV","SK"], fullbodywrap:["GV","SK"],
+    facialworkshop:["GV","SK"], makeupworkshop:["GV"],
+    hotstone:["GV"], swedish:["GV"], swedishbackneck:["GV"], swedishlegs:["GV"],
+    backwrap:["GV"], slimmassage:["GV"], cupping:["GV"], cuppingpeeling:["GV"]
+  }
+};

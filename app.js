@@ -1014,17 +1014,32 @@
   /* ---------------- skin facts ("Weetje: huid, haar en voeten") ---------------- */
   const ALL_FACTS = SKIN_FACTS
     .concat(typeof CONDITION_FACTS !== "undefined" ? CONDITION_FACTS : [])
-    .concat(typeof PRACTICE_FACTS !== "undefined" ? PRACTICE_FACTS : []);
+    .concat(typeof PRACTICE_FACTS !== "undefined" ? PRACTICE_FACTS : [])
+    .concat(typeof CELL_FACTS !== "undefined" ? CELL_FACTS : [])
+    .concat(typeof NAIL_FACTS !== "undefined" ? NAIL_FACTS : [])
+    .concat(typeof LASH_FACTS !== "undefined" ? LASH_FACTS : [])
+    .concat(typeof FACIAL_FACTS !== "undefined" ? FACIAL_FACTS : [])
+    .concat(typeof SKINKNOW_FACTS !== "undefined" ? SKINKNOW_FACTS : []);
   function factPoolFor(m){
     if (m.isKid) return SKIN_FACTS.filter(f => SKIN_FACT_POOLS.kids.includes(f.theme));
     const skinThemes = SKIN_FACT_POOLS.byTreatment[m.treatment.id] || null;
     const condThemes = (typeof CONDITION_FACT_POOLS !== "undefined") ? (CONDITION_FACT_POOLS.byTreatment[m.treatment.id] || null) : null;
     const pracThemes = (typeof PRACTICE_FACT_POOLS !== "undefined") ? (PRACTICE_FACT_POOLS.byTreatment[m.treatment.id] || null) : null;
-    if (!skinThemes && !condThemes && !pracThemes) return SKIN_FACTS.slice();
+    const moreThemes = (typeof MORE_FACT_POOLS !== "undefined") ? (MORE_FACT_POOLS.byTreatment[m.treatment.id] || null) : null;
+    if (!skinThemes && !condThemes && !pracThemes && !moreThemes) return SKIN_FACTS.slice();
     const pool = [];
     if (skinThemes) pool.push(...SKIN_FACTS.filter(f => skinThemes.includes(f.theme)));
     if (condThemes) pool.push(...CONDITION_FACTS.filter(f => condThemes.includes(f.theme)));
     if (pracThemes) pool.push(...PRACTICE_FACTS.filter(f => pracThemes.includes(f.theme)));
+    if (moreThemes) {
+      if (moreThemes.includes("NA")) pool.push(...NAIL_FACTS.filter(f => moreThemes.includes(f.theme)));
+      if (moreThemes.includes("LL")) pool.push(...LASH_FACTS.filter(f => moreThemes.includes(f.theme)));
+      if (moreThemes.includes("GV") || moreThemes.includes("SK")) {
+        pool.push(...FACIAL_FACTS.filter(f => moreThemes.includes(f.theme)));
+        pool.push(...SKINKNOW_FACTS.filter(f => moreThemes.includes(f.theme)));
+      }
+    }
+    if (typeof CELL_FACTS !== "undefined" && pool.length) pool.push(...CELL_FACTS);
     return pool.length ? pool : ALL_FACTS.slice();
   }
   function randomFrom(pool, avoidCode){
