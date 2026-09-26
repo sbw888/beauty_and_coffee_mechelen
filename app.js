@@ -42,8 +42,8 @@
     bw:      "grayscale(1) contrast(1.08)",
     vintage: "sepia(0.35) contrast(0.9) brightness(1.05) saturate(0.8)"
   };
-  const FILTER_IDS = ["none","glow","warm","bw","vintage","cartoon"];
-  const cartoonCache = { sourceUrl: null, resultUrl: null };
+  const FILTER_IDS = ["none","glow","warm","bw","vintage","cartoon","mangacolor"];
+  const cartoonCache = { sourceUrl: null, filterId: null, resultUrl: null };
 
   /* ---------------- helpers ---------------- */
   const $ = (sel, ctx) => (ctx||document).querySelector(sel);
@@ -649,8 +649,8 @@
     ctx.clearRect(0, 0, c.width, c.height);
     ctx.fillStyle = "#241A14";
     ctx.fillRect(0, 0, c.width, c.height);
-    ctx.filter = skipFilter ? "none" : (state.filter === "cartoon"
-      ? "grayscale(1) contrast(1.7) brightness(1.05)"
+    ctx.filter = skipFilter ? "none" : (isMangaFilter(state.filter)
+      ? mangaLiveCss(state.filter)
       : (FILTERS[state.filter] || "none"));
     const scale = editorBaseScale() * editor.scale;
     ctx.save();
@@ -730,8 +730,8 @@
   }
 
   async function applyGlowPreview(){
-    if (state.filter === "cartoon"){
-      const liveCartoonCss = "grayscale(1) contrast(1.7) brightness(1.05)";
+    if (isMangaFilter(state.filter)){
+      const liveCartoonCss = mangaLiveCss(state.filter);
       video().style.filter = liveCartoonCss;
       if (!state.photoDataUrl){
         preview().style.filter = liveCartoonCss;
@@ -739,7 +739,7 @@
       }
       preview().style.filter = "";
       const cartoonUrl = await getCartoonDataUrl();
-      if (state.filter === "cartoon" && cartoonUrl){
+      if (isMangaFilter(state.filter) && cartoonUrl){
         preview().src = cartoonUrl;
       }
       return;
@@ -852,6 +852,40 @@
     };
   }
 
+  /* ---------------- drink "jumps out of the screen" ----------------
+     Free and 100% client-side: a CSS 3D animation of the real drink photo
+     (from the website). With a cut-out the drink leaps over the edge of
+     its frame towards the viewer (like the LinkedIn tiger); without one
+     the photo zooms forward inside the frame. Tap to replay. */
+  function drinkPhotoFor(m){
+    const extras = m.extrasIds || [];
+    for (const id of extras){
+      const byName = DRINK_PHOTOS_BY_EXTRA[id];
+      if (byName && byName[m.drink.name]) return pickRandom(byName[m.drink.name]);
+    }
+    const list = DRINK_PHOTOS[m.drink.name];
+    return list ? pickRandom(list) : null;
+  }
+  function drinkPopHtml(m, alt){
+    const photo = drinkPhotoFor(m);
+    if (!photo) return "";
+    const cut = DRINK_CUTOUTS[photo];
+    const hot = state.temperature !== "iced";
+    return `
+      <div class="drink-pop${cut ? "" : " drink-pop--flat"} is-playing" data-action="replay-drink-pop" role="img" aria-label="${alt}">
+        <div class="drink-pop__floor" aria-hidden="true"></div>
+        <div class="drink-pop__screen"><img class="drink-pop__bg" src="${photo}" alt=""></div>
+        ${cut ? `<img class="drink-pop__cut" src="${cut}" alt="">` : ""}
+        ${hot ? `<span class="drink-pop__steam" aria-hidden="true"><i></i><i></i><i></i></span>` : ""}
+        <span class="drink-pop__hint">↻ ${t("drink_pop_replay", state.lang)}</span>
+      </div>`;
+  }
+  function replayDrinkPop(el){
+    el.classList.remove("is-playing");
+    void el.offsetWidth; // restart the CSS animation
+    el.classList.add("is-playing");
+  }
+
   function renderResultDetails(){
     const wrap = $("#resultDetails");
     const m = state.match;
@@ -872,10 +906,7 @@
     const extrasLabel = (m.extrasIds || []).map(id => t(`extras.${id}`, state.lang));
     const customLine = [milkLabel, ...extrasLabel].filter(Boolean).join(" · ");
 
-    const drinkPhotoOptions = !m.isKid && m.drink ? DRINK_PHOTOS[m.drink.name] : null;
-    const drinkPhotoHtml = drinkPhotoOptions
-      ? `<img class="result-row__photo" src="${pickRandom(drinkPhotoOptions)}" alt="${drinkFull}">`
-      : "";
+    const drinkPhotoHtml = !m.isKid && m.drink ? drinkPopHtml(m, drinkFull) : "";
 
     wrap.innerHTML = `
       <div class="result-row">
@@ -1281,21 +1312,56 @@
     });
   }
 
-  /* ---------------- manga filter (client-side only) ----------------
-     Turns the photo into a black-and-white manga panel: inked outlines,
-     solid black shadows/hair, dot screentones for the mid-tones, speed
-     lines around the edges and a panel border. Everything is computed
-     in the browser, nothing is uploaded. NB: a filter keeps the real
-     face — it does not redraw it (no big anime eyes); that would need a
-     generative AI model and therefore an external, paid service. */
-  function mangaPixels(src, w, h){
-    const N = w * h;
-    // 1. luminance
-    const gray = new Float32Array(N);
-    for (let i = 0, p = 0; p < N; i += 4, p++){
-      gray[p] = (src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114) / 255;
+  /* ---------------- manga filters (client-side only) ----------------
+     "Manga" (black & white) and "Manga kleur" (colour). Both are computed
+     in the browser: inked outlines, flat cel-shaded tones, dot screentone
+     in the shadows, speed lines around the edges and a panel border.
+     Nothing is uploaded. NB: a filter keeps the real face — it does not
+     redraw it (no new anime eyes); that would need a generative AI model,
+     i.e. an external, paid service. */
+  function mangaBlur(input, w, h, sigma){
+    const N = w * h, r = Math.max(1, Math.ceil(sigma * 2.5));
+    const k = new Float32Array(2 * r + 1); let s = 0;
+    for (let i = -r; i <= r; i++){ k[i + r] = Math.exp(-(i * i) / (2 * sigma * sigma)); s += k[i + r]; }
+    for (let i = 0; i < k.length; i++) k[i] /= s;
+    const tmp = new Float32Array(N), out = new Float32Array(N);
+    for (let y = 0; y < h; y++){
+      const row = y * w;
+      for (let x = 0; x < w; x++){
+        let v = 0;
+        for (let i = -r; i <= r; i++){ const xx = x + i < 0 ? 0 : (x + i >= w ? w - 1 : x + i); v += input[row + xx] * k[i + r]; }
+        tmp[row + x] = v;
+      }
     }
-    // 2. auto-levels (1st–99th percentile) so every photo gets full contrast
+    for (let y = 0; y < h; y++){
+      for (let x = 0; x < w; x++){
+        let v = 0;
+        for (let i = -r; i <= r; i++){ const yy = y + i < 0 ? 0 : (y + i >= h ? h - 1 : y + i); v += tmp[yy * w + x] * k[i + r]; }
+        out[y * w + x] = v;
+      }
+    }
+    return out;
+  }
+  // box mean via an integral image: fast whatever the radius
+  function mangaLocalMean(v, w, h, R){
+    const integ = new Float64Array((w + 1) * (h + 1)), out = new Float32Array(w * h);
+    for (let y = 0; y < h; y++){
+      let rowSum = 0;
+      for (let x = 0; x < w; x++){ rowSum += v[y * w + x]; integ[(y + 1) * (w + 1) + x + 1] = integ[y * (w + 1) + x + 1] + rowSum; }
+    }
+    for (let y = 0; y < h; y++){
+      const y0 = Math.max(0, y - R), y1 = Math.min(h, y + R + 1);
+      for (let x = 0; x < w; x++){
+        const x0 = Math.max(0, x - R), x1 = Math.min(w, x + R + 1);
+        out[y * w + x] = (integ[y1 * (w + 1) + x1] - integ[y0 * (w + 1) + x1] - integ[y1 * (w + 1) + x0] + integ[y0 * (w + 1) + x0]) / ((x1 - x0) * (y1 - y0));
+      }
+    }
+    return out;
+  }
+  // shared analysis: luminance (auto-levelled), smoothed luminance, ink mask, local contrast
+  function mangaAnalyse(src, w, h){
+    const N = w * h, gray = new Float32Array(N);
+    for (let i = 0, p = 0; p < N; i += 4, p++) gray[p] = (src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114) / 255;
     const hist = new Uint32Array(256);
     for (let p = 0; p < N; p++) hist[Math.min(255, (gray[p] * 255) | 0)]++;
     let lo = 0, hi = 255, acc = 0;
@@ -1304,127 +1370,107 @@
     for (let v = 255; v >= 0; v--){ acc += hist[v]; if (acc > N * 0.01){ hi = v; break; } }
     const range = Math.max(1, hi - lo) / 255, low = lo / 255;
     for (let p = 0; p < N; p++) gray[p] = Math.min(1, Math.max(0, (gray[p] - low) / range));
-
-    // separable gaussian blur
-    function blur(input, sigma){
-      const r = Math.max(1, Math.ceil(sigma * 2.5));
-      const k = new Float32Array(2 * r + 1); let s = 0;
-      for (let i = -r; i <= r; i++){ k[i + r] = Math.exp(-(i * i) / (2 * sigma * sigma)); s += k[i + r]; }
-      for (let i = 0; i < k.length; i++) k[i] /= s;
-      const tmp = new Float32Array(N), out = new Float32Array(N);
-      for (let y = 0; y < h; y++){
-        const row = y * w;
-        for (let x = 0; x < w; x++){
-          let v = 0;
-          for (let i = -r; i <= r; i++){ const xx = Math.min(w - 1, Math.max(0, x + i)); v += input[row + xx] * k[i + r]; }
-          tmp[row + x] = v;
-        }
-      }
-      for (let y = 0; y < h; y++){
-        for (let x = 0; x < w; x++){
-          let v = 0;
-          for (let i = -r; i <= r; i++){ const yy = Math.min(h - 1, Math.max(0, y + i)); v += tmp[yy * w + x] * k[i + r]; }
-          out[y * w + x] = v;
-        }
-      }
-      return out;
-    }
-    const unit = Math.max(w, h) / 720;           // scale everything to image size
-    const smooth = blur(gray, 1.2 * unit);        // smooth skin/noise for the tones
-    // 3. ink lines: difference-of-gaussians (XDoG-style) on the luminance
-    const g1 = blur(gray, 0.9 * unit), g2 = blur(gray, 1.6 * 0.9 * unit);
+    const unit = Math.max(w, h) / 720;
+    const smooth = mangaBlur(gray, w, h, 1.2 * unit);
+    const g1 = mangaBlur(gray, w, h, 0.9 * unit), g2 = mangaBlur(gray, w, h, 1.44 * unit);
     const ink = new Uint8Array(N);
-    for (let p = 0; p < N; p++){
-      const d = g1[p] - 0.985 * g2[p];
-      ink[p] = d < -0.009 ? 1 : 0;
-    }
-
-    // 4. tones → white / light screentone / dense screentone / black.
-    //    Thresholds come from this photo's own tone distribution, so skin
-    //    ends up paper-white (like manga) and only real shadows get tone.
+    for (let p = 0; p < N; p++) ink[p] = (g1[p] - 0.985 * g2[p]) < -0.009 ? 1 : 0;
+    const local = mangaLocalMean(smooth, w, h, Math.round(22 * unit));
     const sorted = Float32Array.from(smooth).sort();
-    const pct = q => sorted[Math.min(N - 1, Math.floor(N * q))];
-    const tBlack = pct(0.17);
-    // local contrast: how much darker a pixel is than its surroundings.
-    // Even skin stays white; creases, cheek shadows and folds get tone.
-    //    (box mean via an integral image: fast, whatever the radius)
-    const integ = new Float64Array((w + 1) * (h + 1));
-    for (let y = 0; y < h; y++){
-      let rowSum = 0;
-      for (let x = 0; x < w; x++){
-        rowSum += smooth[y * w + x];
-        integ[(y + 1) * (w + 1) + x + 1] = integ[y * (w + 1) + x + 1] + rowSum;
-      }
-    }
-    const R = Math.round(22 * unit), local = new Float32Array(N);
-    for (let y = 0; y < h; y++){
-      const y0 = Math.max(0, y - R), y1 = Math.min(h, y + R + 1);
-      for (let x = 0; x < w; x++){
-        const x0 = Math.max(0, x - R), x1 = Math.min(w, x + R + 1);
-        const sum = integ[y1 * (w + 1) + x1] - integ[y0 * (w + 1) + x1] - integ[y1 * (w + 1) + x0] + integ[y0 * (w + 1) + x0];
-        local[y * w + x] = sum / ((x1 - x0) * (y1 - y0));
-      }
-    }
-    const out = new Uint8ClampedArray(N * 4);
-    const cell = Math.max(3, Math.round(4 * unit));   // screentone dot spacing
-    const cos45 = Math.SQRT1_2;
-    const cx = w / 2, cy = h / 2;
-    // speed lines: one random line per angular bucket (seeded, so stable)
-    const BUCKETS = 220, lines = [];
+    return { gray, smooth, ink, local, unit, tBlack: sorted[Math.floor(N * 0.17)] };
+  }
+  // speed lines + panel border: returns true where the pixel must be ink-black
+  function mangaDecorator(w, h, unit){
+    const cx = w / 2, cy = h / 2, BUCKETS = 220, lines = [];
     let seed = 7;
     const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
     for (let b = 0; b < BUCKETS; b++){
       lines.push(rnd() < 0.55 ? { a:(b + rnd()) / BUCKETS * Math.PI * 2, w:0.0025 + rnd() * 0.006, r:0.78 + rnd() * 0.22 } : null);
     }
     const border = Math.max(3, Math.round(5 * unit)), margin = Math.max(3, Math.round(6 * unit));
-
-    for (let y = 0; y < h; y++){
-      for (let x = 0; x < w; x++){
-        const p = y * w + x;
-        let black;
-        const v = smooth[p];
-        if (ink[p]) black = true;
-        else if (v < tBlack) black = true;               // solid black (hair, deep shadow)
-        else if (v - local[p] > -0.035) black = false;   // paper white (skin, sky)
-        else {
-          const dv = v - local[p];
-          // rotated dot grid; darker tone → bigger dots
-          const u = (x * cos45 + y * cos45) / cell, t = (-x * cos45 + y * cos45) / cell;
-          const du = u - Math.round(u), dt = t - Math.round(t);
-          const dist = Math.sqrt(du * du + dt * dt);
-          const tone = dv < -0.13 ? 0.52 : (dv < -0.07 ? 0.38 : 0.24);  // dot radius in cell units
-          black = dist < tone;
+    return function(x, y){
+      const edge = Math.min(x, y, w - 1 - x, h - 1 - y);
+      if (edge < margin) return "paper";
+      if (edge < margin + border) return "ink";
+      const nx = (x - cx) / cx, ny = (y - cy) / cy, rho = Math.sqrt(nx * nx + ny * ny);
+      if (rho > 0.78){
+        let ang = Math.atan2(ny, nx); if (ang < 0) ang += Math.PI * 2;
+        const b = Math.floor(ang / (Math.PI * 2) * BUCKETS) % BUCKETS;
+        for (let o = -1; o <= 1; o++){
+          const L = lines[(b + o + BUCKETS) % BUCKETS];
+          if (!L || rho <= L.r) continue;
+          let da = Math.abs(ang - L.a); if (da > Math.PI) da = Math.PI * 2 - da;
+          if (da < L.w * Math.min(1, (rho - L.r) / 0.35)) return "ink";
         }
-        // speed lines near the edges
-        if (!black){
-          const nx = (x - cx) / cx, ny = (y - cy) / cy;
-          const rho = Math.sqrt(nx * nx + ny * ny);
-          if (rho > 0.78){
-            let ang = Math.atan2(ny, nx); if (ang < 0) ang += Math.PI * 2;
-            const b = Math.floor(ang / (Math.PI * 2) * BUCKETS) % BUCKETS;
-            for (let o = -1; o <= 1 && !black; o++){
-              const L = lines[(b + o + BUCKETS) % BUCKETS];
-              if (!L || rho <= L.r) continue;
-              let da = Math.abs(ang - L.a); if (da > Math.PI) da = Math.PI * 2 - da;
-              if (da < L.w * Math.min(1, (rho - L.r) / 0.35)) black = true;
-            }
-          }
-        }
-        // panel border with a white margin
-        const edge = Math.min(x, y, w - 1 - x, h - 1 - y);
-        if (edge < margin) black = false;
-        else if (edge < margin + border) black = true;
-
-        const c = black ? 20 : 250, i = p * 4;
-        out[i] = c; out[i+1] = c; out[i+2] = black ? 22 : 246; out[i+3] = 255;
       }
+      return null;
+    };
+  }
+  function screentoneDot(x, y, cell, radius){
+    const c = Math.SQRT1_2, u = (x + y) * c / cell, t = (y - x) * c / cell;
+    const du = u - Math.round(u), dt = t - Math.round(t);
+    return Math.sqrt(du * du + dt * dt) < radius;
+  }
+
+  // black & white manga
+  function mangaPixels(src, w, h){
+    const A = mangaAnalyse(src, w, h), N = w * h, out = new Uint8ClampedArray(N * 4);
+    const cell = Math.max(3, Math.round(4 * A.unit)), deco = mangaDecorator(w, h, A.unit);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+      const p = y * w + x, v = A.smooth[p], dv = v - A.local[p];
+      let black;
+      if (A.ink[p] || v < A.tBlack) black = true;
+      else if (dv > -0.035) black = false;
+      else black = screentoneDot(x, y, cell, dv < -0.13 ? 0.52 : (dv < -0.07 ? 0.38 : 0.24));
+      const d = deco(x, y);
+      if (d === "ink") black = true; else if (d === "paper") black = false;
+      const i = p * 4;
+      out[i] = black ? 20 : 250; out[i+1] = black ? 20 : 250; out[i+2] = black ? 22 : 246; out[i+3] = 255;
     }
     return out;
   }
 
-  // Kept under the old name so the rest of the app (cache, share image)
-  // keeps working; the filter id stays "cartoon", its label is now "Manga".
-  function applyCartoonEffect(img){
+  // colour manga / anime look: flat cel-shaded colours + ink + screentone shadows
+  function mangaColorPixels(src, w, h){
+    const A = mangaAnalyse(src, w, h), N = w * h, out = new Uint8ClampedArray(N * 4);
+    const cell = Math.max(3, Math.round(4 * A.unit)), deco = mangaDecorator(w, h, A.unit);
+    // smooth each colour channel so skin and sky become flat areas
+    const ch = [new Float32Array(N), new Float32Array(N), new Float32Array(N)];
+    for (let p = 0, i = 0; p < N; p++, i += 4){ ch[0][p] = src[i]; ch[1][p] = src[i+1]; ch[2][p] = src[i+2]; }
+    const sm = ch.map(c => mangaBlur(c, w, h, 2.4 * A.unit));
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+      const p = y * w + x, i = p * 4, v = A.smooth[p], dv = v - A.local[p];
+      let r = sm[0][p], g = sm[1][p], b = sm[2][p];
+      // clean, slightly brighter colours (anime look), gentle saturation boost
+      const L = r * 0.299 + g * 0.587 + b * 0.114;
+      r = L + (r - L) * 1.18; g = L + (g - L) * 1.18; b = L + (b - L) * 1.18;
+      const lift = Math.pow(Math.max(0.02, L / 255), 0.78) / Math.max(0.02, L / 255);
+      r *= lift; g *= lift; b *= lift;
+      // flat colour areas: snap every channel to 10 steps
+      r = Math.round(r / 25.5) * 25.5; g = Math.round(g / 25.5) * 25.5; b = Math.round(b / 25.5) * 25.5;
+      // cel shadow: only where it is clearly darker than its surroundings
+      if (dv < -0.05){ r *= 0.8; g *= 0.78; b *= 0.84; }
+      // deepest shadows / hair → near-black ink with a hint of the colour
+      if (v < A.tBlack * 0.8){ r = r * 0.15 + 14; g = g * 0.15 + 12; b = b * 0.15 + 16; }
+      // screentone dots in the darker cast shadows
+      else if (dv < -0.1 && screentoneDot(x, y, cell, dv < -0.16 ? 0.42 : 0.3)){ r *= 0.62; g *= 0.62; b *= 0.66; }
+      let ink = A.ink[p] === 1;
+      const d = deco(x, y);
+      if (d === "ink") ink = true;
+      if (d === "paper"){ out[i] = 250; out[i+1] = 250; out[i+2] = 246; out[i+3] = 255; continue; }
+      if (ink){ r = 22; g = 18; b = 24; }
+      out[i] = r; out[i+1] = g; out[i+2] = b; out[i+3] = 255;
+    }
+    return out;
+  }
+
+  // "cartoon" is the old id of the black & white manga filter (label "Manga");
+  // "mangacolor" is the colour version (label "Manga kleur").
+  function isMangaFilter(id){ return id === "cartoon" || id === "mangacolor"; }
+  function mangaLiveCss(id){
+    return id === "mangacolor" ? "saturate(1.3) contrast(1.25) brightness(1.05)" : "grayscale(1) contrast(1.7) brightness(1.05)";
+  }
+  function applyCartoonEffect(img, filterId){
     const MAX_DIM = 900;
     const scale = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
     const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
@@ -1432,23 +1478,28 @@
     c.width = w; c.height = h;
     const ctx = c.getContext("2d");
     ctx.drawImage(img, 0, 0, w, h);
-    const px = mangaPixels(ctx.getImageData(0, 0, w, h).data, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+    const isColor = filterId === "mangacolor";
+    const px = isColor ? mangaColorPixels(data, w, h) : mangaPixels(data, w, h);
     ctx.putImageData(new ImageData(px, w, h), 0, 0);
-    return c.toDataURL("image/png");
+    return isColor ? c.toDataURL("image/jpeg", 0.92) : c.toDataURL("image/png");
   }
 
   function getCartoonDataUrl(){
     return new Promise(resolve => {
-      if (!state.photoDataUrl){ resolve(null); return; }
-      if (cartoonCache.sourceUrl === state.photoDataUrl){ resolve(cartoonCache.resultUrl); return; }
+      if (!state.photoDataUrl || !isMangaFilter(state.filter)){ resolve(null); return; }
+      const filterId = state.filter, src = state.photoDataUrl;
+      if (cartoonCache.sourceUrl === src && cartoonCache.filterId === filterId){ resolve(cartoonCache.resultUrl); return; }
       const img = new Image();
       img.onload = () => {
-        const result = applyCartoonEffect(img);
-        cartoonCache.sourceUrl = state.photoDataUrl;
-        cartoonCache.resultUrl = result;
-        resolve(result);
+        // let the browser paint first, then do the heavy pixel work
+        setTimeout(() => {
+          const result = applyCartoonEffect(img, filterId);
+          cartoonCache.sourceUrl = src; cartoonCache.filterId = filterId; cartoonCache.resultUrl = result;
+          resolve(result);
+        }, 30);
       };
-      img.src = state.photoDataUrl;
+      img.src = src;
     });
   }
 
@@ -1484,7 +1535,7 @@
     const ctx = out.getContext("2d");
 
     if (state.photoDataUrl){
-      const isCartoon = state.filter === "cartoon";
+      const isCartoon = isMangaFilter(state.filter);
       const sourceUrl = isCartoon ? (await getCartoonDataUrl()) || state.photoDataUrl : state.photoDataUrl;
       await new Promise(res => {
         const img = new Image();
@@ -2269,6 +2320,7 @@
       if (action === "toggle-fav") toggleFavorite();
       if (action === "remove-fav") removeFavorite(Number(el.dataset.favIndex));
       if (action === "add-stamp") addStamp();
+      if (action === "replay-drink-pop") replayDrinkPop(el);
       if (action === "reset-local-data") resetLocalData();
       if (action === "add-reminder") addCalendarReminder();
       if (action === "dismiss-review") dismissReviewPrompt();

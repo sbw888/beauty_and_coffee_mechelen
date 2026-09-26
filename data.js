@@ -13,7 +13,25 @@ const CATEGORY_ICONS = { coffee:"☕", tea:"🫖", matcha:"🍵" };
    plain "Matcha") — showing the wrong variant's photo would be more
    misleading than showing no photo at all. */
 const DRINK_PHOTOS = {
-  "Matcha Latte": ["assets/drinks/matcha-latte-1.jpg", "assets/drinks/matcha-latte-2.jpg"]
+  "Matcha Latte": ["assets/drinks/matcha-latte-1.jpg", "assets/drinks/matcha-latte-2.jpg"],
+  "Latte": ["assets/drinks/latte.jpg"],
+  "Cappuccino": ["assets/drinks/cappuccino.jpg"],
+  "Latte Macchiato": ["assets/drinks/latte-macchiato.jpg"],
+  "Vietnamese Phin Coffee": ["assets/drinks/vietnamese-phin.jpg"]
+};
+/* A Latte with the "pumpkin" topping shows the pumpkin spice latte photo. */
+const DRINK_PHOTOS_BY_EXTRA = {
+  pumpkin: { "Latte": ["assets/drinks/pumpkin-spice-latte.jpg"] }
+};
+/* Cut-out versions (transparent background) for the "drink jumps out of
+   the screen" animation. A photo without a cut-out still animates, but
+   as a zoom inside its frame instead of popping out of it. */
+const DRINK_CUTOUTS = {
+  "assets/drinks/latte.jpg": "assets/drinks/latte-cut.webp",
+  "assets/drinks/cappuccino.jpg": "assets/drinks/cappuccino-cut.webp",
+  "assets/drinks/latte-macchiato.jpg": "assets/drinks/latte-macchiato-cut.webp",
+  "assets/drinks/vietnamese-phin.jpg": "assets/drinks/vietnamese-phin-cut.webp",
+  "assets/drinks/pumpkin-spice-latte.jpg": "assets/drinks/pumpkin-spice-latte-cut.webp"
 };
 const CAFFEINE_ICONS = { caff:"⚡", decaf:"🌙" };
 const TEMPERATURE_ICONS = { hot:"🔥", iced:"🧊" };

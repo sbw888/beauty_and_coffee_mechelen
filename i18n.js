@@ -135,6 +135,7 @@ const I18N = {
     stamp_camera_error: "Camera niet beschikbaar — typ de 6 cijfers hieronder in.",
     stamp_unsupported: "Deze browser kan de stempelcode niet controleren. Probeer een recente versie van Chrome of Safari.",
     stamp_close: "Sluiten",
+    drink_pop_replay: "Tik om opnieuw te spelen",
     salon_title: "Salonmodus · stempelcode",
     salon_hint: "Laat de klant deze QR-code scannen in de app. De code wisselt elke 30 seconden.",
     salon_pin_prompt: "Salonmodus: voer je salon-PIN in.",
@@ -286,7 +287,8 @@ const I18N = {
       warm: "Warm",
       bw: "Zwart-wit",
       vintage: "Vintage",
-      cartoon: "Manga"
+      cartoon: "Manga",
+      mangacolor: "Manga kleur"
     }
   },
 
@@ -423,6 +425,7 @@ const I18N = {
     stamp_camera_error: "Camera not available — type the 6 digits below.",
     stamp_unsupported: "This browser can't check the stamp code. Try a recent version of Chrome or Safari.",
     stamp_close: "Close",
+    drink_pop_replay: "Tap to replay",
     salon_title: "Salon mode · stamp code",
     salon_hint: "Let the client scan this QR code in the app. The code changes every 30 seconds.",
     salon_pin_prompt: "Salon mode: enter your salon PIN.",
@@ -574,7 +577,8 @@ const I18N = {
       warm: "Warm",
       bw: "Black & white",
       vintage: "Vintage",
-      cartoon: "Manga"
+      cartoon: "Manga",
+      mangacolor: "Manga colour"
     }
   }
 };

@@ -132,6 +132,7 @@
   "stamp_camera_error": "Caméra indisponible — tapez les 6 chiffres ci-dessous.",
   "stamp_unsupported": "Ce navigateur ne peut pas vérifier le code du tampon. Essayez une version récente de Chrome ou Safari.",
   "stamp_close": "Fermer",
+  "drink_pop_replay": "Touchez pour rejouer",
   "salon_title": "Mode salon · code du tampon",
   "salon_hint": "Laissez la cliente scanner ce code QR dans l'app. Le code change toutes les 30 secondes.",
   "salon_pin_prompt": "Mode salon : entrez votre PIN du salon.",
@@ -317,7 +318,8 @@
    "warm": "Chaud",
    "bw": "Noir et blanc",
    "vintage": "Vintage",
-   "cartoon": "Manga"
+   "cartoon": "Manga",
+   "mangacolor": "Manga couleur"
   }
  },
  "treatments": {
