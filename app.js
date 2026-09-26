@@ -622,17 +622,36 @@
     editor.offsetY = Math.min(maxY, Math.max(-maxY, editor.offsetY));
   }
 
-  function drawEditor(){
+  // Cache the 2D context once instead of re-fetching it on every redraw
+  // (getContext() is cheap but not free, and drawEditor can run dozens
+  // of times per second while dragging).
+  let editorCtx = null;
+  function getEditorCtx(){
+    if (!editorCtx) editorCtx = editorCanvasEl().getContext("2d", { alpha: false });
+    return editorCtx;
+  }
+
+  // ctx.filter (the CSS-filter-on-canvas API used for the preview filters,
+  // especially the "cartoon" SVG filter) forces a slow, software-rendered
+  // path in several mobile browsers. Applying it on every pointermove while
+  // dragging or zooming is the main source of jank on older/cheaper phones.
+  // Fix: skip the filter entirely while actively dragging or zooming (show
+  // the plain image, which stays fast), and only render the filtered
+  // version once the gesture ends. Also coalesce rapid-fire events
+  // (pointermove, the zoom slider's "input") into one draw per animation
+  // frame instead of one draw per event.
+  let editorDrawQueued = false;
+  function drawEditor(skipFilter){
     if (!editor.img) return;
     clampEditorOffset();
     const c = editorCanvasEl();
-    const ctx = c.getContext("2d");
+    const ctx = getEditorCtx();
     ctx.clearRect(0, 0, c.width, c.height);
     ctx.fillStyle = "#241A14";
     ctx.fillRect(0, 0, c.width, c.height);
-    ctx.filter = state.filter === "cartoon"
-      ? "url(#cartoonPosterize) saturate(1.6) contrast(1.15)"
-      : (FILTERS[state.filter] || "none");
+    ctx.filter = skipFilter ? "none" : (state.filter === "cartoon"
+      ? "grayscale(1) contrast(1.7) brightness(1.05)"
+      : (FILTERS[state.filter] || "none"));
     const scale = editorBaseScale() * editor.scale;
     ctx.save();
     ctx.translate(c.width/2 + editor.offsetX, c.height/2 + editor.offsetY);
@@ -641,6 +660,11 @@
     ctx.drawImage(editor.img, -editor.img.width/2, -editor.img.height/2);
     ctx.restore();
     ctx.filter = "none";
+  }
+  function requestEditorDraw(skipFilter){
+    if (editorDrawQueued) return;
+    editorDrawQueued = true;
+    requestAnimationFrame(() => { editorDrawQueued = false; drawEditor(skipFilter); });
   }
 
   function editorRotate(){
@@ -685,22 +709,29 @@
       editor.offsetX += (e.clientX - editor.lastX) * r;
       editor.offsetY += (e.clientY - editor.lastY) * r;
       editor.lastX = e.clientX; editor.lastY = e.clientY;
-      drawEditor();
+      requestEditorDraw(true); // skip the filter while dragging, for smoothness
     });
-    const endDrag = () => { editor.dragging = false; };
+    const endDrag = () => {
+      const wasDragging = editor.dragging;
+      editor.dragging = false;
+      if (wasDragging) requestEditorDraw(false); // one final draw, filter back on
+    };
     c.addEventListener("pointerup", endDrag);
     c.addEventListener("pointercancel", endDrag);
     c.addEventListener("pointerleave", endDrag);
 
+    let zoomEndTimer = null;
     $("#editorZoom").addEventListener("input", e => {
       editor.scale = parseFloat(e.target.value);
-      drawEditor();
+      requestEditorDraw(true); // skip the filter while the slider is moving
+      clearTimeout(zoomEndTimer);
+      zoomEndTimer = setTimeout(() => requestEditorDraw(false), 120);
     });
   }
 
   async function applyGlowPreview(){
     if (state.filter === "cartoon"){
-      const liveCartoonCss = "url(#cartoonPosterize) saturate(1.6) contrast(1.15)";
+      const liveCartoonCss = "grayscale(1) contrast(1.7) brightness(1.05)";
       video().style.filter = liveCartoonCss;
       if (!state.photoDataUrl){
         preview().style.filter = liveCartoonCss;
@@ -1176,6 +1207,7 @@
   function renderResultBlocks(){
     renderSkinFact();
     renderActions();
+    renderUpsell();
     renderHouseRulesTeaser();
     const wrap = $("#resultBlocks");
     const m = state.match;
@@ -1249,90 +1281,160 @@
     });
   }
 
-  /* ---------------- cartoon-style filter (client-side only) ----------------
-     A real "turn me into an animated movie character" transformation needs a
-     generative AI model, which would mean sending the photo to an external
-     API — breaking the "100% on your device" privacy promise, and needing a
-     paid key that can't be safely stored in a static site with no backend.
-     This gives an honest, achievable alternative instead: a genuine cartoon/
-     comic look (flat posterized colors + inked outlines) computed entirely
-     in the browser, nothing ever uploaded anywhere. */
+  /* ---------------- manga filter (client-side only) ----------------
+     Turns the photo into a black-and-white manga panel: inked outlines,
+     solid black shadows/hair, dot screentones for the mid-tones, speed
+     lines around the edges and a panel border. Everything is computed
+     in the browser, nothing is uploaded. NB: a filter keeps the real
+     face — it does not redraw it (no big anime eyes); that would need a
+     generative AI model and therefore an external, paid service. */
+  function mangaPixels(src, w, h){
+    const N = w * h;
+    // 1. luminance
+    const gray = new Float32Array(N);
+    for (let i = 0, p = 0; p < N; i += 4, p++){
+      gray[p] = (src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114) / 255;
+    }
+    // 2. auto-levels (1st–99th percentile) so every photo gets full contrast
+    const hist = new Uint32Array(256);
+    for (let p = 0; p < N; p++) hist[Math.min(255, (gray[p] * 255) | 0)]++;
+    let lo = 0, hi = 255, acc = 0;
+    for (let v = 0; v < 256; v++){ acc += hist[v]; if (acc > N * 0.01){ lo = v; break; } }
+    acc = 0;
+    for (let v = 255; v >= 0; v--){ acc += hist[v]; if (acc > N * 0.01){ hi = v; break; } }
+    const range = Math.max(1, hi - lo) / 255, low = lo / 255;
+    for (let p = 0; p < N; p++) gray[p] = Math.min(1, Math.max(0, (gray[p] - low) / range));
+
+    // separable gaussian blur
+    function blur(input, sigma){
+      const r = Math.max(1, Math.ceil(sigma * 2.5));
+      const k = new Float32Array(2 * r + 1); let s = 0;
+      for (let i = -r; i <= r; i++){ k[i + r] = Math.exp(-(i * i) / (2 * sigma * sigma)); s += k[i + r]; }
+      for (let i = 0; i < k.length; i++) k[i] /= s;
+      const tmp = new Float32Array(N), out = new Float32Array(N);
+      for (let y = 0; y < h; y++){
+        const row = y * w;
+        for (let x = 0; x < w; x++){
+          let v = 0;
+          for (let i = -r; i <= r; i++){ const xx = Math.min(w - 1, Math.max(0, x + i)); v += input[row + xx] * k[i + r]; }
+          tmp[row + x] = v;
+        }
+      }
+      for (let y = 0; y < h; y++){
+        for (let x = 0; x < w; x++){
+          let v = 0;
+          for (let i = -r; i <= r; i++){ const yy = Math.min(h - 1, Math.max(0, y + i)); v += tmp[yy * w + x] * k[i + r]; }
+          out[y * w + x] = v;
+        }
+      }
+      return out;
+    }
+    const unit = Math.max(w, h) / 720;           // scale everything to image size
+    const smooth = blur(gray, 1.2 * unit);        // smooth skin/noise for the tones
+    // 3. ink lines: difference-of-gaussians (XDoG-style) on the luminance
+    const g1 = blur(gray, 0.9 * unit), g2 = blur(gray, 1.6 * 0.9 * unit);
+    const ink = new Uint8Array(N);
+    for (let p = 0; p < N; p++){
+      const d = g1[p] - 0.985 * g2[p];
+      ink[p] = d < -0.009 ? 1 : 0;
+    }
+
+    // 4. tones → white / light screentone / dense screentone / black.
+    //    Thresholds come from this photo's own tone distribution, so skin
+    //    ends up paper-white (like manga) and only real shadows get tone.
+    const sorted = Float32Array.from(smooth).sort();
+    const pct = q => sorted[Math.min(N - 1, Math.floor(N * q))];
+    const tBlack = pct(0.17);
+    // local contrast: how much darker a pixel is than its surroundings.
+    // Even skin stays white; creases, cheek shadows and folds get tone.
+    //    (box mean via an integral image: fast, whatever the radius)
+    const integ = new Float64Array((w + 1) * (h + 1));
+    for (let y = 0; y < h; y++){
+      let rowSum = 0;
+      for (let x = 0; x < w; x++){
+        rowSum += smooth[y * w + x];
+        integ[(y + 1) * (w + 1) + x + 1] = integ[y * (w + 1) + x + 1] + rowSum;
+      }
+    }
+    const R = Math.round(22 * unit), local = new Float32Array(N);
+    for (let y = 0; y < h; y++){
+      const y0 = Math.max(0, y - R), y1 = Math.min(h, y + R + 1);
+      for (let x = 0; x < w; x++){
+        const x0 = Math.max(0, x - R), x1 = Math.min(w, x + R + 1);
+        const sum = integ[y1 * (w + 1) + x1] - integ[y0 * (w + 1) + x1] - integ[y1 * (w + 1) + x0] + integ[y0 * (w + 1) + x0];
+        local[y * w + x] = sum / ((x1 - x0) * (y1 - y0));
+      }
+    }
+    const out = new Uint8ClampedArray(N * 4);
+    const cell = Math.max(3, Math.round(4 * unit));   // screentone dot spacing
+    const cos45 = Math.SQRT1_2;
+    const cx = w / 2, cy = h / 2;
+    // speed lines: one random line per angular bucket (seeded, so stable)
+    const BUCKETS = 220, lines = [];
+    let seed = 7;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (let b = 0; b < BUCKETS; b++){
+      lines.push(rnd() < 0.55 ? { a:(b + rnd()) / BUCKETS * Math.PI * 2, w:0.0025 + rnd() * 0.006, r:0.78 + rnd() * 0.22 } : null);
+    }
+    const border = Math.max(3, Math.round(5 * unit)), margin = Math.max(3, Math.round(6 * unit));
+
+    for (let y = 0; y < h; y++){
+      for (let x = 0; x < w; x++){
+        const p = y * w + x;
+        let black;
+        const v = smooth[p];
+        if (ink[p]) black = true;
+        else if (v < tBlack) black = true;               // solid black (hair, deep shadow)
+        else if (v - local[p] > -0.035) black = false;   // paper white (skin, sky)
+        else {
+          const dv = v - local[p];
+          // rotated dot grid; darker tone → bigger dots
+          const u = (x * cos45 + y * cos45) / cell, t = (-x * cos45 + y * cos45) / cell;
+          const du = u - Math.round(u), dt = t - Math.round(t);
+          const dist = Math.sqrt(du * du + dt * dt);
+          const tone = dv < -0.13 ? 0.52 : (dv < -0.07 ? 0.38 : 0.24);  // dot radius in cell units
+          black = dist < tone;
+        }
+        // speed lines near the edges
+        if (!black){
+          const nx = (x - cx) / cx, ny = (y - cy) / cy;
+          const rho = Math.sqrt(nx * nx + ny * ny);
+          if (rho > 0.78){
+            let ang = Math.atan2(ny, nx); if (ang < 0) ang += Math.PI * 2;
+            const b = Math.floor(ang / (Math.PI * 2) * BUCKETS) % BUCKETS;
+            for (let o = -1; o <= 1 && !black; o++){
+              const L = lines[(b + o + BUCKETS) % BUCKETS];
+              if (!L || rho <= L.r) continue;
+              let da = Math.abs(ang - L.a); if (da > Math.PI) da = Math.PI * 2 - da;
+              if (da < L.w * Math.min(1, (rho - L.r) / 0.35)) black = true;
+            }
+          }
+        }
+        // panel border with a white margin
+        const edge = Math.min(x, y, w - 1 - x, h - 1 - y);
+        if (edge < margin) black = false;
+        else if (edge < margin + border) black = true;
+
+        const c = black ? 20 : 250, i = p * 4;
+        out[i] = c; out[i+1] = c; out[i+2] = black ? 22 : 246; out[i+3] = 255;
+      }
+    }
+    return out;
+  }
+
+  // Kept under the old name so the rest of the app (cache, share image)
+  // keeps working; the filter id stays "cartoon", its label is now "Manga".
   function applyCartoonEffect(img){
-    const MAX_DIM = 720;
+    const MAX_DIM = 900;
     const scale = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
     const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
-
     const c = document.createElement("canvas");
     c.width = w; c.height = h;
     const ctx = c.getContext("2d");
     ctx.drawImage(img, 0, 0, w, h);
-    const srcData = ctx.getImageData(0, 0, w, h);
-    const src = srcData.data;
-
-    const gray = new Uint8ClampedArray(w * h);
-    for (let i = 0, p = 0; i < src.length; i += 4, p++){
-      gray[p] = src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114;
-    }
-
-    const edgesRaw = new Uint8Array(w * h);
-    for (let y = 1; y < h - 1; y++){
-      for (let x = 1; x < w - 1; x++){
-        const i = y * w + x;
-        const gx = -gray[i-w-1] + gray[i-w+1] - 2*gray[i-1] + 2*gray[i+1] - gray[i+w-1] + gray[i+w+1];
-        const gy = -gray[i-w-1] - 2*gray[i-w] - gray[i-w+1] + gray[i+w-1] + 2*gray[i+w] + gray[i+w+1];
-        edgesRaw[i] = Math.sqrt(gx*gx + gy*gy) > 85 ? 1 : 0;
-      }
-    }
-    const edges = new Uint8Array(w * h);
-    for (let y = 1; y < h - 1; y++){
-      for (let x = 1; x < w - 1; x++){
-        const i = y * w + x;
-        edges[i] = (edgesRaw[i] || edgesRaw[i-1] || edgesRaw[i+1] || edgesRaw[i-w] || edgesRaw[i+w]) ? 1 : 0;
-      }
-    }
-
-    const blurred = new Uint8ClampedArray(src.length);
-    const R = 2;
-    for (let y = 0; y < h; y++){
-      for (let x = 0; x < w; x++){
-        let rSum=0, gSum=0, bSum=0, count=0;
-        for (let dy=-R; dy<=R; dy++){
-          const yy = y+dy; if (yy<0 || yy>=h) continue;
-          for (let dx=-R; dx<=R; dx++){
-            const xx = x+dx; if (xx<0 || xx>=w) continue;
-            const j = (yy*w+xx)*4;
-            rSum += src[j]; gSum += src[j+1]; bSum += src[j+2]; count++;
-          }
-        }
-        const i = (y*w+x)*4;
-        blurred[i]   = rSum/count;
-        blurred[i+1] = gSum/count;
-        blurred[i+2] = bSum/count;
-      }
-    }
-
-    const levels = 4;
-    const step = 255 / (levels - 1);
-    const satBoost = 1.6;
-    const out = ctx.createImageData(w, h);
-    const od = out.data;
-    for (let i = 0, p = 0; i < src.length; i += 4, p++){
-      if (edges[p]){
-        od[i] = 18; od[i+1] = 16; od[i+2] = 22;
-      } else {
-        let r = blurred[i], g = blurred[i+1], b = blurred[i+2];
-        const lum = r*0.299 + g*0.587 + b*0.114;
-        r = lum + (r - lum) * satBoost;
-        g = lum + (g - lum) * satBoost;
-        b = lum + (b - lum) * satBoost;
-        od[i]   = Math.round(Math.round(Math.max(0,Math.min(255,r)) / step) * step);
-        od[i+1] = Math.round(Math.round(Math.max(0,Math.min(255,g)) / step) * step);
-        od[i+2] = Math.round(Math.round(Math.max(0,Math.min(255,b)) / step) * step);
-      }
-      od[i+3] = src[i+3];
-    }
-    ctx.putImageData(out, 0, 0);
-    return c.toDataURL("image/jpeg", 0.9);
+    const px = mangaPixels(ctx.getImageData(0, 0, w, h).data, w, h);
+    ctx.putImageData(new ImageData(px, w, h), 0, 0);
+    return c.toDataURL("image/png");
   }
 
   function getCartoonDataUrl(){
@@ -1523,6 +1625,92 @@
     }
   }
 
+  /* ---------------- "Installeer als app" banner ---------------- */
+  let deferredInstallPrompt = null;
+  function isStandalone(){
+    return window.matchMedia && window.matchMedia("(display-mode: standalone)").matches
+      || window.navigator.standalone === true; // legacy iOS Safari flag
+  }
+  function daysSince(iso){
+    if (!iso) return Infinity;
+    return (Date.now() - new Date(iso).getTime()) / 86400000;
+  }
+  function maybeShowInstallBanner(){
+    if (isStandalone()) return; // already installed / running as an app
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    if (deferredInstallPrompt){
+      if (daysSince(localData.installDismissedAt) < 14) return;
+      const el = $("#installBanner");
+      if (el) el.hidden = false;
+    } else if (isIos){
+      // iOS never fires beforeinstallprompt — show manual "Add to Home Screen" instructions instead.
+      if (daysSince(localData.installIosDismissedAt) < 14) return;
+      const el = $("#installBannerIOS");
+      if (el) el.hidden = false;
+    }
+  }
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    maybeShowInstallBanner();
+  });
+  window.addEventListener("appinstalled", () => {
+    trackEvent("app-installed");
+    const el = $("#installBanner"); if (el) el.hidden = true;
+  });
+  async function installApp(){
+    const el = $("#installBanner");
+    if (!deferredInstallPrompt){ if (el) el.hidden = true; return; }
+    if (el) el.hidden = true;
+    deferredInstallPrompt.prompt();
+    try {
+      const choice = await deferredInstallPrompt.userChoice;
+      trackEvent(choice.outcome === "accepted" ? "install-accepted" : "install-dismissed");
+    } catch(e){ /* ignore */ }
+    deferredInstallPrompt = null;
+  }
+  function dismissInstallBanner(){
+    localData.installDismissedAt = new Date().toISOString();
+    saveLocalData();
+    const el = $("#installBanner"); if (el) el.hidden = true;
+  }
+  function dismissInstallBannerIOS(){
+    localData.installIosDismissedAt = new Date().toISOString();
+    saveLocalData();
+    const el = $("#installBannerIOS"); if (el) el.hidden = true;
+  }
+
+  /* ---------------- upsell card (result screen) ---------------- */
+  function renderUpsell(){
+    const wrap = $("#upsellCard");
+    if (!wrap) return;
+    const m = state.match;
+    const sug = (m && !m.isKid && typeof UPSELL_SUGGESTIONS !== "undefined") ? UPSELL_SUGGESTIONS[m.treatment.id] : null;
+    if (!sug){ wrap.innerHTML = ""; return; }
+    const lang = state.lang;
+    wrap.innerHTML = `
+      <span class="upsell-card__icon" aria-hidden="true">✨</span>
+      <span class="upsell-card__text">${sug[lang] || sug.nl}</span>
+      ${sug.price ? `<span class="upsell-card__price">${sug.price}</span>` : ""}`;
+  }
+
+  /* ---------------- newsletter signup (mailto — no backend) ---------------- */
+  function submitNewsletter(e){
+    e.preventDefault();
+    const input = $("#newsletterEmail");
+    const email = (input && input.value || "").trim();
+    if (!email) return;
+    const lang = state.lang;
+    const subject = t("newsletter_mail_subject", lang);
+    const body = t("newsletter_mail_body", lang).replace("{email}", email);
+    window.location.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    localData.newsletterSentAt = new Date().toISOString();
+    saveLocalData();
+    showToast(t("newsletter_sent_toast", lang));
+    trackEvent("newsletter-signup");
+    if (input) input.value = "";
+  }
+
   /* ---------------- analytics (optional, privacy-friendly) ----------------
      No-ops until a GoatCounter (or similar) script is added in index.html —
      see the comment there for setup instructions. Nothing is tracked without it. */
@@ -1553,11 +1741,11 @@
   /* ---------------- wire up ---------------- */
   /* ---------------- local memory (localStorage) ----------------
      Everything below stays on this device only — no account, no
-     server, nothing ever sent to Beauty & Coffee. The stamp card
-     is self-reported (shown in the salon for a manual stamp), not
-     an automated discount system. */
+     server, nothing ever sent to Beauty & Coffee. A stamp is only
+     added after scanning the rotating QR code in the salon (see
+     "stamp card via QR" below). */
   const LOCAL_KEY = "beautyCoffeeLocal_v1";
-  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], favorites:[], lastMatchAt:null, reviewPromptShownFor:null, savedProfile:null, savedAgeBracket:null };
+  const localData = { version:1, stamps:0, discoveredTreatments:[], discoveredDrinks:[], favorites:[], lastMatchAt:null, reviewPromptShownFor:null, savedProfile:null, savedAgeBracket:null, installDismissedAt:null, installIosDismissedAt:null, newsletterSentAt:null, lastStampDay:null };
 
   function loadLocalData(){
     try {
@@ -1694,19 +1882,278 @@
       <p class="loyalty-privacy">🔒 ${t("loyalty_privacy_note", state.lang)} ${t("stamp_backup_tip", state.lang)}</p>`;
   }
 
+  /* ---------------- stamp card via QR (salon mode) ----------------
+     Sandra opens the app with #salon on her own phone ("salon mode").
+     It shows a QR code + 6 digits that change every 30 seconds,
+     computed from SALON_STAMP_SECRET and the current time (the same
+     idea as a bank app's login codes). The client's app scans the code
+     and recomputes it; only a fresh, valid code gives a stamp. A photo
+     of an old code is useless a minute later. Max 1 stamp per day.
+     100% client-side and free: Web Crypto (built into the browser),
+     a bundled QR encoder (assets/lib/qr-encoder.js) and for scanning
+     the browser's own BarcodeDetector or else the open-source jsQR.
+     NB: the secret sits in data.js, so a programmer could in theory
+     compute codes — fine for a coffee stamp card, not bank security. */
+  const STAMP_STEP_SECONDS = 30;
+  const STAMP_QR_PREFIX = "BCSTAMP:";
+  const JSQR_SOURCES = ["assets/lib/jsQR.js", "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"];
+
+  function todayKey(){
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  }
+  function stampCounterNow(){ return Math.floor(Date.now() / 1000 / STAMP_STEP_SECONDS); }
+
+  let stampKeyPromise = null;
+  function getStampKey(){
+    if (!stampKeyPromise){
+      stampKeyPromise = crypto.subtle.importKey("raw", new TextEncoder().encode(SALON_STAMP_SECRET),
+        { name:"HMAC", hash:"SHA-256" }, false, ["sign"]);
+    }
+    return stampKeyPromise;
+  }
+  async function stampCodeFor(counter){
+    const key = await getStampKey();
+    const sig = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode("BC-STAMP|" + counter)));
+    const off = sig[sig.length - 1] & 15;   // RFC 4226-style dynamic truncation
+    const num = ((sig[off] & 127) << 24) | (sig[off+1] << 16) | (sig[off+2] << 8) | sig[off+3];
+    return String(num % 1000000).padStart(6, "0");
+  }
+  function stampCryptoAvailable(){
+    return !!(window.crypto && crypto.subtle && typeof SALON_STAMP_SECRET === "string" && SALON_STAMP_SECRET);
+  }
+  // Accepts the current code and the previous ~90 s (clock differences,
+  // slow scanning) plus one step ahead (a phone clock running slow).
+  async function isValidStampCode(code){
+    if (!/^\d{6}$/.test(code)) return false;
+    const now = stampCounterNow();
+    for (let k = -3; k <= 1; k++){
+      if (await stampCodeFor(now + k) === code) return true;
+    }
+    return false;
+  }
+  function parseStampPayload(text){
+    if (!text) return null;
+    const s = String(text).trim();
+    if (s.startsWith(STAMP_QR_PREFIX)) return s.slice(STAMP_QR_PREFIX.length).trim();
+    return /^\d{6}$/.test(s) ? s : null;
+  }
+
+  function loadScript(src){
+    return new Promise((resolve, reject) => {
+      const el = document.createElement("script");
+      el.src = src; el.async = true;
+      el.onload = () => resolve(); el.onerror = () => { el.remove(); reject(new Error(src)); };
+      document.head.appendChild(el);
+    });
+  }
+  async function loadFirstScript(sources, isReady){
+    if (isReady()) return true;
+    for (const src of sources){
+      try { await loadScript(src); if (isReady()) return true; } catch(e){ /* try the next source */ }
+    }
+    return false;
+  }
+
+  /* ---- client side: scan the QR (or type the 6 digits) ---- */
+  const stampScan = { stream:null, timer:null, busy:false, detector:null, lastInvalidAt:0 };
+
   function addStamp(){
-    if (typeof SALON_STAMP_PIN === "string" && SALON_STAMP_PIN){
-      const entered = prompt(t("stamp_pin_prompt", state.lang));
-      if (entered === null) return;
-      if (entered.trim() !== SALON_STAMP_PIN){ showToast(t("stamp_pin_wrong", state.lang)); return; }
-    } else if (!confirm(t("stamp_confirm_text", state.lang))) return;
-    localData.stamps++;
-    saveLocalData();
-    renderLoyaltyBlock();
-    if (localData.stamps > 0 && localData.stamps % 10 === 0){
-      showToast(t("stamp_card_full_toast", state.lang));
+    if (!stampCryptoAvailable()){ showToast(t("stamp_unsupported", state.lang)); return; }
+    if (localData.lastStampDay === todayKey()){ showToast(t("stamp_already_today", state.lang)); return; }
+    openStampScanner();
+  }
+
+  function openStampScanner(){
+    closeStampScanner();
+    const ov = document.createElement("div");
+    ov.className = "stamp-overlay"; ov.id = "stampScanOverlay";
+    ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+    ov.innerHTML = `
+      <div class="stamp-overlay__panel">
+        <button type="button" class="stamp-overlay__close" data-stamp="close" aria-label="${t("stamp_close", state.lang)}">✕</button>
+        <p class="stamp-overlay__title">☕ ${t("stamp_scan_title", state.lang)}</p>
+        <p class="stamp-overlay__hint" id="stampScanStatus">${t("stamp_scan_hint", state.lang)}</p>
+        <div class="stamp-scan__viewport">
+          <video id="stampScanVideo" playsinline autoplay muted></video>
+          <span class="stamp-scan__frame" aria-hidden="true"></span>
+        </div>
+        <label class="stamp-scan__label" for="stampCodeInput">${t("stamp_manual_label", state.lang)}</label>
+        <div class="stamp-scan__manual">
+          <input id="stampCodeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="000000">
+          <button type="button" class="btn btn--primary btn--sm" data-stamp="manual">${t("stamp_manual_button", state.lang)}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener("click", e => {
+      const a = e.target.closest("[data-stamp]");
+      if (e.target === ov || (a && a.dataset.stamp === "close")) closeStampScanner();
+      else if (a && a.dataset.stamp === "manual") submitStampCode($("#stampCodeInput").value, "manual");
+    });
+    $("#stampCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") submitStampCode(e.target.value, "manual"); });
+    startStampCamera();
+  }
+
+  function setStampStatus(key, isError){
+    const el = $("#stampScanStatus");
+    if (!el) return;
+    el.textContent = t(key, state.lang);
+    el.classList.toggle("is-error", !!isError);
+  }
+
+  async function startStampCamera(){
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("no camera API");
+      stampScan.stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:"environment" } }, audio:false });
+      const v = $("#stampScanVideo");
+      if (!v){ stopStampCamera(); return; }   // overlay closed meanwhile
+      v.srcObject = stampScan.stream;
+      await v.play().catch(()=>{});
+    } catch(e){
+      setStampStatus("stamp_camera_error", true);
+      const vp = document.querySelector(".stamp-scan__viewport"); if (vp) vp.hidden = true;
+      return;
+    }
+    // Prefer the browser's built-in QR reader; otherwise load jsQR.
+    try {
+      if ("BarcodeDetector" in window){
+        const formats = await BarcodeDetector.getSupportedFormats();
+        if (formats.includes("qr_code")) stampScan.detector = new BarcodeDetector({ formats:["qr_code"] });
+      }
+    } catch(e){ stampScan.detector = null; }
+    if (!stampScan.detector){
+      const ok = await loadFirstScript(JSQR_SOURCES, () => typeof window.jsQR === "function");
+      if (!ok){ setStampStatus("stamp_camera_error", true); return; }
+    }
+    stampScan.timer = setInterval(scanStampFrame, 180);
+  }
+
+  const stampScanCanvas = document.createElement("canvas");
+  async function scanStampFrame(){
+    const v = $("#stampScanVideo");
+    if (!v || stampScan.busy || v.readyState < 2 || !v.videoWidth) return;
+    stampScan.busy = true;
+    try {
+      let text = null;
+      if (stampScan.detector){
+        const codes = await stampScan.detector.detect(v);
+        if (codes && codes.length) text = codes[0].rawValue;
+      } else {
+        const scale = Math.min(1, 640 / Math.max(v.videoWidth, v.videoHeight));
+        const w = Math.round(v.videoWidth * scale), h = Math.round(v.videoHeight * scale);
+        stampScanCanvas.width = w; stampScanCanvas.height = h;
+        const ctx = stampScanCanvas.getContext("2d", { willReadFrequently:true });
+        ctx.drawImage(v, 0, 0, w, h);
+        const res = window.jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts:"dontInvert" });
+        if (res) text = res.data;
+      }
+      if (text) await submitStampCode(text, "scan");
+    } catch(e){ /* a bad frame — just try the next one */ }
+    stampScan.busy = false;
+  }
+
+  async function submitStampCode(raw, source){
+    const code = parseStampPayload(raw);
+    if (code && await isValidStampCode(code)){
+      if (localData.lastStampDay === todayKey()){ closeStampScanner(); showToast(t("stamp_already_today", state.lang)); return; }
+      localData.stamps++;
+      localData.lastStampDay = todayKey();
+      saveLocalData();
+      closeStampScanner();
+      renderLoyaltyBlock();
+      renderReturningUserBlock();
+      if (navigator.vibrate) navigator.vibrate(60);
+      showToast(localData.stamps % 10 === 0 ? t("stamp_card_full_toast", state.lang) : t("stamp_added_toast", state.lang));
+      trackEvent("stamp-added");
+      return;
+    }
+    // Invalid: say so (not on every video frame), keep scanning.
+    if (source === "manual" || Date.now() - stampScan.lastInvalidAt > 2500){
+      stampScan.lastInvalidAt = Date.now();
+      setStampStatus("stamp_invalid", true);
     }
   }
+
+  function stopStampCamera(){
+    clearInterval(stampScan.timer); stampScan.timer = null;
+    if (stampScan.stream){ stampScan.stream.getTracks().forEach(tr => tr.stop()); stampScan.stream = null; }
+    stampScan.detector = null; stampScan.busy = false;
+  }
+  function closeStampScanner(){
+    stopStampCamera();
+    const ov = $("#stampScanOverlay"); if (ov) ov.remove();
+  }
+
+  /* ---- salon side: show the rotating QR code (open the app with #salon) ---- */
+  const salonMode = { timer:null, counter:null, wakeLock:null };
+
+  async function openSalonMode(){
+    if (!stampCryptoAvailable()){ showToast(t("stamp_unsupported", state.lang)); return; }
+    if (typeof SALON_MODE_PIN === "string" && SALON_MODE_PIN){
+      const entered = prompt(t("salon_pin_prompt", state.lang));
+      if (entered === null || entered.trim() !== SALON_MODE_PIN){
+        if (entered !== null) showToast(t("salon_pin_wrong", state.lang));
+        return;
+      }
+    }
+    const ok = await loadFirstScript(["assets/lib/qr-encoder.js"], () => !!window.BCQRCode);
+    if (!ok){ showToast(t("stamp_unsupported", state.lang)); return; }
+    closeSalonMode();
+    const ov = document.createElement("div");
+    ov.className = "stamp-overlay stamp-overlay--salon"; ov.id = "salonOverlay";
+    ov.innerHTML = `
+      <div class="stamp-overlay__panel">
+        <button type="button" class="stamp-overlay__close" data-salon="close" aria-label="${t("stamp_close", state.lang)}">✕</button>
+        <p class="stamp-overlay__title">${t("salon_title", state.lang)}</p>
+        <canvas id="salonQr" class="salon-qr" width="600" height="600"></canvas>
+        <p class="salon-code" id="salonCode">······</p>
+        <div class="salon-timer"><div class="salon-timer__fill" id="salonTimerFill"></div></div>
+        <p class="stamp-overlay__hint">${t("salon_hint", state.lang)}</p>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener("click", e => { const a = e.target.closest("[data-salon]"); if (a) closeSalonMode(); });
+    try { if (navigator.wakeLock) salonMode.wakeLock = await navigator.wakeLock.request("screen"); } catch(e){ /* optional */ }
+    salonMode.counter = null;
+    await tickSalonMode();
+    salonMode.timer = setInterval(tickSalonMode, 1000);
+  }
+
+  async function tickSalonMode(){
+    const counter = stampCounterNow();
+    const secs = Date.now() / 1000;
+    const left = STAMP_STEP_SECONDS - (secs % STAMP_STEP_SECONDS);
+    const fill = $("#salonTimerFill");
+    if (fill) fill.style.width = `${(left / STAMP_STEP_SECONDS) * 100}%`;
+    if (counter === salonMode.counter) return;
+    salonMode.counter = counter;
+    const code = await stampCodeFor(counter);
+    const codeEl = $("#salonCode"); if (codeEl) codeEl.textContent = `${code.slice(0,3)} ${code.slice(3)}`;
+    drawQrToCanvas($("#salonQr"), STAMP_QR_PREFIX + code);
+  }
+
+  function drawQrToCanvas(canvas, text){
+    if (!canvas || !window.BCQRCode) return;
+    const { QRCode, ECL } = window.BCQRCode;
+    const qr = new QRCode(-1, ECL.M);
+    qr.addData(text); qr.make();
+    const n = qr.getModuleCount(), quiet = 4;
+    const size = canvas.width, cellPx = Math.floor(size / (n + quiet * 2));
+    const offset = Math.floor((size - cellPx * n) / 2);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = "#000000";
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++){
+      if (qr.isDark(r, c)) ctx.fillRect(offset + c * cellPx, offset + r * cellPx, cellPx, cellPx);
+    }
+  }
+
+  function closeSalonMode(){
+    clearInterval(salonMode.timer); salonMode.timer = null;
+    if (salonMode.wakeLock){ salonMode.wakeLock.release().catch(()=>{}); salonMode.wakeLock = null; }
+    const ov = $("#salonOverlay"); if (ov) ov.remove();
+    if (location.hash === "#salon") window.history.replaceState(null, "", location.pathname + location.search);
+  }
+  function checkSalonHash(){ if (location.hash === "#salon") openSalonMode(); }
 
   function resetLocalData(){
     if (!confirm(t("reset_confirm_text", state.lang))) return;
@@ -1767,6 +2214,11 @@
     renderReturningUserBlock();
     showStep("welcome");
     setupEditorDrag();
+    const newsletterForm = $("#newsletterForm");
+    if (newsletterForm) newsletterForm.addEventListener("submit", submitNewsletter);
+    setTimeout(maybeShowInstallBanner, 2500); // give the page a moment to settle first
+    checkSalonHash();                                   // salon mode: open the app with #salon
+    window.addEventListener("hashchange", checkSalonHash);
 
     $$(".lang-btn").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
@@ -1809,6 +2261,9 @@
       if (action === "open-pricelist") goTo("pricelist");
       if (action === "open-houserules") goTo("houserules");
       if (action === "another-fact") anotherFact();
+      if (action === "install-app") installApp();
+      if (action === "dismiss-install") dismissInstallBanner();
+      if (action === "dismiss-install-ios") dismissInstallBannerIOS();
       if (action === "toggle-slot") toggleSlot(el.dataset.slot);
       if (action === "another-match") rerollMatch();
       if (action === "toggle-fav") toggleFavorite();

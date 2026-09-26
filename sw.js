@@ -2,7 +2,7 @@
    Network-first for the app shell: online users always get the latest
    files immediately after a deploy. Offline users fall back to whatever
    was last cached, so the app still works without a connection. */
-const CACHE_NAME = "beauty-coffee-v15";
+const CACHE_NAME = "beauty-coffee-v17";
 const ASSETS = [
   "./",
   "./index.html",
@@ -14,7 +14,8 @@ const ASSETS = [
   "./manifest.json",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
-  "./assets/logo-transparent.png"
+  "./assets/logo-transparent.png",
+  "./assets/lib/qr-encoder.js"
 ];
 
 self.addEventListener("install", event => {

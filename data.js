@@ -726,13 +726,22 @@ const BOOKING_SLOTS = [
 ];
 
 /* ============================================================
-   SALON STAMP PIN — a short code that only you know.
-   Leave "" to keep the old behaviour (client confirms herself).
-   Fill in e.g. "4821" to require the code before a stamp is added.
-   NB: this is a deterrent, not real security (the code sits in
-   this file). Good enough to stop casual self-stamping.
+   STAMP CARD VIA QR (salon mode)
+   Open the app on your own phone with #salon at the end of the
+   address, e.g. https://sbw888.github.io/beauty_and_coffee_mechelen/#salon
+   It shows a QR code + 6 digits that change every 30 seconds.
+   The client scans it in her app to get a stamp (max 1 per day).
+
+   SALON_STAMP_SECRET: a random key both phones use to compute the
+   codes. Changing it makes all older codes invalid — fine, the codes
+   only live 30 seconds anyway. Do not make it short or guessable.
+   SALON_MODE_PIN: optional code asked before salon mode opens
+   (e.g. "4821"). Leave "" to open salon mode without a PIN.
+   NB: both sit in this public file — a deterrent for casual users,
+   not real security. Good enough for a coffee stamp card.
    ============================================================ */
-const SALON_STAMP_PIN = "";
+const SALON_STAMP_SECRET = "b97d679a76827355855fbc9eb42c73b322825d8df5456e47";
+const SALON_MODE_PIN = "";
 
 /* ============================================================
    PRICE LIST (tab "Prijslijst") — prices as on the website
@@ -1360,4 +1369,35 @@ const MORE_FACT_POOLS = {
     hotstone:["GV"], swedish:["GV"], swedishbackneck:["GV"], swedishlegs:["GV"],
     backwrap:["GV"], slimmassage:["GV"], cupping:["GV"], cuppingpeeling:["GV"]
   }
+};
+
+/* ============================================================
+   UPSELL SUGGESTIONS — small add-ons shown on the result screen.
+   One suggestion per treatment id (optional — a treatment with
+   none simply shows no upsell card). Keep it to genuinely cheap,
+   quick add-ons; this is a nudge, not a hard sell.
+   ============================================================ */
+function U(nl, en, fr, price){ return { nl, en, fr, price }; }
+const UPSELL_SUGGESTIONS = {
+  swedish: U("Voeg Hot Stone toe aan je massage", "Add Hot Stone to your massage", "Ajoutez le Hot Stone à votre massage", "+€20"),
+  swedishbackneck: U("Voeg Hot Stone toe aan je massage", "Add Hot Stone to your massage", "Ajoutez le Hot Stone à votre massage", "+€20"),
+  swedishlegs: U("Voeg een handpeeling toe", "Add a hand peeling", "Ajoutez un gommage des mains", "+€10"),
+  detoxback: U("Voeg een Hot Stone gelaatsmassage toe", "Add a Hot Stone facial massage", "Ajoutez un massage du visage Hot Stone", "+€20"),
+  harmonizingbody: U("Voeg een handpeeling &amp; -massage toe", "Add a hand peeling & massage", "Ajoutez un gommage et massage des mains", "+€10"),
+  cupping: U("Vraag naar Cupping Body Renewal voor een volgende zone", "Ask about Cupping Body Renewal for another zone", "Demandez le Cupping Body Renewal pour une autre zone", "€120"),
+  hotstone: U("Voeg LED-therapie toe aan je volgende gelaatsverzorging", "Add LED therapy to your next facial", "Ajoutez la luminothérapie LED à votre prochain soin du visage", "+€10"),
+  hydrapeel: U("Voeg een collageenvliesmasker toe", "Add a collagen sheet mask", "Ajoutez un masque en tissu au collagène", "+€20"),
+  signaturefacial: U("Voeg een Hot Stone gelaatsmassage toe", "Add a Hot Stone facial massage", "Ajoutez un massage du visage Hot Stone", "+€20"),
+  fillme: U("Voeg LED-therapie toe", "Add LED therapy", "Ajoutez la luminothérapie LED", "+€10"),
+  fruitacid: U("Voeg een anti-aging paraffinemasker toe", "Add an anti-aging paraffin mask", "Ajoutez un masque à la paraffine anti-âge", "+€20"),
+  liftsummere: U("Voeg een peel-off masker toe", "Add a peel-off mask", "Ajoutez un masque peel-off", "+€15"),
+  antiagefacial: U("Voeg een collageenvliesmasker toe", "Add a collagen sheet mask", "Ajoutez un masque en tissu au collagène", "+€20"),
+  manicure: U("Voeg een SPA-supplement toe", "Add a SPA add-on", "Ajoutez un supplément SPA", "+€30"),
+  pedicure: U("Voeg een SPA-supplement toe", "Add a SPA add-on", "Ajoutez un supplément SPA", "+€30"),
+  pedicureexpress: U("Kies de uitgebreide pedicure voor eeltverzorging en massage", "Choose the full pedicure for callus care and massage", "Optez pour la pédicure complète (callosités et massage)", "€35"),
+  glammakeup: U("Voeg valse wimpers toe (breng je eigen wimpers en lijm mee)", "Add false lashes (bring your own lashes and glue)", "Ajoutez des faux cils (apportez vos cils et colle)", null),
+  browlift: U("Combineer met Lash Lift voor een complete look", "Combine with a Lash Lift for a complete look", "Combinez avec un Lash Lift pour un look complet", "€75"),
+  lashlift: U("Combineer met Brow Lift voor een complete look", "Combine with a Brow Lift for a complete look", "Combinez avec un Brow Lift pour un look complet", "€75"),
+  oksel: U("Combineer met bovenlip-ontharing", "Combine with upper-lip hair removal", "Combinez avec l'épilation de la lèvre supérieure", "+€10"),
+  been: U("Voeg een harmoniserende verzorging toe voor een zachtere huid", "Add a harmonising treatment for softer skin", "Ajoutez un soin harmonisant pour une peau plus douce", "€35")
 };

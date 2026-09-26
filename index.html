@@ -62,6 +62,24 @@
   <div class="progress__track"><div class="progress__fill" id="progressFill"></div></div>
 </nav>
 
+<div class="install-banner" id="installBanner" hidden>
+  <span class="install-banner__icon" aria-hidden="true">📲</span>
+  <div class="install-banner__text">
+    <p class="install-banner__title" data-i18n="install_banner_title">Installeer Beauty &amp; Coffee</p>
+    <p class="install-banner__sub" data-i18n="install_banner_sub">Voeg toe aan je beginscherm — geen App Store nodig.</p>
+  </div>
+  <button type="button" class="btn btn--primary install-banner__btn" data-action="install-app" data-i18n="install_banner_button">Installeren</button>
+  <button type="button" class="install-banner__close" data-action="dismiss-install" aria-label="Sluiten">✕</button>
+</div>
+<div class="install-banner install-banner--ios" id="installBannerIOS" hidden>
+  <span class="install-banner__icon" aria-hidden="true">📲</span>
+  <div class="install-banner__text">
+    <p class="install-banner__title" data-i18n="install_banner_title">Installeer Beauty &amp; Coffee</p>
+    <p class="install-banner__sub" data-i18n="install_banner_ios_sub">Tik op ⬆️ Deel, dan op "Zet op beginscherm".</p>
+  </div>
+  <button type="button" class="install-banner__close" data-action="dismiss-install-ios" aria-label="Sluiten">✕</button>
+</div>
+
 <main class="app" id="app">
 
   <!-- WELCOME -->
@@ -321,6 +339,7 @@
     </div>
 
     <div class="result-details" id="resultDetails"></div>
+    <div class="upsell-card" id="upsellCard"></div>
     <div class="match-tools" id="matchTools"></div>
     <div class="result-blocks" id="resultBlocks"></div>
     <div class="skinfact" id="skinFactCard"></div>
@@ -391,6 +410,16 @@
   </section>
 
 </main>
+
+<section class="newsletter-card" id="newsletterCard">
+  <p class="newsletter-card__title" data-i18n="newsletter_title">☕ Blijf op de hoogte</p>
+  <p class="newsletter-card__sub" data-i18n="newsletter_sub">Nieuwe behandelingen, acties zoals de grabbelton, en workshop-data — af en toe een mailtje, nooit spam.</p>
+  <form id="newsletterForm" class="newsletter-card__form">
+    <input type="email" id="newsletterEmail" class="newsletter-card__input" required autocomplete="email" data-i18n-placeholder="newsletter_placeholder" placeholder="jij@voorbeeld.be">
+    <button type="submit" class="btn btn--primary" data-i18n="newsletter_button">Inschrijven</button>
+  </form>
+  <p class="newsletter-card__note" data-i18n="newsletter_note">Opent je e-mailapp met een kant-en-klaar bericht — jij verstuurt het zelf.</p>
+</section>
 
 <footer class="app-footer">
   <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>

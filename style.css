@@ -544,3 +544,86 @@ body{
 .skinfact__disclaimer{ font-size:11.5px; color:var(--espresso-60); margin:8px 0 0; }
 .sun-fact{ font-size:13px; line-height:1.5; color:var(--espresso-60); margin:14px 2px 0; }
 .sun-fact:empty{ display:none; }
+
+/* ============ INSTALL BANNER ============ */
+.install-banner{
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
+  display:flex; align-items:center; gap:12px;
+  background: var(--espresso); color: var(--cream);
+  padding: 12px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+}
+.install-banner__icon{ font-size:24px; flex-shrink:0; }
+.install-banner__text{ flex:1; min-width:0; }
+.install-banner__title{ font-family:var(--font-display); font-weight:600; font-size:14px; margin:0; }
+.install-banner__sub{ font-size:12px; color: var(--cream-70, rgba(246,240,230,0.75)); margin:2px 0 0; }
+.install-banner__btn{ flex-shrink:0; padding:8px 16px; font-size:13px; }
+.install-banner__close{
+  flex-shrink:0; background:none; border:none; color: rgba(246,240,230,0.7);
+  font-size:16px; line-height:1; padding:4px; cursor:pointer;
+}
+.install-banner--ios .install-banner__sub{ line-height:1.4; }
+
+/* ============ UPSELL CARD ============ */
+.upsell-card{ margin:0 0 16px; }
+.upsell-card:not(:empty){
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  background: linear-gradient(135deg, #fff8ea, var(--cream));
+  border:1px dashed var(--gold); border-radius: var(--radius-m);
+  padding:12px 16px;
+}
+.upsell-card__icon{ font-size:18px; }
+.upsell-card__text{ flex:1; min-width:160px; font-size:13.5px; color:var(--espresso); }
+.upsell-card__price{ font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--gold-ink); white-space:nowrap; }
+
+/* ============ NEWSLETTER CARD ============ */
+.newsletter-card{
+  max-width: 560px; margin: 0 auto 24px; padding: 0 20px;
+  text-align:center;
+}
+.newsletter-card__title{ font-family:var(--font-display); font-weight:600; font-size:16px; margin:0 0 4px; }
+.newsletter-card__sub{ font-size:12.5px; color:var(--espresso-60); margin:0 0 12px; line-height:1.5; }
+.newsletter-card__form{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.newsletter-card__input{
+  flex:1; min-width:200px; font-family:var(--font-body); font-size:14px; color:var(--espresso);
+  background:#fff; border:1px solid var(--espresso-30); border-radius:999px;
+  padding:11px 16px;
+}
+.newsletter-card__note{ font-size:11px; color:var(--espresso-60); margin:8px 0 0; }
+
+/* ===== Stamp card via QR: scanner (client) + salon mode ===== */
+.stamp-overlay{
+  position:fixed; inset:0; z-index:40; display:flex; align-items:center; justify-content:center;
+  padding:18px; background:rgba(36,26,20,.72); backdrop-filter:blur(4px);
+}
+.stamp-overlay__panel{
+  position:relative; width:100%; max-width:420px; max-height:100%; overflow:auto;
+  background:var(--cream); color:var(--espresso); border-radius:var(--radius-l);
+  padding:26px 20px 22px; box-shadow:var(--shadow-card); text-align:center;
+}
+.stamp-overlay__close{
+  position:absolute; top:10px; right:12px; width:36px; height:36px; border:none; border-radius:50%;
+  background:var(--espresso-12); color:var(--espresso); font-size:16px; cursor:pointer;
+}
+.stamp-overlay__title{ font-family:var(--font-display); font-size:22px; margin:4px 0 6px; }
+.stamp-overlay__hint{ font-size:13.5px; color:var(--espresso-60); margin:0 0 14px; line-height:1.45; }
+.stamp-overlay__hint.is-error{ color:#9b2c2c; font-weight:500; }
+.stamp-scan__viewport{
+  position:relative; width:100%; aspect-ratio:1/1; border-radius:var(--radius-m); overflow:hidden;
+  background:#000; margin-bottom:14px;
+}
+.stamp-scan__viewport video{ width:100%; height:100%; object-fit:cover; display:block; }
+.stamp-scan__frame{
+  position:absolute; inset:18%; border:3px solid var(--gold-light); border-radius:14px;
+  box-shadow:0 0 0 999px rgba(0,0,0,.28);
+}
+.stamp-scan__label{ display:block; font-size:12.5px; color:var(--espresso-60); margin-bottom:8px; }
+.stamp-scan__manual{ display:flex; gap:8px; justify-content:center; }
+.stamp-scan__manual input{
+  width:11ch; font:600 20px/1 var(--font-body); letter-spacing:.14em; text-align:center;
+  padding:10px 8px; border:1.5px solid var(--espresso-30); border-radius:var(--radius-s); background:#fff;
+}
+.stamp-overlay--salon .stamp-overlay__panel{ background:#fff; }
+.salon-qr{ width:min(78vw, 340px); height:auto; aspect-ratio:1/1; image-rendering:pixelated; display:block; margin:6px auto 8px; }
+.salon-code{ font:600 34px/1 var(--font-body); letter-spacing:.12em; margin:4px 0 12px; }
+.salon-timer{ height:6px; border-radius:99px; background:var(--espresso-12); overflow:hidden; margin:0 auto 14px; max-width:260px; }
+.salon-timer__fill{ height:100%; width:100%; background:var(--gold); transition:width 1s linear; }
