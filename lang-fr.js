@@ -164,7 +164,7 @@
   "newsletter_sub": "Nouveaux soins, promotions comme le tonneau à surprises, et dates d'ateliers — un e-mail de temps en temps, jamais de spam.",
   "newsletter_placeholder": "vous@exemple.be",
   "newsletter_button": "S'inscrire",
-  "newsletter_note": "Ouvre votre application e-mail avec un message prêt à l'emploi — vous l'envoyez vous-même.",
+  "newsletter_note": "Ouvre la page d'inscription sur notre site (en néerlandais). Vous confirmez votre adresse par e-mail et pouvez vous désinscrire à tout moment.",
   "newsletter_mail_subject": "Inscription newsletter Beauty & Coffee",
   "newsletter_mail_body": "Bonjour Sandra,\n\nJe voudrais rester informé(e) des nouveaux soins et promotions chez Beauty & Coffee.\n\nMon adresse e-mail : {email}\n\nCordialement,",
   "newsletter_sent_toast": "Presque fini — envoyez l'e-mail qui vient de s'ouvrir.",

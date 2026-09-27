@@ -934,6 +934,7 @@
   }
 
   const BOOKING_EMAIL = "sandra.truong@ikmail.com";
+  const NEWSLETTER_URL = "https://sanmakeupstudio.wordpress.com/nieuwsbrief/"; // WordPress.com-nieuwsbrief (Jetpack Subscribe-blok)
   const BOOKING_WHATSAPP = "32499221901"; // wa.me format: country code + number, no + or spaces
   function drinkFullFor(m){
     if (!m) return "";
@@ -1745,21 +1746,13 @@
       ${sug.price ? `<span class="upsell-card__price">${sug.price}</span>` : ""}`;
   }
 
-  /* ---------------- newsletter signup (mailto — no backend) ---------------- */
-  function submitNewsletter(e){
-    e.preventDefault();
-    const input = $("#newsletterEmail");
-    const email = (input && input.value || "").trim();
-    if (!email) return;
-    const lang = state.lang;
-    const subject = t("newsletter_mail_subject", lang);
-    const body = t("newsletter_mail_body", lang).replace("{email}", email);
-    window.location.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  /* ---------------- newsletter signup (WordPress.com-nieuwsbrief) ----------------
+     De inschrijving zelf gebeurt op de website (dubbele opt-in via WordPress/Jetpack).
+     De app opent enkel die pagina en onthoudt lokaal dat erop geklikt werd. */
+  function openNewsletter(){
     localData.newsletterSentAt = new Date().toISOString();
     saveLocalData();
-    showToast(t("newsletter_sent_toast", lang));
     trackEvent("newsletter-signup");
-    if (input) input.value = "";
   }
 
   /* ---------------- analytics (optional, privacy-friendly) ----------------
@@ -2265,8 +2258,11 @@
     renderReturningUserBlock();
     showStep("welcome");
     setupEditorDrag();
-    const newsletterForm = $("#newsletterForm");
-    if (newsletterForm) newsletterForm.addEventListener("submit", submitNewsletter);
+    const newsletterLink = $("#newsletterLink");
+    if (newsletterLink){
+      newsletterLink.href = NEWSLETTER_URL;
+      newsletterLink.addEventListener("click", openNewsletter);
+    }
     setTimeout(maybeShowInstallBanner, 2500); // give the page a moment to settle first
     checkSalonHash();                                   // salon mode: open the app with #salon
     window.addEventListener("hashchange", checkSalonHash);
