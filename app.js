@@ -10,7 +10,7 @@
     profile: null,        // 'kind' | 'man' | 'vrouw'
     ageBracket: null,     // '16-24' | '25-34' | '35-44' | '45plus'
     sunExposed: null,     // bool
-    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false },
+    healthFlags: { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false, sport:false, diet:false },
     kidsDrink: null,      // 'water' | 'chocolate'
     mood: null,
     complaintText: "",
@@ -262,16 +262,27 @@
       }
     }
 
+    // Sport and diet are two separate choices (both may be ticked);
+    // "neither" clears them. The matching logic still only needs
+    // dietExercise = sport OR diet (for the slimming massage).
     const dietWrap = $("#dietOptions");
     if (dietWrap){
       dietWrap.innerHTML = "";
-      [["yes",true],["no",false]].forEach(([key,val]) => {
+      const hf = state.healthFlags;
+      [["sport","🏃"],["diet","🥗"],["none","🙅"]].forEach(([key, icon]) => {
+        const selected = key === "none" ? (!hf.sport && !hf.diet) : !!hf[key];
         const tile = document.createElement("button");
         tile.type = "button";
-        tile.className = "option-tile" + (state.healthFlags.dietExercise===val ? " is-selected" : "");
-        tile.innerHTML = `<span class="option-tile__icon">${val ? "🥗" : "🍽️"}</span>
-          <span class="option-tile__title">${t(`diet_${key}`, state.lang)}</span>`;
-        tile.addEventListener("click", () => { state.healthFlags.dietExercise = val; renderHealthOptions(); });
+        tile.className = "option-tile" + (selected ? " is-selected" : "");
+        tile.setAttribute("aria-pressed", selected ? "true" : "false");
+        tile.innerHTML = `<span class="option-tile__icon">${icon}</span>
+          <span class="option-tile__title">${t(`diet_opt_${key}`, state.lang)}</span>`;
+        tile.addEventListener("click", () => {
+          if (key === "none"){ hf.sport = false; hf.diet = false; }
+          else hf[key] = !hf[key];
+          hf.dietExercise = hf.sport || hf.diet;
+          renderHealthOptions();
+        });
         dietWrap.appendChild(tile);
       });
     }
@@ -1843,7 +1854,7 @@
     stopCamera();
     cameraFacing = "user";
     state.profile = null; state.ageBracket = null; state.sunExposed = null; state.kidsDrink = null;
-    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false };
+    state.healthFlags = { phlebitis:false, contactLenses:false, menstruation:false, pregnant:false, musclePain:false, roaccutane:false, dietExercise:false, sport:false, diet:false };
     state.mood = null; state.category = null; state.temperature = null; state.caffeine = null; state.complaintText = "";
     const complaintEl = $("#complaintInput"); if (complaintEl) complaintEl.value = "";
     state.milk = "none"; state.extras = []; state.context = null;
