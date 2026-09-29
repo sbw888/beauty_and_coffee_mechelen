@@ -171,6 +171,8 @@
   "newsletter_placeholder": "vous@exemple.be",
   "newsletter_button": "S'inscrire",
   "newsletter_note": "Ouvre votre application e-mail avec un message prêt à l'emploi — vous l'envoyez vous-même.",
+  "newsletter_web_button": "S'inscrire via mon site",
+  "newsletter_web_note": "Vous vous inscrivez sur mon site et confirmez d'un clic dans votre boîte mail. Désinscription possible à tout moment en bas de chaque e-mail.",
   "newsletter_mail_subject": "Inscription newsletter Beauty & Coffee",
   "newsletter_mail_body": "Bonjour Sandra,\n\nJe voudrais rester informé(e) des nouveaux soins et promotions chez Beauty & Coffee.\n\nMon adresse e-mail : {email}\n\nCordialement,",
   "newsletter_sent_toast": "Presque fini — envoyez l'e-mail qui vient de s'ouvrir.",

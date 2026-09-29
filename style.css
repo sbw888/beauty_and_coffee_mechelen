@@ -720,3 +720,5 @@ body{
   font-size:13.5px; box-shadow:var(--shadow-card);
 }
 .update-banner[hidden]{ display:none; }
+.newsletter-card__form[hidden], .newsletter-card__web[hidden]{ display:none !important; }
+.newsletter-card__web{ display:inline-flex; margin:4px auto 0; text-decoration:none; }

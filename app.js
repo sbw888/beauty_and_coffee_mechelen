@@ -1776,6 +1776,20 @@
       ${sug.price ? `<span class="upsell-card__price">${sug.price}</span>` : ""}`;
   }
 
+  /* ---------------- newsletter signup ----------------
+     With NEWSLETTER_URL (data.js) filled in, the card shows one button to
+     the WordPress newsletter page (proper list, double opt-in, unsubscribe
+     link). Without it, the old ready-made-email fallback stays. */
+  function setupNewsletterCard(){
+    const url = (typeof NEWSLETTER_URL === "string") ? NEWSLETTER_URL.trim() : "";
+    const link = $("#newsletterWebLink"), form = $("#newsletterForm");
+    const note = document.querySelector('.newsletter-card__note');
+    if (!url || !link) return;
+    link.href = url; link.hidden = false;
+    if (form) form.hidden = true;
+    if (note) note.setAttribute("data-i18n", "newsletter_web_note");
+    link.addEventListener("click", () => trackEvent("newsletter-web"));
+  }
   /* ---------------- newsletter signup (mailto — no backend) ---------------- */
   function submitNewsletter(e){
     e.preventDefault();
@@ -2318,6 +2332,8 @@
     setupEditorDrag();
     const newsletterForm = $("#newsletterForm");
     if (newsletterForm) newsletterForm.addEventListener("submit", submitNewsletter);
+    setupNewsletterCard();
+    applyI18n();
     setTimeout(maybeShowInstallBanner, 2500); // give the page a moment to settle first
     checkSalonHash();                                   // salon mode: open the app with #salon
     window.addEventListener("hashchange", checkSalonHash);
