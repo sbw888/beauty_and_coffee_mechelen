@@ -89,6 +89,7 @@
     renderSunFact();
     if (typeof HOUSE_RULES !== "undefined" && $('[data-step="houserules"]').classList.contains("is-active")) renderHouseRules();
     if (typeof localData !== "undefined") renderReturningUserBlock();
+    renderSocialLinks();
   }
 
   function setLang(lang){
@@ -105,6 +106,7 @@
 
   function showStep(name){
     $$(".step").forEach(sec => sec.classList.toggle("is-active", sec.dataset.step === name));
+    const topBack = $("#topbarBack"); if (topBack) topBack.hidden = (name === "welcome");
     updateProgress(name);
 
     if (name === "pricelist") {
@@ -136,15 +138,32 @@
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
+  /* Every step is also an entry in the browser history, so the phone's own
+     back button / back gesture works like the "Terug" button (feedback:
+     people could not find the way back). NB: "history" (lower case) is the
+     app's own step list; the browser's is window.history. */
   function goTo(name){
     history.push(name);
+    try { window.history.pushState({ bcStep:name }, ""); } catch(e){ /* ignore */ }
     showStep(name);
   }
-
-  function back(){
+  function stepBack(){
     if (history.length > 1) history.pop();
-    const prev = history[history.length-1];
-    showStep(prev);
+    showStep(history[history.length-1]);
+  }
+  function back(){
+    if (window.history.state && window.history.state.bcStep && history.length > 1) window.history.back();  // → popstate → stepBack()
+    else stepBack();
+  }
+  window.addEventListener("popstate", () => {
+    if (document.getElementById("stampScanOverlay")) { closeStampScanner(); return; }
+    if (history.length > 1) stepBack();
+  });
+  // Result screen: go back to the first question with every answer kept,
+  // so someone who clicked the wrong profile can simply change it.
+  function editAnswers(){
+    history = ["welcome"];
+    goTo("profile");
   }
 
   /* ---------------- option rendering ---------------- */
@@ -934,7 +953,6 @@
   }
 
   const BOOKING_EMAIL = "sandra.truong@ikmail.com";
-  const NEWSLETTER_URL = "https://sanmakeupstudio.wordpress.com/nieuwsbrief/"; // WordPress.com-nieuwsbrief (Jetpack Subscribe-blok)
   const BOOKING_WHATSAPP = "32499221901"; // wa.me format: country code + number, no + or spaces
   function drinkFullFor(m){
     if (!m) return "";
@@ -1746,13 +1764,21 @@
       ${sug.price ? `<span class="upsell-card__price">${sug.price}</span>` : ""}`;
   }
 
-  /* ---------------- newsletter signup (WordPress.com-nieuwsbrief) ----------------
-     De inschrijving zelf gebeurt op de website (dubbele opt-in via WordPress/Jetpack).
-     De app opent enkel die pagina en onthoudt lokaal dat erop geklikt werd. */
-  function openNewsletter(){
+  /* ---------------- newsletter signup (mailto — no backend) ---------------- */
+  function submitNewsletter(e){
+    e.preventDefault();
+    const input = $("#newsletterEmail");
+    const email = (input && input.value || "").trim();
+    if (!email) return;
+    const lang = state.lang;
+    const subject = t("newsletter_mail_subject", lang);
+    const body = t("newsletter_mail_body", lang).replace("{email}", email);
+    window.location.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     localData.newsletterSentAt = new Date().toISOString();
     saveLocalData();
+    showToast(t("newsletter_sent_toast", lang));
     trackEvent("newsletter-signup");
+    if (input) input.value = "";
   }
 
   /* ---------------- analytics (optional, privacy-friendly) ----------------
@@ -1767,6 +1793,16 @@
   }
 
   /* ---------------- reset ---------------- */
+  /* ---------------- social links + version ---------------- */
+  function renderSocialLinks(){
+    const links = [];
+    if (SOCIAL_LINKS.instagram) links.push(`<a class="social-link social-link--ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener">📷 Instagram</a>`);
+    if (SOCIAL_LINKS.facebook)  links.push(`<a class="social-link social-link--fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener">👍 Facebook</a>`);
+    const html = links.length ? `<p class="social-links__title">${t("social_follow", state.lang)}</p><div class="social-links__row">${links.join("")}</div>` : "";
+    ["#socialLinks", "#socialLinksResult"].forEach(sel => { const el = $(sel); if (el) el.innerHTML = html; });
+    const v = $("#appVersion"); if (v) v.textContent = `${t("app_version_label", state.lang)} ${APP_VERSION}`;
+  }
+
   function resetApp(){
     stopCamera();
     cameraFacing = "user";
@@ -2258,11 +2294,8 @@
     renderReturningUserBlock();
     showStep("welcome");
     setupEditorDrag();
-    const newsletterLink = $("#newsletterLink");
-    if (newsletterLink){
-      newsletterLink.href = NEWSLETTER_URL;
-      newsletterLink.addEventListener("click", openNewsletter);
-    }
+    const newsletterForm = $("#newsletterForm");
+    if (newsletterForm) newsletterForm.addEventListener("submit", submitNewsletter);
     setTimeout(maybeShowInstallBanner, 2500); // give the page a moment to settle first
     checkSalonHash();                                   // salon mode: open the app with #salon
     window.addEventListener("hashchange", checkSalonHash);
@@ -2305,6 +2338,8 @@
       if (action === "share") shareImage();
       if (action === "download") downloadImage();
       if (action === "restart") resetApp();
+      if (action === "edit-answers") editAnswers();
+      if (action === "reload-app") window.location.reload();
       if (action === "open-pricelist") goTo("pricelist");
       if (action === "open-houserules") goTo("houserules");
       if (action === "another-fact") anotherFact();
@@ -2360,9 +2395,27 @@
   document.addEventListener("DOMContentLoaded", init);
 
   /* ---------------- PWA service worker ---------------- */
+  /* Updates without clearing the cache (feedback: people kept seeing old
+     prices and did not know how to clear their cache). The browser checks
+     for a new sw.js on every start and whenever the app comes back to the
+     foreground. When a new version takes over: on the welcome screen the
+     page simply reloads; in the middle of a match a small banner offers
+     "Vernieuwen", so nobody loses their answers. */
   if ("serviceWorker" in navigator){
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch(()=>{});
+      let hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register("sw.js", { updateViaCache:"none" }).then(reg => {
+        reg.update().catch(()=>{});
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") reg.update().catch(()=>{});
+        });
+      }).catch(()=>{});
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (!hadController){ hadController = true; return; }   // very first install: nothing old to replace
+        const current = history[history.length - 1];
+        if (current === "welcome") window.location.reload();
+        else { const b = $("#updateBanner"); if (b) b.hidden = false; }
+      });
     });
   }
 })();

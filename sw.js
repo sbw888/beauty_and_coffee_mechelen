@@ -36,8 +36,15 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  // Own files: always ask GitHub whether there is a newer version
+  // ("no-cache" = revalidate, not "never store"), so a deploy is visible
+  // at once instead of after the browser's own cache expires.
+  const sameOrigin = new URL(event.request.url).origin === self.location.origin;
+  const netFetch = sameOrigin
+    ? fetch(event.request.url, { cache:"no-cache", credentials:"same-origin" })
+    : fetch(event.request);
   event.respondWith(
-    fetch(event.request)
+    netFetch
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)).catch(()=>{});

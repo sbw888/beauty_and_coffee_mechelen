@@ -44,6 +44,7 @@
 
 <!-- ===== TOP BAR ===== -->
 <header class="topbar">
+  <button type="button" class="topbar-back" id="topbarBack" data-action="back" hidden><span aria-hidden="true">‹</span> <span data-i18n="back_button">Terug</span></button>
   <div class="brand-mark">
     <img src="assets/icon-192.png" alt="Beauty & Coffee logo" class="brand-mark__logo">
     <span class="brand-mark__text">Beauty <span class="amp">&amp;</span> Coffee</span>
@@ -333,6 +334,10 @@
   <section class="step" data-step="result">
     <div class="bean-divider" aria-hidden="true"><span class="bean"></span></div>
     <h2 class="step__title" id="resultTitle" data-i18n="result_title">Jouw Beauty &amp; Coffee match</h2>
+    <div class="result-edit">
+      <button type="button" class="btn btn--outline btn--sm" data-action="edit-answers" data-i18n="edit_answers_button">✏️ Antwoorden aanpassen</button>
+      <button type="button" class="btn btn--outline btn--sm" data-action="restart" data-i18n="restart_button">Opnieuw beginnen</button>
+    </div>
 
     <div class="result-card" id="resultCardWrap">
       <canvas id="resultCanvas" class="result-card__canvas"></canvas>
@@ -353,6 +358,8 @@
       <p data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend, ook 's avonds — geen afspraken op weekdagen en (tijdelijk) geen huisbezoeken, wegens avondopleiding.</p>
       <p data-i18n="practical_info_parking">Parkeren: aan het begin van de straat (net vóór je links afslaat naar de woonhuizen) zijn parkeerplaatsen — vandaar is het maar 2 minuten stappen tot bij mij. Kom je met de bakfiets? Die mag je vastzetten bij de fietsen.</p>
     </div>
+
+    <div class="social-links social-links--result" id="socialLinksResult"></div>
 
     <div class="rules-teaser" id="houseRulesTeaser"></div>
 
@@ -414,10 +421,11 @@
 <section class="newsletter-card" id="newsletterCard">
   <p class="newsletter-card__title" data-i18n="newsletter_title">☕ Blijf op de hoogte</p>
   <p class="newsletter-card__sub" data-i18n="newsletter_sub">Nieuwe behandelingen, acties zoals de grabbelton, en workshop-data — af en toe een mailtje, nooit spam.</p>
-  <div class="newsletter-card__form">
-    <a id="newsletterLink" class="btn btn--primary" href="https://sanmakeupstudio.wordpress.com/nieuwsbrief/" target="_blank" rel="noopener" data-i18n="newsletter_button">Inschrijven</a>
-  </div>
-  <p class="newsletter-card__note" data-i18n="newsletter_note">Opent de inschrijfpagina op onze website. Je bevestigt je adres via een mailtje en kan je altijd uitschrijven.</p>
+  <form id="newsletterForm" class="newsletter-card__form">
+    <input type="email" id="newsletterEmail" class="newsletter-card__input" required autocomplete="email" data-i18n-placeholder="newsletter_placeholder" placeholder="jij@voorbeeld.be">
+    <button type="submit" class="btn btn--primary" data-i18n="newsletter_button">Inschrijven</button>
+  </form>
+  <p class="newsletter-card__note" data-i18n="newsletter_note">Opent je e-mailapp met een kant-en-klaar bericht — jij verstuurt het zelf.</p>
 </section>
 
 <footer class="app-footer">
@@ -430,8 +438,14 @@
     <p data-i18n="privacy_p3"></p>
     <p data-i18n="privacy_p4"></p>
   </details>
+  <div class="social-links" id="socialLinks"></div>
   <button type="button" class="footer-reset-btn" data-action="reset-local-data" data-i18n="footer_reset_button">Wis mijn lokale gegevens</button>
+  <p class="app-version" id="appVersion"></p>
 </footer>
+<div class="update-banner" id="updateBanner" hidden>
+  <span data-i18n="update_banner_text">Er is een nieuwe versie van de app.</span>
+  <button type="button" class="btn btn--primary btn--sm" data-action="reload-app" data-i18n="update_banner_button">Vernieuwen</button>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

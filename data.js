@@ -744,6 +744,19 @@ const BOOKING_SLOTS = [
 ];
 
 /* ============================================================
+   VERSION + SOCIAL MEDIA
+   APP_VERSION is shown at the bottom of the app, so you can ask a client
+   "which version do you see?". Raise it with every update (and the
+   CACHE_NAME in sw.js too).
+   SOCIAL_LINKS: leave a link "" to hide that button.
+   ============================================================ */
+const APP_VERSION = "v19 · 28/09/2026";
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
+  facebook: ""   // ← plak hier de link naar je Facebook-pagina
+};
+
+/* ============================================================
    STAMP CARD VIA QR (salon mode)
    Open the app on your own phone with #salon at the end of the
    address, e.g. https://sbw888.github.io/beauty_and_coffee_mechelen/#salon

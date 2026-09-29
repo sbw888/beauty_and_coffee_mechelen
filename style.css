@@ -683,3 +683,39 @@ body{
 @media (prefers-reduced-motion: reduce){
   .drink-pop *, .drink-pop.is-playing *{ animation:none !important; }
 }
+
+/* ===== Navigation made easier to find (client feedback) ===== */
+.topbar-back{
+  display:inline-flex; align-items:center; gap:4px; margin-right:8px;
+  padding:8px 12px; border-radius:999px; border:1.5px solid var(--espresso-30);
+  background:rgba(255,255,255,.55); color:var(--espresso);
+  font:600 13px/1 var(--font-body); cursor:pointer;
+}
+.topbar-back[hidden]{ display:none; }
+.topbar-back span[aria-hidden]{ font-size:20px; line-height:.6; }
+/* the bottom "Terug" buttons were grey text only: now a visible outline button */
+.step__nav .btn--ghost[data-action="back"]{
+  border:1.5px solid var(--espresso-30); color:var(--espresso); padding:13px 18px;
+}
+.step__nav .btn--ghost[data-action="back"]::before{ content:"‹"; font-size:18px; line-height:.6; }
+.result-edit{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:-4px 0 16px; }
+
+/* ===== Social links ===== */
+.social-links{ text-align:center; margin:14px 0; }
+.social-links:empty{ display:none; }
+.social-links__title{ font-size:12.5px; color:var(--espresso-60); margin:0 0 8px; }
+.social-links__row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.social-link{
+  display:inline-flex; align-items:center; gap:6px; padding:10px 16px; border-radius:999px;
+  border:1.5px solid var(--espresso-30); color:var(--espresso); text-decoration:none; font-weight:600; font-size:13.5px;
+}
+.app-version{ font-size:11px; color:var(--espresso-60); text-align:center; margin-top:10px; }
+
+/* ===== "New version" banner ===== */
+.update-banner{
+  position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom, 0px)); z-index:45;
+  display:flex; align-items:center; gap:12px; justify-content:space-between;
+  padding:12px 14px; border-radius:var(--radius-m); background:var(--espresso); color:#fff;
+  font-size:13.5px; box-shadow:var(--shadow-card);
+}
+.update-banner[hidden]{ display:none; }
