@@ -933,13 +933,13 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v23 · 29/09/2026";
+const APP_VERSION = "v24 · 29/09/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".
    Filled in → the app sends people to that page (WordPress newsletter,
    they confirm by email). Left "" → old behaviour: a ready-made email. */
-const NEWSLETTER_URL = "";
+const NEWSLETTER_URL = "https://sanmakeupstudio.wordpress.com/nieuwsbrief/";
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
   facebook: "https://www.facebook.com/profile.php?id=100071510416360"   // zakelijke pagina (niet het privéprofiel)
