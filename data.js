@@ -492,7 +492,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink de eerste dag wel extra veel water.",
                 en:"You can shower normally once you're home — just drink extra water on the first day." } },
 
-  { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
+  { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een gezellige privéworkshop waarin je leert hoe je jouw make-up mooi en praktisch kunt aanbrengen — met een uitgebreide Beauty & Coffee-tafel vol verse hapjes en een affogato met vanille-ijs als afsluiter.",
                en:"A fun private workshop where you'll learn how to apply your makeup beautifully and practically — with an extensive Beauty & Coffee spread of fresh treats and an affogato with vanilla ice cream to finish." },
@@ -501,7 +501,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen specifieke nazorg nodig — reinig de huid zoals gewoonlijk aan het einde van de dag.",
                 en:"No specific aftercare needed — cleanse the skin as usual at the end of the day." } },
 
-  { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€50 (75') · €35 p.p. bij 3-4 personen",
+  { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
     homecare:{ category:"facial" },
     benefits:{ nl:"Ontdek een eenvoudige verzorgingsroutine en leer hoe je jouw look daarna met een mooie touch-up afwerkt.",
                en:"Discover a simple skincare routine and learn how to finish your look afterwards with a lovely touch-up." },
@@ -510,7 +510,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Gebruik dagelijks SPF na een gelaatsbehandeling en hydrateer 's avonds goed.",
                 en:"Use daily SPF after a facial treatment and moisturize well in the evening." } },
 
-  { id:"tastingbasic", name:"Coffee Tasting Basic", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€60 p.p. (120')",
+  { id:"tastingbasic", name:"Coffee Tasting Basic", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€60 – €85 p.p. (120′)",
     homecare:{ category:"soap", soapHint:["koffie"] },
     benefits:{ nl:"Leer de basis van koffie proeven: aroma's, zuurgraad en afdronk herkennen.",
                en:"Learn the basics of coffee tasting: recognizing aroma, acidity and aftertaste." },
@@ -519,7 +519,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen nazorg nodig — geniet gerust van nog een kopje na afloop.",
                 en:"No aftercare needed — feel free to enjoy another cup afterwards." } },
 
-  { id:"tastingadvanced", name:"Coffee Tasting Advanced", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€65 p.p. (180')",
+  { id:"tastingadvanced", name:"Coffee Tasting Advanced", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€65 – €95 p.p. (180′)",
     homecare:{ category:"soap", soapHint:["koffie"] },
     benefits:{ nl:"Verdiep je in origin-vergelijkingen en brouwmethodes als een echte barista.",
                en:"Dive deeper into origin comparisons and brewing methods like a true barista." },
@@ -750,10 +750,10 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v19 · 28/09/2026";
+const APP_VERSION = "v21 · 29/09/2026";
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
-  facebook: ""   // ← plak hier de link naar je Facebook-pagina
+  facebook: "https://www.facebook.com/profile.php?id=100071510416360"   // zakelijke pagina (niet het privéprofiel)
 };
 
 /* ============================================================
@@ -871,13 +871,38 @@ const PRICE_LIST = [
     PI("Energetische lichaamspakking full body","Energising full body wrap","120′","€110","Verfrissende peeling, algenpakking en massage.","Refreshing peeling, seaweed wrap and massage.")
   ]},
   { id:"workshops", icon:"☕", title:{ nl:"Beauty & Koffie workshops", en:"Beauty & Coffee workshops" },
-    note:{ nl:"Privéworkshops in kleine groepen van 3–4 personen. Minstens 1 week op voorhand inschrijven.", en:"Private workshops in small groups of 3–4 people. Please register at least 1 week in advance." },
+    note:{ nl:"Minstens 1 week op voorhand inschrijven. Inclusief gebruik van alle professionele materialen, specialty coffee/thee/matcha & verse verwennerij.",
+           en:"Please register at least 1 week in advance. Includes use of all professional materials, specialty coffee/tea/matcha & fresh treats." },
     items:[
-    PI("Beauty Make-up Privéworkshop","Beauty Make-up Private Workshop","75′","€50",null,null,"3–4 personen: €35 p.p.","3–4 people: €35 p.p."),
-    PI("Beauty Gelaatsverzorging & Touch-up Make-up Privéworkshop","Beauty Facial & Touch-up Make-up Private Workshop","75′","€50",null,null,"3–4 personen: €35 p.p.","3–4 people: €35 p.p."),
-    PI("Koffieproeverij Basis","Coffee tasting – Basic","120′","€60 p.p.","Ontdek koffiearoma’s, het verhaal van boon tot specialty coffee en vergelijk meerdere koffies.","Discover coffee aromas, the story from bean to specialty coffee, and compare several coffees.",  "3–4 personen","3–4 people"),
-    PI("Koffieproeverij Verdiepend","Coffee tasting – Advanced","180′","€65 p.p.","Meer over verwerkingsprocessen, variëteiten, omgevingsfactoren, brandprofielen en smaken.","More on processing methods, varieties, growing conditions, roast profiles and flavours.","3–4 personen","3–4 people"),
-    PI("Barista Privéworkshop","Barista Private Workshop","120′","€175","Zet thuis zelf espresso, espresso-afgeleiden en slow coffees (V60, French Press, Phin, Mokapot).","Learn to make espresso, espresso-based drinks and slow coffees at home (V60, French Press, Phin, Moka pot).")
+    PI("Teambuilding Beauty & Pamper Experience","Team building Beauty & Pamper Experience","","€275",
+       "Uitgebreide workshop naar keuze (gelaatsverzorging met make-up touch-up, beauty make-up of threading), specialty coffee bar, welkomstdrankje, zoete en hartige hapjes, affogato (vanille-ijs met espresso of matcha) en een luxe attentie voor elke deelnemer.",
+       "Extended workshop of your choice (facial with make-up touch-up, beauty make-up or threading), specialty coffee bar, welcome drink, sweet and savoury bites, affogato (vanilla ice cream with espresso or matcha) and a luxury gift for every participant.",
+       "Per groep, max. 4 deelnemers","Per group, max. 4 participants"),
+    PI("Teambuilding Specialty Coffee Experience","Team building Specialty Coffee Experience","","€295",
+       "Uitgebreide koffieworkshop naar keuze (Specialty Koffieproeverij Basis of Verdiepend), specialty coffee bar, welkomstdrankje, zoete en hartige hapjes en affogato (vanille-ijs met espresso of matcha).",
+       "Extended coffee workshop of your choice (Specialty Coffee Tasting Basic or Advanced), specialty coffee bar, welcome drink, sweet and savoury bites and affogato (vanilla ice cream with espresso or matcha).",
+       "Per groep, max. 4 deelnemers","Per group, max. 4 participants"),
+    PI("Beauty & Skincare Workshop","Beauty & Skincare Workshop","75′","€75",
+       "Gelaatsverzorging, beauty make-up of threading. Ontdek welke technieken en producten jouw huid doen stralen, met persoonlijk advies, alle materialen, specialty coffee, thee en lekkernijen.",
+       "Facial care, beauty make-up or threading. Discover which techniques and products make your skin glow, with personal advice, all materials, specialty coffee, tea and treats.",
+       "Privé 1 op 1: €75 · Duo: €65 p.p. · 3–4 personen: €55 p.p.","Private 1-to-1: €75 · Duo: €65 p.p. · 3–4 people: €55 p.p."),
+    PI("Cat Eye & Magnetische Gellak Manicure Workshop","Cat Eye & Magnetic Gel Polish Manicure Workshop","90–120′","€85",
+       "Leer zelf een prachtig magnetisch ‘Cat Eye’-effect op je nagels maken. Inclusief alle professionele lakken, magneten en UV/LED-lampen, plus specialty coffee/thee en huisgemaakte zoetigheden.",
+       "Learn to create a beautiful magnetic ‘cat eye’ effect on your nails. Includes all professional polishes, magnets and UV/LED lamps, plus specialty coffee/tea and homemade sweets.",
+       "Privé 1 op 1: €85 · Duo: €75 p.p. · Max. 2 deelnemers. Je nagels moeten bij aanvang volledig vrij zijn van lak, gellak of gelnagels.",
+       "Private 1-to-1: €85 · Duo: €75 p.p. · Max. 2 participants. Your nails must be completely free of polish, gel polish or gel nails at the start."),
+    PI("Koffieproeverij Basis","Coffee tasting – Basic","120′","€60 – €85 p.p.",
+       "Ontdek koffiearoma’s, het verhaal van boon tot specialty coffee en vergelijk en beoordeel meerdere koffies. Inclusief koffie/thee of water.",
+       "Discover coffee aromas, the story from bean to specialty coffee, and compare and rate several coffees. Includes coffee/tea or water.",
+       "Duo: €85 p.p. · 3–4 personen: €60 p.p.","Duo: €85 p.p. · 3–4 people: €60 p.p."),
+    PI("Koffieproeverij Verdiepend","Coffee tasting – Advanced","180′","€65 – €95 p.p.",
+       "Meer over verwerkingsprocessen, variëteiten, omgevingsfactoren, brandprofielen en smaken. Inclusief koffie/thee of water.",
+       "More on processing methods, varieties, growing conditions, roast profiles and flavours. Includes coffee/tea or water.",
+       "Duo: €95 p.p. · 3–4 personen: €65 p.p.","Duo: €95 p.p. · 3–4 people: €65 p.p."),
+    PI("Barista Privéworkshop","Barista Private Workshop","120′","€175",
+       "Zet thuis zelf espresso’s, espresso-afgeleiden en slow coffees met een V60, French Press, Phin of Mokapot. Inclusief koffie/thee of water en een leuke attentie.",
+       "Learn to make espressos, espresso-based drinks and slow coffees at home with a V60, French Press, Phin or Moka pot. Includes coffee/tea or water and a nice little gift.",
+       "Privé 1 op 1","Private 1-to-1")
   ]}
 ];
 

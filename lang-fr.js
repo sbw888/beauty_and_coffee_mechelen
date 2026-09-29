@@ -135,6 +135,7 @@
   "drink_pop_replay": "Touchez pour rejouer",
   "edit_answers_button": "✏️ Modifier mes réponses",
   "social_follow": "Suivez Beauty & Coffee",
+  "social_tag_hint": "Vous partagez votre match sur Instagram ou Facebook ? Identifiez-nous avec {handle}, pour que nous le voyions aussi ! 💛",
   "app_version_label": "Version",
   "update_banner_text": "Une nouvelle version de l'app est disponible (p. ex. nouveaux prix).",
   "update_banner_button": "Actualiser",
@@ -1046,37 +1047,49 @@
   },
   "workshops": {
    "title": "Ateliers Beauty & Café",
-   "note": "Ateliers privés en petits groupes de 3 à 4 personnes. Inscription au moins 1 semaine à l'avance.",
+   "note": "Inscription au moins 1 semaine à l'avance. Utilisation de tout le matériel professionnel, specialty coffee/thé/matcha & douceurs fraîches incluses.",
    "items": [
     [
-     "Beauty Make-up Privéworkshop",
-     "Atelier privé maquillage Beauty",
-     null,
-     "3–4 personnes : €35 p.p."
+     "Teambuilding Beauty & Pamper Experience",
+     "Team building Beauty & Pamper Experience",
+     "Atelier approfondi au choix (soin du visage avec retouche maquillage, maquillage beauté ou threading), bar à specialty coffee, boisson de bienvenue, bouchées sucrées et salées, affogato (glace vanille avec espresso ou matcha) et une attention luxueuse pour chaque participant.",
+     "Par groupe, max. 4 participants"
     ],
     [
-     "Beauty Gelaatsverzorging & Touch-up Make-up Privéworkshop",
-     "Atelier privé soin du visage & retouche maquillage Beauty",
-     null,
-     "3–4 personnes : €35 p.p."
+     "Teambuilding Specialty Coffee Experience",
+     "Team building Specialty Coffee Experience",
+     "Atelier café approfondi au choix (Dégustation Specialty Coffee Base ou Approfondie), bar à specialty coffee, boisson de bienvenue, bouchées sucrées et salées et affogato (glace vanille avec espresso ou matcha).",
+     "Par groupe, max. 4 participants"
+    ],
+    [
+     "Beauty & Skincare Workshop",
+     "Atelier Beauty & Skincare",
+     "Soin du visage, maquillage beauté ou threading. Découvrez les techniques et produits qui font rayonner votre peau, avec conseils personnalisés, tout le matériel, specialty coffee, thé et douceurs.",
+     "Privé 1 à 1 : €75 · Duo : €65 p.p. · 3–4 personnes : €55 p.p."
+    ],
+    [
+     "Cat Eye & Magnetische Gellak Manicure Workshop",
+     "Atelier manucure Cat Eye & vernis gel magnétique",
+     "Apprenez à créer vous-même un superbe effet magnétique « Cat Eye » sur vos ongles. Tous les vernis professionnels, aimants et lampes UV/LED inclus, ainsi que specialty coffee/thé et douceurs maison.",
+     "Privé 1 à 1 : €85 · Duo : €75 p.p. · Max. 2 participants. Vos ongles doivent être totalement libres de vernis, vernis gel ou ongles en gel au début."
     ],
     [
      "Koffieproeverij Basis",
      "Dégustation de café – Base",
-     "Découvrez les arômes du café, l'histoire de la graine au specialty coffee et comparez plusieurs cafés.",
-     "3–4 personnes"
+     "Découvrez les arômes du café, l'histoire de la graine au specialty coffee, et comparez et évaluez plusieurs cafés. Café/thé ou eau inclus.",
+     "Duo : €85 p.p. · 3–4 personnes : €60 p.p."
     ],
     [
      "Koffieproeverij Verdiepend",
      "Dégustation de café – Approfondie",
-     "En savoir plus sur les procédés de traitement, les variétés, les facteurs environnementaux, les profils de torréfaction et les saveurs.",
-     "3–4 personnes"
+     "En savoir plus sur les procédés de traitement, les variétés, les facteurs environnementaux, les profils de torréfaction et les saveurs. Café/thé ou eau inclus.",
+     "Duo : €95 p.p. · 3–4 personnes : €65 p.p."
     ],
     [
      "Barista Privéworkshop",
      "Atelier privé barista",
-     "Préparez chez vous espresso, boissons à base d'espresso et cafés lents (V60, French Press, Phin, cafetière moka).",
-     null
+     "Préparez chez vous espressos, boissons à base d'espresso et cafés lents avec un V60, French Press, Phin ou cafetière moka. Café/thé ou eau et une petite attention inclus.",
+     "Privé 1 à 1"
     ]
    ]
   }

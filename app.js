@@ -1222,7 +1222,7 @@
         <ul class="price-items">
           ${items.map(it => `<li class="price-item">
             <div class="price-item__main"><span class="price-item__name">${it.n[lang]}</span><span class="price-item__price">${it.price}</span></div>
-            <div class="price-item__meta">${it.time}${it.d ? " · " + it.d[lang] : ""}</div>
+            <div class="price-item__meta">${[it.time, it.d && it.d[lang]].filter(Boolean).join(" · ")}</div>
             ${it.note ? `<div class="price-item__note">${it.note[lang]}</div>` : ""}
           </li>`).join("")}
         </ul>
@@ -1639,6 +1639,17 @@
     ctx.fillStyle = "rgba(246,240,230,0.7)";
     ctx.font = "italic 21px 'Playfair Display', Georgia, serif";
     ctx.fillText("Where Beauty Meets Coffee", 44, H-72);
+    // Instagram handle on the image itself: Instagram (story/post) ignores any
+    // caption sent along via the share menu, so the tag must be in the picture.
+    const igHandle = socialHandle();
+    if (igHandle){
+      ctx.save();
+      ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "rgba(246,240,230,0.92)";
+      ctx.font = "600 22px Jost, Arial, sans-serif";
+      ctx.fillText("📸 " + igHandle, W - 44, H - 72);
+      ctx.restore();
+    }
 
     // Site link — drawn in its own high-contrast pill so it always survives
     // sharing (WhatsApp and friends often strip any caption text you send).
@@ -1680,7 +1691,8 @@
     // several share targets, WhatsApp included, drop accompanying text when an
     // image file is shared — the caption text/url below is a bonus for apps that
     // do keep it (Telegram, Signal, Mail, ...), not the only way the link travels.
-    const shareText = t("share_text", state.lang) + " " + SITE_URL;
+    const handle = socialHandle();
+    const shareText = t("share_text", state.lang) + (handle ? ` ${handle} #beautyandcoffeemechelen` : "") + " " + SITE_URL;
     if (navigator.canShare && navigator.canShare({ files:[file] })){
       try { await navigator.share({ files:[file], title:"Beauty & Coffee", text: shareText, url: SITE_URL }); }
       catch(err){ /* user cancelled */ }
@@ -1794,12 +1806,22 @@
 
   /* ---------------- reset ---------------- */
   /* ---------------- social links + version ---------------- */
+  // "@beauty_and_coffee_mechelen", taken from the Instagram link in data.js
+  function socialHandle(){
+    const m = (SOCIAL_LINKS.instagram || "").match(/instagram\.com\/([^/?#]+)/i);
+    return m ? "@" + m[1] : "";
+  }
   function renderSocialLinks(){
     const links = [];
     if (SOCIAL_LINKS.instagram) links.push(`<a class="social-link social-link--ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener">📷 Instagram</a>`);
     if (SOCIAL_LINKS.facebook)  links.push(`<a class="social-link social-link--fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener">👍 Facebook</a>`);
     const html = links.length ? `<p class="social-links__title">${t("social_follow", state.lang)}</p><div class="social-links__row">${links.join("")}</div>` : "";
-    ["#socialLinks", "#socialLinksResult"].forEach(sel => { const el = $(sel); if (el) el.innerHTML = html; });
+    const foot = $("#socialLinks"); if (foot) foot.innerHTML = html;
+    const res = $("#socialLinksResult");
+    if (res){
+      const h = socialHandle();
+      res.innerHTML = html + (h ? `<p class="social-links__tag">${t("social_tag_hint", state.lang).replace("{handle}", `<strong>${h}</strong>`)}</p>` : "");
+    }
     const v = $("#appVersion"); if (v) v.textContent = `${t("app_version_label", state.lang)} ${APP_VERSION}`;
   }
 
