@@ -802,7 +802,7 @@
   function generateMatch(){
     if (state.profile === "kind"){
       const drinkDef = KIDS_DRINKS.find(d => d.id === state.kidsDrink) || KIDS_DRINKS[0];
-      const homecarePick = pickHomecareProduct("hand", null);
+      const homecarePick = pickHomecareProduct("hand", null, "kind");
       const soapPick = pickSecondarySoap(homecarePick ? homecarePick.categoryId : null);
       state.match = {
         isKid: true,
@@ -847,7 +847,7 @@
       drink = { name: pickRandom(pool), origin:null, notes:null };
     }
 
-    const homecarePick = pickHomecareProduct(treatmentObj.homecare.category, treatmentObj.homecare.soapHint);
+    const homecarePick = pickHomecareProduct(treatmentObj.homecare.category, treatmentObj.homecare.soapHint, state.profile);
     const soapPick = pickSecondarySoap(homecarePick ? homecarePick.categoryId : null);
 
     // build a copy of the treatment so we can safely append a lens warning

@@ -164,7 +164,7 @@ const PRODUCT_CATEGORIES = {
       { id:"bodymoist", name:"24h Body Moisturizer (250 ml)",
         usage:{ nl:"Dagelijks na het douchen over het lichaam aanbrengen en inmasseren.",
                 en:"Daily after showering, apply over the body and massage in." } },
-      { id:"bust", name:"Perfect Bust Formula (150 ml)",
+      { id:"bust", name:"Perfect Bust Formula (150 ml)", genders:["vrouw"],   // never suggested to men
         usage:{ nl:"Dagelijks op buste en decolleté aanbrengen met opwaartse, cirkelvormige bewegingen.",
                 en:"Daily, apply to the bust and décolleté using upward, circular movements." } }
     ]
@@ -240,11 +240,13 @@ const HOMECARE_FALLBACK_ORDER = ["facial","body","hand","foot","soap","eye","sun
    happens exactly once, at match-generation time) and returns just its ids.
    Call resolveHomecareText() with the current language whenever rendering,
    so a language switch always shows correctly translated text. */
-function pickHomecareProduct(categoryId, soapHints){
+/* profile: "vrouw" / "man" / "kind". A product with a `genders` list is only
+   suggested to those profiles (e.g. the bust cream only to women). */
+function pickHomecareProduct(categoryId, soapHints, profile){
   const tryCategory = (catId) => {
     const cat = PRODUCT_CATEGORIES[catId];
     if (!cat || !cat.inStock) return null;
-    let pool = cat.products;
+    let pool = cat.products.filter(p => !p.genders || !profile || p.genders.includes(profile));
     if (catId === "soap" && soapHints && soapHints.length){
       const hinted = pool.filter(p => soapHints.includes(p.id));
       if (hinted.length) pool = hinted;
@@ -933,7 +935,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v24 · 29/09/2026";
+const APP_VERSION = "v25 · 29/09/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".
