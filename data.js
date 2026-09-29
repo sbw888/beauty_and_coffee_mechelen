@@ -492,7 +492,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Eenmaal thuis kun je gewoon douchen zoals normaal — drink de eerste dag wel extra veel water.",
                 en:"You can shower normally once you're home — just drink extra water on the first day." } },
 
-  { id:"makeupworkshop", name:"Private Beauty Makeup Workshop", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
+  { id:"makeupworkshop", name:"Beauty & Skincare Workshop – Make-up", moods:["group"], genders:["vrouw"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
     homecare:{ category:"facial" },
     benefits:{ nl:"Een gezellige privéworkshop waarin je leert hoe je jouw make-up mooi en praktisch kunt aanbrengen — met een uitgebreide Beauty & Coffee-tafel vol verse hapjes en een affogato met vanille-ijs als afsluiter.",
                en:"A fun private workshop where you'll learn how to apply your makeup beautifully and practically — with an extensive Beauty & Coffee spread of fresh treats and an affogato with vanilla ice cream to finish." },
@@ -501,7 +501,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Geen specifieke nazorg nodig — reinig de huid zoals gewoonlijk aan het einde van de dag.",
                 en:"No specific aftercare needed — cleanse the skin as usual at the end of the day." } },
 
-  { id:"facialworkshop", name:"Private Facial & Touch-Up Workshop", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
+  { id:"facialworkshop", name:"Beauty & Skincare Workshop – Gelaatsverzorging", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€75 (75′) · duo €65 p.p. · 3–4 p. €55 p.p.",
     homecare:{ category:"facial" },
     benefits:{ nl:"Ontdek een eenvoudige verzorgingsroutine en leer hoe je jouw look daarna met een mooie touch-up afwerkt.",
                en:"Discover a simple skincare routine and learn how to finish your look afterwards with a lovely touch-up." },
@@ -582,7 +582,7 @@ const TREATMENTS_CATALOG = [
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, deodorant, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
                 en:"Avoid direct sun exposure, tanning beds, deodorant, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
 
-  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"vanaf €30 (Onderbenen, 20')",
+  { id:"been", name:"Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"€30 onderbenen (20′) · €40 met knieën (35′)",
     homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
     benefits:{ nl:"Wekenlang gladde benen met een fijnere, langzamere hergroei dan bij scheren.",
                en:"Weeks of smooth legs, with finer, slower regrowth than shaving." },
@@ -616,7 +616,187 @@ const TREATMENTS_CATALOG = [
     funfact:{ nl:"Net als bij de rug groeit het haar na herhaalde behandelingen vaak dunner terug.",
               en:"As with the back, hair often grows back thinner after repeated treatments." },
     aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
-                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } }
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  /* ---- added from the price list (v22) ---- */
+  { id:"expressfacial", name:"Express Gelaatsverzorging", moods:["energetic","focus"], genders:["vrouw","man"], sunSensitive:false, price:"€60 (30′)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Een snelle maar grondige opfrisbeurt: reiniging, dieptereiniging, een crèmemasker en dagcrème — ideaal als je weinig tijd hebt en toch een frisse huid wil.",
+               en:"A quick yet thorough refresh: cleansing, deep cleansing, a cream mask and day cream — ideal when you're short on time but still want fresh skin." },
+    funfact:{ nl:"Ook een korte verzorging helpt: een propere huid neemt de actieve stoffen van een masker en dagcrème beter op.",
+              en:"Even a short treatment helps: clean skin absorbs the active ingredients of a mask and day cream better." },
+    aftercare:{ nl:"Gebruik de komende dagen dagelijks een SPF, drink voldoende water en laat je huid de eerste 24 uur zoveel mogelijk rusten zonder zware make-up.",
+                en:"Use SPF daily for the next few days, drink enough water and let your skin rest as much as possible for the first 24 hours without heavy make-up." } },
+
+  { id:"acnefacial", name:"Acnécontrole – Équilibre Pureté Citron Vert", moods:["focus"], genders:["vrouw","man"], sunSensitive:false, price:"€65 (60′)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Een zuiverende gelaatsverzorging voor een onzuivere of vette huid, met een huidanalyse bij de eerste behandeling zodat de verzorging echt op jouw huid is afgestemd.",
+               en:"A purifying facial for blemish-prone or oily skin, with a skin analysis at the first treatment so the care is truly tailored to your skin." },
+    funfact:{ nl:"Onzuiverheden ontstaan vaak wanneer talg en dode huidcellen samen een porie afsluiten — regelmatige, zachte reiniging helpt dat te voorkomen.",
+              en:"Blemishes often form when sebum and dead skin cells together block a pore — regular, gentle cleansing helps prevent this." },
+    caution:{ nl:"Gebruik je medicatie tegen acne (bv. Roaccutane) of een voorschrift van de dermatoloog? Laat het vooraf weten, dan passen we de behandeling aan.",
+              en:"Are you using acne medication (e.g. Roaccutane) or a dermatologist's prescription? Let us know beforehand so we can adapt the treatment." },
+    aftercare:{ nl:"Raak je gezicht zo weinig mogelijk aan, gebruik de eerste 24 uur geen zware make-up en bescherm je huid dagelijks met een lichte, niet-vette SPF.",
+                en:"Touch your face as little as possible, avoid heavy make-up for the first 24 hours and protect your skin daily with a light, non-greasy SPF." } },
+
+  { id:"bridaltrial", name:"Bridal Proefmake-up", moods:["luxury","energetic"], genders:["vrouw"], sunSensitive:false, price:"€65 (60′)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Een rustige proefsessie om samen jouw bruidslook uit te werken: we testen kleuren, houdbaarheid en stijl, zodat je op je grote dag zeker bent van het resultaat.",
+               en:"A relaxed trial session to create your bridal look together: we test colours, longevity and style, so you're confident about the result on your big day." },
+    funfact:{ nl:"Een proefmake-up plan je best een paar weken voor de trouw — dan kan je de look ook eens laten zien op foto en bij daglicht.",
+              en:"A trial is best planned a few weeks before the wedding — that way you can also see the look in photos and in daylight." },
+    aftercare:{ nl:"Verwijder je make-up 's avonds grondig met een milde reiniger en breng daarna een hydraterende crème aan.",
+                en:"Remove your make-up thoroughly in the evening with a mild cleanser, then apply a moisturising cream." } },
+
+  { id:"bridalpackage", name:"Bridal Proefmake-up & Bruidsmake-up", moods:["luxury"], genders:["vrouw"], sunSensitive:false, price:"€135 (2×60′)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Het volledige pakket: een proefsessie om je look uit te werken én de make-up op je trouwdag zelf, zodat alles tot in de puntjes klopt.",
+               en:"The full package: a trial session to create your look and the make-up on your wedding day itself, so every detail is right." },
+    funfact:{ nl:"Minerale make-up is licht en ademend, en blijft daardoor ook tijdens een lange trouwdag comfortabel aanvoelen.",
+              en:"Mineral make-up is light and breathable, so it stays comfortable even during a long wedding day." },
+    aftercare:{ nl:"Verwijder je make-up 's avonds grondig met een milde reiniger en breng daarna een hydraterende crème aan.",
+                en:"Remove your make-up thoroughly in the evening with a mild cleanser, then apply a moisturising cream." } },
+
+  { id:"weddingguest", name:"Huwelijksdag Make-up (per persoon)", moods:["group","energetic"], genders:["vrouw"], sunSensitive:false, price:"€40 (30′)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Een verzorgde make-up voor mama, getuige, bruidsmeisje of gast op de trouwdag — mooi afgestemd op de bruidslook.",
+               en:"A polished make-up for mum, witness, bridesmaid or guest on the wedding day — nicely matched to the bridal look." },
+    funfact:{ nl:"Met een kleine groep op dezelfde dag maken we een planning, zodat iedereen op tijd en ontspannen klaar is.",
+              en:"For a small group on the same day we make a schedule, so everyone is ready on time and relaxed." },
+    aftercare:{ nl:"Verwijder je make-up 's avonds grondig met een milde reiniger en breng daarna een hydraterende crème aan.",
+                en:"Remove your make-up thoroughly in the evening with a mild cleanser, then apply a moisturising cream." } },
+
+  { id:"browtint", name:"Brow Tinting", moods:["energetic"], genders:["vrouw","man"], sunSensitive:false, price:"€20 (15′)",
+    homecare:{ category:"eye" },
+    benefits:{ nl:"Het kleuren van je wenkbrauwharen voor een vollere, meer gedefinieerde blik — zonder dagelijks bijwerken met potlood.",
+               en:"Tinting your brow hairs for a fuller, more defined look — without filling them in with pencil every day." },
+    funfact:{ nl:"Lichte of grijze wenkbrauwharen worden met een tint ineens zichtbaar, waardoor de wenkbrauw voller oogt.",
+              en:"Light or grey brow hairs suddenly become visible with a tint, making the brow look fuller." },
+    caution:{ nl:"Bij een eerste kleuring doen we best 48 uur vooraf een huidtest, om een allergische reactie uit te sluiten.",
+              en:"For a first tint it's best to do a patch test 48 hours beforehand to rule out an allergic reaction." },
+    aftercare:{ nl:"Maak je wenkbrauwen de eerste 24 uur niet nat, vermijd sauna en stoom, en gebruik geen peeling op die zone.",
+                en:"Don't get your brows wet for the first 24 hours, avoid sauna and steam, and don't use an exfoliant on that area." } },
+
+  { id:"browshaping", name:"Brow Shaping (mappen & ontharen)", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"€25 (20′)",
+    homecare:{ category:"eye" },
+    benefits:{ nl:"We meten je wenkbrauwen op maat van jouw gezicht (mapping) en brengen ze daarna mooi in vorm door te ontharen.",
+               en:"We measure your brows to suit your face (mapping) and then shape them beautifully by removing hair." },
+    funfact:{ nl:"Bij brow mapping bepalen we begin, hoogste punt en einde van je wenkbrauw aan de hand van je neus, pupil en ooghoek.",
+              en:"With brow mapping we determine the start, arch and end of your brow based on your nose, pupil and eye corner." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"lashtint", name:"Lash Tinting", moods:["energetic"], genders:["vrouw"], sunSensitive:false, lensWarning:true, price:"€20 (15′)",
+    homecare:{ category:"eye" },
+    benefits:{ nl:"Het kleuren van je wimpers voor een intensere blik, ook zonder mascara — handig voor vakantie, sport of een drukke week.",
+               en:"Tinting your lashes for a more intense look, even without mascara — handy for holidays, sport or a busy week." },
+    funfact:{ nl:"De uiteinden van wimpers zijn vaak lichter dan de basis; door te kleuren lijken ze ineens langer.",
+              en:"The tips of lashes are often lighter than the base; tinting makes them suddenly look longer." },
+    caution:{ nl:"Bij een eerste kleuring doen we best 48 uur vooraf een huidtest, om een allergische reactie uit te sluiten.",
+              en:"For a first tint it's best to do a patch test 48 hours beforehand to rule out an allergic reaction." },
+    aftercare:{ nl:"Maak je wimpers de eerste 24 uur niet nat, wrijf niet in je ogen en vermijd sauna en stoom.",
+                en:"Don't get your lashes wet for the first 24 hours, don't rub your eyes, and avoid sauna and steam." } },
+
+  { id:"manicureexpress", name:"Express Manicure", moods:["energetic","relax"], genders:["vrouw","man"], sunSensitive:false, price:"€30 (30′)",
+    homecare:{ category:"hand" },
+    benefits:{ nl:"Snel verzorgde handen: knippen, vijlen, nagelriemen verzorgen en een voedende handcrème.",
+               en:"Quickly groomed hands: trimming, filing, cuticle care and a nourishing hand cream." },
+    funfact:{ nl:"Een nagel groeit gemiddeld zo'n 3 millimeter per maand — een vingernagel volledig vernieuwen duurt dus enkele maanden.",
+              en:"A nail grows on average about 3 millimetres a month — so fully renewing a fingernail takes several months." },
+    aftercare:{ nl:"Smeer je handen en nagelriemen dagelijks in en draag handschoenen bij afwas of schoonmaak.",
+                en:"Moisturise your hands and cuticles daily and wear gloves when washing up or cleaning." } },
+
+  { id:"kin", name:"Kinontharing", moods:["energetic"], genders:["vrouw"], sunSensitive:true, waxing:true, price:"€10 (10′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Een gladde kin, snel en verzorgd — zonder scheren of pincet.",
+               en:"A smooth chin, quick and neat — without shaving or tweezers." },
+    funfact:{ nl:"Haartjes op de kin kunnen door hormonale schommelingen sterker worden; regelmatig ontharen houdt het beheersbaar.",
+              en:"Chin hairs can become stronger due to hormonal changes; regular hair removal keeps it manageable." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"bovenlip", name:"Bovenlipontharing", moods:["energetic"], genders:["vrouw"], sunSensitive:true, waxing:true, price:"€10 (10′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Een gladde bovenlip met resultaat dat weken meegaat.",
+               en:"A smooth upper lip with results that last for weeks." },
+    funfact:{ nl:"De huid boven de lip is dun en gevoelig; daarom werken we hier met zachte was of threading.",
+              en:"The skin above the lip is thin and sensitive, which is why we use gentle wax or threading here." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"wenkbrauwontharing", name:"Wenkbrauwen opschonen (zonder mapping)", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"€15 (20′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Je bestaande wenkbrauwvorm netjes opgeschoond — voor een verzorgde blik zonder de vorm te veranderen.",
+               en:"Your existing brow shape neatly tidied up — for a groomed look without changing the shape." },
+    funfact:{ nl:"Threading is een eeuwenoude ontharingstechniek met een gedraaide katoenen draad, zonder was op de huid.",
+              en:"Threading is an age-old hair-removal technique using a twisted cotton thread, with no wax on the skin." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"schouders", name:"Schouderontharing", moods:["energetic"], genders:["man"], sunSensitive:true, waxing:true, price:"€15 (25′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Gladde, verzorgde schouders — handig in combinatie met een rugontharing.",
+               en:"Smooth, groomed shoulders — handy in combination with a back wax." },
+    funfact:{ nl:"Na herhaalde behandelingen groeit het haar op de schouders vaak dunner terug.",
+              en:"After repeated treatments, hair on the shoulders often grows back thinner." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"borstbuik", name:"Borst- & Buikontharing", moods:["energetic"], genders:["man"], sunSensitive:true, waxing:true, price:"€40 (90′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Borst en buik in één behandeling glad en verzorgd, met resultaat dat weken meegaat.",
+               en:"Chest and stomach smooth and groomed in one treatment, with results that last for weeks." },
+    funfact:{ nl:"Samen behandelen is voordeliger dan borst en buik apart, en je huid heeft maar één keer hersteltijd nodig.",
+              en:"Treating both together costs less than chest and stomach separately, and your skin needs recovery time only once." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"volledigebenen", name:"Volledige Beenontharing", moods:["energetic"], genders:["vrouw","man"], sunSensitive:true, waxing:true, price:"€50 (60′)",
+    homecare:{ category:"soap", soapHint:["aloevera","komkommer"] },
+    benefits:{ nl:"Wekenlang gladde benen, van enkel tot bovenbeen.",
+               en:"Weeks of smooth legs, from ankle to thigh." },
+    funfact:{ nl:"Na een aantal ontharingsbeurten groeit het haar vaak dunner en spaarzamer terug.",
+              en:"After several waxing sessions, hair often grows back thinner and more sparse." },
+    aftercare:{ nl:"Vermijd de eerste 24 tot 48 uur directe zon, de zonnebank, strakke kleding en hete douches of sauna's. Breng op ontblote zones altijd een zonnebrandcrème met hoge beschermingsfactor (SPF 50) aan om roodheid en pigmentvlekken te voorkomen.",
+                en:"Avoid direct sun exposure, tanning beds, tight clothing, hot showers, and saunas for the first 24 to 48 hours. Always apply a high protection sunscreen (SPF 50) to exposed areas to prevent redness and hyperpigmentation." } },
+
+  { id:"harmonizingback", name:"Harmoniserende Rugverzorging", moods:["relax","focus"], genders:["vrouw","man"], sunSensitive:false, isMassage:true, pregnancyUnsafe:true, price:"€35 (30′)",
+    homecare:{ category:"body" },
+    benefits:{ nl:"Een korte verwenbeurt voor je rug: een peeling en massage voor een zachte, gladde huid en losgemaakte spieren.",
+               en:"A short treat for your back: a peeling and massage for soft, smooth skin and relaxed muscles." },
+    funfact:{ nl:"De rug is een zone die we zelf moeilijk bereiken — daardoor krijgt de huid daar vaak het minst verzorging.",
+              en:"The back is an area we can hardly reach ourselves — which is why the skin there often gets the least care." },
+    aftercare:{ nl:"Drink voldoende water en smeer je rug de dagen erna in met een voedende bodylotion.",
+                en:"Drink enough water and apply a nourishing body lotion to your back in the following days." } },
+
+  { id:"teambeauty", name:"Teambuilding Beauty & Pamper Experience", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€275 per groep (max. 4)",
+    homecare:{ category:"facial" },
+    benefits:{ nl:"Een exclusief arrangement voor je team of vriendengroep: een uitgebreide workshop naar keuze (gelaatsverzorging met make-up touch-up, beauty make-up of threading), een specialty coffee bar, welkomstdrankje, zoete en hartige hapjes, een affogato en een luxe attentie voor iedereen.",
+               en:"An exclusive package for your team or group of friends: an extended workshop of your choice (facial with make-up touch-up, beauty make-up or threading), a specialty coffee bar, welcome drink, sweet and savoury bites, an affogato and a luxury gift for everyone." },
+    funfact:{ nl:"Een affogato is Italiaans voor 'verdronken': een bol vanille-ijs overgoten met een warme espresso — of bij ons ook met matcha.",
+              en:"Affogato is Italian for 'drowned': a scoop of vanilla ice cream topped with a hot espresso — or, with us, with matcha too." },
+    aftercare:{ nl:"Schrijf minstens 1 week op voorhand in. Na een gelaatsverzorging gebruik je best dagelijks een SPF.",
+                en:"Please register at least 1 week in advance. After a facial it's best to use SPF daily." } },
+
+  { id:"teamcoffee", name:"Teambuilding Specialty Coffee Experience", moods:["group"], genders:["vrouw","man"], sunSensitive:false, price:"€295 per groep (max. 4)",
+    homecare:{ category:"soap", soapHint:["koffie"] },
+    benefits:{ nl:"Een exclusief arrangement rond koffie: een uitgebreide koffieworkshop naar keuze (Specialty Koffieproeverij Basis of Verdiepend), een specialty coffee bar, welkomstdrankje, zoete en hartige hapjes en een affogato.",
+               en:"An exclusive coffee package: an extended coffee workshop of your choice (Specialty Coffee Tasting Basic or Advanced), a specialty coffee bar, welcome drink, sweet and savoury bites and an affogato." },
+    funfact:{ nl:"Specialty coffee is koffie die door gecertificeerde proevers minstens 80 op 100 punten krijgt.",
+              en:"Specialty coffee is coffee that certified tasters score at least 80 out of 100 points." },
+    aftercare:{ nl:"Schrijf minstens 1 week op voorhand in. Noteer na afloop je favoriete koffie en bereiding voor thuis.",
+                en:"Please register at least 1 week in advance. Afterwards, jot down your favourite coffee and brew method for at home." } },
+
+  { id:"cateye", name:"Cat Eye & Magnetische Gellak Manicure Workshop", moods:["group","energetic"], genders:["vrouw"], sunSensitive:false, price:"€85 privé · duo €75 p.p. (90–120′)",
+    homecare:{ category:"hand" },
+    benefits:{ nl:"Leer zelf een prachtig magnetisch ‘Cat Eye’-effect op je nagels maken, met alle professionele lakken, magneten en UV/LED-lampen — plus specialty coffee/thee en huisgemaakte zoetigheden.",
+               en:"Learn to create a beautiful magnetic ‘cat eye’ effect on your nails, with all professional polishes, magnets and UV/LED lamps — plus specialty coffee/tea and homemade sweets." },
+    funfact:{ nl:"Cat eye-gellak bevat fijne metaalachtige deeltjes; met een magneet trek je ze in een lijn, waardoor die typische lichtstreep ontstaat.",
+              en:"Cat eye gel polish contains fine metallic particles; a magnet pulls them into a line, creating that typical streak of light." },
+    caution:{ nl:"Max. 2 deelnemers. Je nagels moeten bij aanvang volledig vrij zijn van lak, gellak of gelnagels.",
+              en:"Max. 2 participants. Your nails must be completely free of polish, gel polish or gel nails at the start." },
+    aftercare:{ nl:"Smeer je nagelriemen dagelijks in met nagelriemolie en laat gellak altijd professioneel verwijderen (soak-off), niet aftrekken.",
+                en:"Apply cuticle oil daily and always have gel polish removed professionally (soak-off) — never peel it off." } }
 ];
 
 /* Gentle, never-sun-sensitive, never-massage items usable as a safe
@@ -630,18 +810,21 @@ const SAFE_FALLBACK_IDS = ["signaturefacial","manicure","pedicure","liftsummere"
    replacement for it — the guided questions (safety filters included)
    remain the reliable backbone. */
 const COMPLAINT_KEYWORDS = [
-  { words:["rug","rugpijn","rugklachten","nek","schouder","schouders"], ids:["backwrap","detoxback","harmonizingbody","swedishbackneck","cupping","cuppingpeeling"] },
+  { words:["rug","rugpijn","rugklachten","nek","schouder","schouders"], ids:["backwrap","detoxback","harmonizingbody","harmonizingback","swedishbackneck","cupping","cuppingpeeling"] },
   { words:["stress","gestrest","ontspanning","ontspannen","moe","vermoeid","uitgeput"], ids:["swedish","swedishbackneck","hotstone","cupping"] },
   { words:["spierpijn","spieren","stijf","gespannen"], ids:["cupping","cuppingpeeling","slimmassage","swedish"] },
   { words:["rimpels","veroudering","verouderen","huidveroudering","stevigheid"], ids:["antiagefacial","liftsummere"] },
   { words:["pigmentatie","pigmentvlekken","oneffen","dof","vale huid","vaal"], ids:["hydrapeel","fruitacid"] },
-  { words:["onzuiverheden","puistjes","acne","vette huid"], ids:["signaturefacial"] },
+  { words:["onzuiverheden","puistjes","acne","vette huid"], ids:["signaturefacial","acnefacial","expressfacial"] },
   { words:["voeten","voet","eelt","nagelriem","ingegroeide nagel"], ids:["pedicure"] },
-  { words:["nagels","handen","manicure"], ids:["manicure","manipedispa"] },
-  { words:["wimpers","wenkbrauwen","brows","lashes"], ids:["lashlift","browlift","hennabrows"] },
-  { words:["ontharen","ontharing","haargroei","beharing"], ids:["oksel","been","rug","buik","borst"] },
+  { words:["nagels","handen","manicure"], ids:["manicure","manipedispa","manicureexpress","cateye"] },
+  { words:["wimpers","wenkbrauwen","brows","lashes"], ids:["lashlift","browlift","hennabrows","browtint","browshaping","lashtint","wenkbrauwontharing"] },
+  { words:["ontharen","ontharing","haargroei","beharing"], ids:["oksel","been","rug","buik","borst","kin","bovenlip","wenkbrauwontharing","schouders","borstbuik","volledigebenen"] },
   { words:["contour","silhouet","gewicht","afslanken","cellulite"], ids:["slimmassage"] },
-  { words:["make-up","makeup","visagie"], ids:["glammakeup"] }
+  { words:["make-up","makeup","visagie"], ids:["glammakeup","bridaltrial","weddingguest"] },
+  { words:["bruid","bruiloft","huwelijk","trouw","trouwfeest"], ids:["bridaltrial","bridalpackage","weddingguest"] },
+  { words:["teambuilding","team","collega","collega's","vriendinnen","groep"], ids:["teambeauty","teamcoffee"] },
+  { words:["koffie","barista","proeverij"], ids:["teamcoffee","tastingbasic","tastingadvanced","baristaworkshop"] }
 ];
 
 function boostByComplaint(pool, complaintText){
@@ -750,7 +933,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v21 · 29/09/2026";
+const APP_VERSION = "v22 · 29/09/2026";
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
   facebook: "https://www.facebook.com/profile.php?id=100071510416360"   // zakelijke pagina (niet het privéprofiel)
@@ -1033,6 +1216,7 @@ const SKIN_FACTS = [
 const SKIN_FACT_POOLS = {
   kids: ["A","G","H"],
   byTreatment: {
+    expressfacial:["A","B","C","D"], acnefacial:["A","B","C","D"], bridaltrial:["A","B"], bridalpackage:["A","B"], weddingguest:["A","B"], browtint:["G"], browshaping:["G"], lashtint:["G"], manicureexpress:["F","H","C"], cateye:["F","H","C"], kin:["G"], bovenlip:["G"], wenkbrauwontharing:["G"], schouders:["G"], borstbuik:["G"], volledigebenen:["G"], harmonizingback:["A","D","E"], teambeauty:["A","B","C"],
     pedicure:["F","E","C"], pedicureexpress:["F","E","C"],
     manipedispa:["F","C","H"], manicure:["F","H","C"],
     oksel:["G","E"], been:["G"], rug:["G"], buik:["G"], borst:["G"],
@@ -1127,6 +1311,7 @@ const CONDITION_FACTS = [
 const CONDITION_FACT_POOLS = {
   sun: ["SH"],
   byTreatment: {
+    expressfacial:["PI","DR"], acnefacial:["AC","PI"], bridaltrial:["AL"], bridalpackage:["AL"], weddingguest:["AL"], browtint:["AL"], browshaping:["AL"], lashtint:["AL"], kin:["AL"], bovenlip:["AL"], wenkbrauwontharing:["AL"], schouders:["AL"], borstbuik:["AL"], volledigebenen:["AL","PE"], harmonizingback:["ZW"], teambeauty:["AC","PI"],
     pedicure:["PE","ZW"], pedicureexpress:["PE","ZW"], manipedispa:["PE"],
     hotstone:["ZW"], swedish:["ZW"], swedishbackneck:["ZW"], swedishlegs:["ZW","PE"],
     detoxback:["ZW"], slimmassage:["ZW"],
@@ -1238,6 +1423,7 @@ const PRACTICE_FACTS = [
 ];
 const PRACTICE_FACT_POOLS = {
   byTreatment: {
+    harmonizingback:["MA","MT","MV","MR","WEC"], cateye:["WEC","WEG"], teambeauty:["WEC","WEG"], teamcoffee:["WEC"],
     hotstone:["WEW","MA","MT","MV","MR"],
     cupping:["MA","MT","MV","MR"], cuppingpeeling:["MA","MT","MV","MR"],
     swedish:["MA","MT","MV","MR"], swedishbackneck:["MA","MT","MV","MR"], swedishlegs:["MA","MT","MV","MR"],
@@ -1415,6 +1601,7 @@ const SKINKNOW_FACTS = [
 const MORE_FACT_POOLS = {
   cellIntro: true,
   byTreatment: {
+    expressfacial:["GV","SK"], acnefacial:["GV","SK"], lashtint:["LL","LT"], manicureexpress:["NA","NB","NC","ND","NE","NF"], cateye:["NA","NB","NC","ND","NE","NF"], harmonizingback:["GV","SK"], teambeauty:["GV"],
     manicure:["NA","NB","NC","ND","NE","NF"], manipedispa:["NA","NB","NC","ND","NE","NF"],
     pedicure:["NA","NB","NC","ND","NE","NF"], pedicureexpress:["NA","NB","NC","ND","NE","NF"],
     lashlift:["LL","LT"],
@@ -1435,6 +1622,19 @@ const MORE_FACT_POOLS = {
    ============================================================ */
 function U(nl, en, fr, price){ return { nl, en, fr, price }; }
 const UPSELL_SUGGESTIONS = {
+  expressfacial: U("Voeg een ampul / serum toe", "Add an ampoule / serum", "Ajoutez une ampoule / un sérum", "+€5"),
+  acnefacial: U("Voeg LED-therapie toe", "Add LED therapy", "Ajoutez la luminothérapie LED", "+€10"),
+  bridaltrial: U("Kies meteen het pakket proef- &amp; bruidsmake-up", "Go for the trial &amp; wedding-day package", "Optez pour le forfait essai &amp; mariage", "€135"),
+  browtint: U("Combineer met Lash Tinting", "Combine with Lash Tinting", "Combinez avec la teinture des cils", "€20"),
+  lashtint: U("Combineer met Brow Tinting", "Combine with Brow Tinting", "Combinez avec la teinture des sourcils", "€20"),
+  browshaping: U("Voeg Brow Tinting toe", "Add Brow Tinting", "Ajoutez la teinture des sourcils", "+€20"),
+  manicureexpress: U("Voeg gellak (soak-off) toe", "Add gel polish (soak-off)", "Ajoutez un vernis gel (soak-off)", "+€20"),
+  kin: U("Combineer met bovenlip-ontharing", "Combine with upper-lip hair removal", "Combinez avec l'épilation de la lèvre supérieure", "+€10"),
+  bovenlip: U("Combineer met kinontharing", "Combine with chin hair removal", "Combinez avec l'épilation du menton", "+€10"),
+  schouders: U("Combineer met rugontharing", "Combine with back waxing", "Combinez avec l'épilation du dos", "€40"),
+  volledigebenen: U("Voeg een harmoniserende verzorging toe voor een zachtere huid", "Add a harmonising treatment for softer skin", "Ajoutez un soin harmonisant pour une peau plus douce", "€35"),
+  harmonizingback: U("Kies de full body-versie", "Choose the full body version", "Choisissez la version corps entier", "€70"),
+  cateye: U("Kom met z'n tweeën: duo €75 p.p.", "Come as a pair: duo €75 p.p.", "Venez à deux : duo €75 p.p.", null),
   swedish: U("Voeg Hot Stone toe aan je massage", "Add Hot Stone to your massage", "Ajoutez le Hot Stone à votre massage", "+€20"),
   swedishbackneck: U("Voeg Hot Stone toe aan je massage", "Add Hot Stone to your massage", "Ajoutez le Hot Stone à votre massage", "+€20"),
   swedishlegs: U("Voeg een handpeeling toe", "Add a hand peeling", "Ajoutez un gommage des mains", "+€10"),

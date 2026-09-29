@@ -329,6 +329,105 @@
   }
  },
  "treatments": {
+  "expressfacial": {
+   "benefits": "Un rafraîchissement rapide mais complet : nettoyage, nettoyage en profondeur, masque crème et crème de jour — idéal quand vous manquez de temps mais voulez une peau fraîche.",
+   "funfact": "Même un soin court aide : une peau propre absorbe mieux les actifs d'un masque et d'une crème de jour.",
+   "aftercare": "Utilisez un SPF chaque jour pendant les prochains jours, buvez suffisamment d'eau et laissez votre peau se reposer autant que possible pendant les 24 premières heures, sans maquillage lourd."
+  },
+  "acnefacial": {
+   "benefits": "Un soin du visage purifiant pour les peaux à imperfections ou grasses, avec une analyse de peau lors du premier soin pour l'adapter vraiment à votre peau.",
+   "funfact": "Les imperfections apparaissent souvent quand le sébum et les cellules mortes bouchent ensemble un pore — un nettoyage doux et régulier aide à l'éviter.",
+   "aftercare": "Touchez votre visage le moins possible, évitez le maquillage lourd pendant les 24 premières heures et protégez votre peau chaque jour avec un SPF léger et non gras.",
+   "caution": "Vous prenez un médicament contre l'acné (p. ex. Roaccutane) ou un traitement prescrit par un dermatologue ? Prévenez-nous à l'avance pour que nous adaptions le soin."
+  },
+  "bridaltrial": {
+   "benefits": "Une séance d'essai détendue pour créer ensemble votre look de mariée : nous testons les couleurs, la tenue et le style, pour être sûre du résultat le grand jour.",
+   "funfact": "Il vaut mieux prévoir l'essai quelques semaines avant le mariage — vous pouvez ainsi voir le look en photo et à la lumière du jour.",
+   "aftercare": "Démaquillez-vous soigneusement le soir avec un nettoyant doux, puis appliquez une crème hydratante."
+  },
+  "bridalpackage": {
+   "benefits": "Le forfait complet : une séance d'essai pour créer votre look et le maquillage le jour même du mariage, pour que chaque détail soit parfait.",
+   "funfact": "Le maquillage minéral est léger et respirant, il reste donc confortable même pendant une longue journée de mariage.",
+   "aftercare": "Démaquillez-vous soigneusement le soir avec un nettoyant doux, puis appliquez une crème hydratante."
+  },
+  "weddingguest": {
+   "benefits": "Un maquillage soigné pour la maman, le témoin, la demoiselle d'honneur ou l'invitée le jour du mariage — harmonisé avec le look de la mariée.",
+   "funfact": "Pour un petit groupe le même jour, nous faisons un planning pour que chacune soit prête à temps et détendue.",
+   "aftercare": "Démaquillez-vous soigneusement le soir avec un nettoyant doux, puis appliquez une crème hydratante."
+  },
+  "browtint": {
+   "benefits": "La coloration des poils de sourcils pour un regard plus fourni et mieux défini — sans crayon tous les jours.",
+   "funfact": "Les poils de sourcils clairs ou gris deviennent visibles grâce à la teinture, ce qui donne des sourcils plus fournis.",
+   "aftercare": "Ne mouillez pas vos sourcils pendant les 24 premières heures, évitez sauna et vapeur, et n'utilisez pas de gommage sur cette zone.",
+   "caution": "Pour une première coloration, il est préférable de faire un test cutané 48 heures avant pour exclure une réaction allergique."
+  },
+  "browshaping": {
+   "benefits": "Nous mesurons vos sourcils selon votre visage (mapping), puis nous les mettons joliment en forme par épilation.",
+   "funfact": "Avec le brow mapping, nous déterminons le début, le point le plus haut et la fin du sourcil à partir du nez, de la pupille et du coin de l'œil.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "lashtint": {
+   "benefits": "La teinture des cils pour un regard plus intense, même sans mascara — pratique en vacances, pour le sport ou une semaine chargée.",
+   "funfact": "Les pointes des cils sont souvent plus claires que la base ; la teinture les fait paraître soudain plus longs.",
+   "aftercare": "Ne mouillez pas vos cils pendant les 24 premières heures, ne vous frottez pas les yeux et évitez sauna et vapeur.",
+   "caution": "Pour une première coloration, il est préférable de faire un test cutané 48 heures avant pour exclure une réaction allergique."
+  },
+  "manicureexpress": {
+   "benefits": "Des mains soignées en peu de temps : coupe, limage, soin des cuticules et crème nourrissante pour les mains.",
+   "funfact": "Un ongle pousse en moyenne d'environ 3 millimètres par mois — le renouvellement complet d'un ongle prend donc plusieurs mois.",
+   "aftercare": "Hydratez vos mains et vos cuticules chaque jour et portez des gants pour la vaisselle ou le ménage."
+  },
+  "kin": {
+   "benefits": "Un menton lisse, rapidement et proprement — sans rasoir ni pince.",
+   "funfact": "Les poils du menton peuvent devenir plus visibles avec les variations hormonales ; une épilation régulière permet de les maîtriser.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "bovenlip": {
+   "benefits": "Une lèvre supérieure lisse avec un résultat qui dure des semaines.",
+   "funfact": "La peau au-dessus de la lèvre est fine et sensible ; c'est pourquoi nous utilisons ici une cire douce ou le threading.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "wenkbrauwontharing": {
+   "benefits": "Votre forme de sourcils actuelle nettoyée avec soin — pour un regard soigné sans changer la forme.",
+   "funfact": "Le threading est une technique d'épilation ancestrale avec un fil de coton torsadé, sans cire sur la peau.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "schouders": {
+   "benefits": "Des épaules lisses et soignées — pratique en combinaison avec une épilation du dos.",
+   "funfact": "Après des séances répétées, les poils des épaules repoussent souvent plus fins.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "borstbuik": {
+   "benefits": "Le torse et le ventre lisses et soignés en une seule séance, avec un résultat qui dure des semaines.",
+   "funfact": "Traiter les deux ensemble revient moins cher que séparément, et votre peau n'a besoin de récupérer qu'une seule fois.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "volledigebenen": {
+   "benefits": "Des jambes lisses pendant des semaines, de la cheville à la cuisse.",
+   "funfact": "Après plusieurs séances d'épilation, les poils repoussent souvent plus fins et plus clairsemés.",
+   "aftercare": "Évitez l'exposition directe au soleil, les bancs solaires, les vêtements serrés, les douches chaudes et les saunas pendant les 24 à 48 premières heures. Appliquez toujours une crème solaire à haute protection (SPF 50) sur les zones exposées pour prévenir les rougeurs et l'hyperpigmentation."
+  },
+  "harmonizingback": {
+   "benefits": "Un court moment de soin pour votre dos : un gommage et un massage pour une peau douce et lisse et des muscles détendus.",
+   "funfact": "Le dos est une zone difficile à atteindre soi-même — c'est pourquoi la peau y reçoit souvent le moins de soins.",
+   "aftercare": "Buvez suffisamment d'eau et appliquez une lotion nourrissante sur votre dos les jours suivants."
+  },
+  "teambeauty": {
+   "benefits": "Un forfait exclusif pour votre équipe ou groupe d'amis : un atelier approfondi au choix (soin du visage avec retouche maquillage, maquillage beauté ou threading), un bar à specialty coffee, une boisson de bienvenue, des bouchées sucrées et salées, un affogato et une attention luxueuse pour chacun.",
+   "funfact": "Affogato signifie « noyé » en italien : une boule de glace vanille arrosée d'un espresso chaud — ou chez nous aussi de matcha.",
+   "aftercare": "Inscrivez-vous au moins 1 semaine à l'avance. Après un soin du visage, utilisez de préférence un SPF chaque jour."
+  },
+  "teamcoffee": {
+   "benefits": "Un forfait exclusif autour du café : un atelier café approfondi au choix (Dégustation Specialty Coffee Base ou Approfondie), un bar à specialty coffee, une boisson de bienvenue, des bouchées sucrées et salées et un affogato.",
+   "funfact": "Le specialty coffee est un café noté au moins 80 sur 100 par des dégustateurs certifiés.",
+   "aftercare": "Inscrivez-vous au moins 1 semaine à l'avance. Ensuite, notez votre café et votre méthode préférés pour la maison."
+  },
+  "cateye": {
+   "benefits": "Apprenez à créer vous-même un superbe effet magnétique « Cat Eye » sur vos ongles, avec tous les vernis professionnels, aimants et lampes UV/LED — ainsi que specialty coffee/thé et douceurs maison.",
+   "funfact": "Le vernis gel cat eye contient de fines particules métalliques ; un aimant les aligne, ce qui crée ce reflet lumineux typique.",
+   "aftercare": "Appliquez chaque jour de l'huile pour cuticules et faites toujours retirer le vernis gel par un professionnel (soak-off) — ne l'arrachez jamais.",
+   "caution": "Max. 2 participantes. Vos ongles doivent être totalement libres de vernis, vernis gel ou ongles en gel au début."
+  },
   "hotstone": {
    "benefits": "Un massage du corps profondément relaxant avec des pierres chaudes qui glissent sur la peau, combiné à des techniques de massage manuelles — un moment pour vous relâcher complètement.",
    "funfact": "Les pierres sont généralement en basalte, une roche volcanique qui garde longtemps la chaleur — c'est pourquoi le massage reste agréablement chaud.",
