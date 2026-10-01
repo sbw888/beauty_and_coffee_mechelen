@@ -1242,7 +1242,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v34 · 01/10/2026";
+const APP_VERSION = "v35 · 01/10/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".
@@ -1253,8 +1253,15 @@ const NEWSLETTER_URL = "https://sanmakeupstudio.wordpress.com/nieuwsbrief/";
    site:     the WordPress.com address (no https://).
    category: "" = all posts; or a category slug, e.g. "weetjes".
    count:    how many posts to show (1–5).
+   allUrl:   where "Alle berichten op de website" goes. The homepage is a
+             static page, so this points to the overview of all posts.
    Set site to "" to hide the news card completely. */
-const NEWS_FEED = { site: "sanmakeupstudio.wordpress.com", category: "", count: 3 };
+const NEWS_FEED = {
+  site: "sanmakeupstudio.wordpress.com",
+  category: "",
+  count: 3,
+  allUrl: "https://sanmakeupstudio.wordpress.com/author/beautyglowbysandra/"
+};
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
   facebook: "https://www.facebook.com/profile.php?id=100071510416360"   // zakelijke pagina (niet het privéprofiel)

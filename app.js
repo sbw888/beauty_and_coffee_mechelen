@@ -1880,7 +1880,8 @@
     const count = Math.min(5, Math.max(1, parseInt(cfg.count, 10) || 3));
     const all = $("#newsAllLink");
     if (all){
-      all.href = "https://" + site + "/" + (cfg.category ? "category/" + encodeURIComponent(cfg.category) + "/" : "");
+      const own = newsSafeUrl(cfg.allUrl || "");
+      all.href = own || ("https://" + site + "/" + (cfg.category ? "category/" + encodeURIComponent(cfg.category) + "/" : ""));
       all.addEventListener("click", () => trackEvent("news-all"));
     }
     try {
