@@ -101,7 +101,7 @@
   function updateProgress(name){
     const w = STEP_WEIGHTS[name] ?? 0;
     $("#progressFill").style.width = w + "%";
-    $(".progress").style.visibility = (name==="welcome" || name==="pricelist" || name==="houserules") ? "hidden" : "visible";
+    $(".progress").style.visibility = (name==="welcome" || name==="pricelist" || name==="houserules" || name==="stampcard") ? "hidden" : "visible";
   }
 
   function showStep(name){
@@ -114,6 +114,9 @@
     }
     if (name === "houserules") {
       renderHouseRules();
+    }
+    if (name === "stampcard") {
+      renderLoyaltyBlock();
     }
     if (name === "sunCheck") {
       state.sunFact = randomFactCode(SKIN_FACT_POOLS.sun);
@@ -1983,9 +1986,13 @@
       </ul>` : ""}` : "");
   }
 
+  // Rendered in two places: on the result screen and on the stand-alone
+  // "Mijn stempelkaart" screen (welcome screen button / #stempelkaart link),
+  // so a client never has to redo the questions just to scan a stamp.
   function renderLoyaltyBlock(){
-    const block = $("#loyaltyBlock");
-    if (!block) return;
+    const blocks = [$("#loyaltyBlock"), $("#loyaltyBlockStandalone")].filter(Boolean);
+    if (!blocks.length) return;
+    const block = { set innerHTML(html){ blocks.forEach(b => { b.innerHTML = html; }); } };
     const totalTreatments = TREATMENTS_CATALOG.length;
     const totalDrinks = getAllDrinkNames().size;
     const stampsCapped = Math.min(localData.stamps, 10);
@@ -2281,7 +2288,15 @@
     const ov = $("#salonOverlay"); if (ov) ov.remove();
     if (location.hash === "#salon") window.history.replaceState(null, "", location.pathname + location.search);
   }
-  function checkSalonHash(){ if (location.hash === "#salon") openSalonMode(); }
+  function checkSalonHash(){
+    if (location.hash === "#salon") openSalonMode();
+    // direct link to the stamp card, e.g. a QR poster in the salon:
+    // https://sbw888.github.io/beauty_and_coffee_mechelen/#stempelkaart
+    else if (location.hash === "#stempelkaart" || location.hash === "#stamps"){
+      window.history.replaceState(null, "", location.pathname + location.search);
+      goTo("stampcard");
+    }
+  }
 
   function resetLocalData(){
     if (!confirm(t("reset_confirm_text", state.lang))) return;
@@ -2397,6 +2412,7 @@
       if (action === "reload-app") window.location.reload();
       if (action === "open-pricelist") goTo("pricelist");
       if (action === "open-houserules") goTo("houserules");
+      if (action === "open-stampcard") goTo("stampcard");
       if (action === "another-fact") anotherFact();
       if (action === "install-app") installApp();
       if (action === "dismiss-install") dismissInstallBanner();

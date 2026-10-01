@@ -89,6 +89,7 @@
     <div class="returning-user" id="returningUserBlock" hidden></div>
 
     <button type="button" class="btn btn--primary btn--wide" data-action="start" data-i18n="start_button">Begin je match</button>
+    <button type="button" class="btn btn--outline btn--wide welcome-stampcard" data-action="open-stampcard" data-i18n="stampcard_button">☕ Mijn stempelkaart</button>
     <button type="button" class="btn btn--gold-outline btn--wide welcome-pricelist" data-action="open-pricelist" data-i18n="pricelist_button">💶 Bekijk prijslijst</button>
     <button type="button" class="btn btn--text welcome-houserules" data-action="open-houserules" data-i18n="houserules_button">📋 Lees de huisregels</button>
     <button type="button" class="btn btn--text" id="changeProfileLink" data-action="change-profile" data-i18n="change_profile_link" hidden>Niet jij? Pas je profiel aan</button>
@@ -374,6 +375,18 @@
   </section>
 
   <!-- HOUSE RULES -->
+  <!-- STAMP CARD (reachable from the welcome screen, no match needed) -->
+  <section class="step" data-step="stampcard">
+    <div class="step__head">
+      <h2 class="step__title" data-i18n="stampcard_title">Mijn stempelkaart</h2>
+      <p class="step__hint" data-i18n="stampcard_intro"></p>
+    </div>
+    <div class="loyalty" id="loyaltyBlockStandalone"></div>
+    <div class="step__nav">
+      <button type="button" class="btn btn--ghost" data-action="back" data-i18n="back_button">Terug</button>
+    </div>
+  </section>
+
   <section class="step" data-step="houserules">
     <div class="step__head">
       <h2 class="step__title" data-i18n="houserules_title">Huisregels</h2>
