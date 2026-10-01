@@ -577,6 +577,7 @@
   function showPhotoPreview(){
     $("#photoEditor").hidden = true;
     $("#photoStage").hidden = false;
+    $("#filterRow").hidden = false;   // fix v28: filters stayed hidden after the photo editor
     preview().src = state.photoDataUrl;
     preview().hidden = false;
     placeholder().hidden = true;
@@ -945,7 +946,7 @@
           <div class="result-row__label">${t("drink_label", state.lang)}</div>
           <div class="result-row__value">${drinkFull}</div>
           ${drinkNotes ? `<div class="result-row__notes">${drinkNotes}</div>` : ""}
-          ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}: ${customLine}</div>` : ""}
+          ${customLine ? `<div class="result-row__notes">${t("with_label", state.lang)}${state.lang === "fr" ? "\u00a0:" : ":"} ${customLine}</div>` : ""}
           ${drinkPhotoHtml}
         </div>
       </div>
@@ -1690,7 +1691,7 @@
     const a = document.createElement("a");
     a.href = url; a.download = "beauty-and-coffee-match.jpg";
     document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);   // revoking at once can break the download on some phones
     showToast(t("toast_downloaded", state.lang));
     trackEvent("download");
   }
@@ -2314,10 +2315,15 @@
     const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
     const title = state.match && !state.match.isKid ? state.match.treatment.name : t("reminder_ics_title", state.lang);
 
+    // UID, DTSTAMP and PRODID are required by the calendar standard (RFC 5545);
+    // without them some calendar apps (e.g. Outlook, older iPhones) refuse the file.
     const ics = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
+      "PRODID:-//Beauty & Coffee//Match app//NL",
       "BEGIN:VEVENT",
+      `UID:${Date.now()}-${Math.random().toString(36).slice(2)}@beauty-coffee`,
+      `DTSTAMP:${fmt(new Date())}`,
       `DTSTART:${fmt(start)}`,
       `DTEND:${fmt(end)}`,
       `SUMMARY:${t("reminder_ics_title", state.lang)} — ${title}`,
@@ -2331,7 +2337,7 @@
     const a = document.createElement("a");
     a.href = url; a.download = "beauty-coffee-herinnering.ics";
     document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);   // revoking at once can break the download on some phones
     showToast(t("reminder_saved_toast", state.lang));
   }
 

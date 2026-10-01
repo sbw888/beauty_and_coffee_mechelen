@@ -4,7 +4,7 @@
    users fall back to what was cached last, so the app keeps working.
    Requests to other sites (GoatCounter statistics, Google Fonts) are left
    alone: they go straight to the network and are never cached here. */
-const CACHE_NAME = "beauty-coffee-v27";
+const CACHE_NAME = "beauty-coffee-v28";
 const ASSETS = [
   "./",
   "./index.html",
