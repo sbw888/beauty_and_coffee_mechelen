@@ -151,6 +151,7 @@
   "privacy_p2": "Si vous envoyez un message de réservation par e-mail ou WhatsApp, il contient uniquement le soin, la boisson et les disponibilités choisis, ainsi que ce que vous y ajoutez vous-même.",
   "privacy_p3": "Les tampons, favoris et découvertes sont conservés uniquement sur cet appareil. Si vous effacez les données de votre navigateur, ils disparaissent. Vous pouvez aussi les effacer vous-même avec le bouton ci-dessous.",
   "privacy_p4": "Le contrôle de santé sert uniquement à vous proposer un match sûr et ne constitue pas un avis médical.",
+  "privacy_p5": "Pour améliorer l'app, nous comptons de façon anonyme sa fréquence d'utilisation (p. ex. nombre de visites et de matchs) via GoatCounter. Sans cookies et sans données permettant de vous identifier.",
   "houserules_button": "📋 Consulter le règlement du salon",
   "houserules_title": "Règlement du salon",
   "houserules_intro": "Pour que votre rendez-vous se déroule de façon agréable et professionnelle.",
