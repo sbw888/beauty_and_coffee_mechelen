@@ -90,6 +90,7 @@
     if (typeof HOUSE_RULES !== "undefined" && $('[data-step="houserules"]').classList.contains("is-active")) renderHouseRules();
     if (typeof localData !== "undefined") renderReturningUserBlock();
     renderSocialLinks();
+    renderActions();
   }
 
   function setLang(lang){
@@ -1252,9 +1253,12 @@
   }
 
   /* Current actions (data.js → CURRENT_ACTIONS): date-windowed, bilingual */
+  // Shown on the welcome screen (so everyone sees the promo before
+  // starting) and again on the result screen, right before booking.
   function renderActions(){
-    const wrap = $("#actionsBlock");
-    if (!wrap || typeof CURRENT_ACTIONS === "undefined") return;
+    const wraps = [$("#actionsBlock"), $("#actionsBlockWelcome")].filter(Boolean);
+    if (!wraps.length || typeof CURRENT_ACTIONS === "undefined") return;
+    const wrap = { set innerHTML(html){ wraps.forEach(w => { w.innerHTML = html; w.hidden = !html.trim(); }); } };
     const d = new Date();
     const today = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
     const lang = state.lang;

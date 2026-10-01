@@ -1217,8 +1217,8 @@ function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const CURRENT_ACTIONS = [
   { id:"grabbelton", icon:"🎁", from:null, until:null,
     title:{ nl:"Grabbelton", en:"Lucky dip" },
-    text:{ nl:"Besteed je €75 of meer tijdens dezelfde afspraak? Dan mag je één keer grabbelen in de grabbelton.",
-           en:"Spend €75 or more during the same appointment and you get one grab from the lucky dip." } }
+    text:{ nl:"Besteed je €75 of meer tijdens dezelfde afspraak? Dan mag je één keer grabbelen in de grabbelton. Zolang de voorraad strekt.",
+           en:"Spend €75 or more during the same appointment and you get one grab from the lucky dip. While stocks last." } }
 ];
 
 /* ============================================================
@@ -1242,7 +1242,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v30 · 01/10/2026";
+const APP_VERSION = "v32 · 01/10/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".

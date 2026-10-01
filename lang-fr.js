@@ -696,7 +696,7 @@
  "actions": {
   "grabbelton": {
    "title": "Tonneau à surprises",
-   "text": "Vous dépensez 75 € ou plus lors du même rendez-vous ? Vous pouvez alors piocher une fois dans le tonneau à surprises."
+   "text": "Vous dépensez 75 € ou plus lors du même rendez-vous ? Vous pouvez alors piocher une fois dans le tonneau à surprises. Dans la limite des stocks disponibles."
   }
  },
  "price": {
