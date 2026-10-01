@@ -113,6 +113,313 @@ const KIDS_DRINKS = [
 const KIDS_TREATMENT = "Kindermanicure";
 
 /* ============================================================
+   NAME TRANSLATIONS — treatment, product, soap and drink names.
+   The original name (as used in the salon) stays the key and is
+   used for matching, photos and the booking message; this table
+   only changes what the client SEES in English / French (and
+   Dutch for the English drink notes). Missing entry = original.
+   ============================================================ */
+const NAME_I18N = {
+ "Hot Stone Massage": {
+  "en": "Hot Stone Massage",
+  "fr": "Massage aux pierres chaudes"
+ },
+ "Cuppingmassage": {
+  "en": "Cupping Massage",
+  "fr": "Massage par ventouses (cupping)"
+ },
+ "Cupping Body Renewal": {
+  "en": "Cupping Body Renewal",
+  "fr": "Cupping Body Renewal (gommage et ventouses)"
+ },
+ "Swedish Full Body Massage": {
+  "en": "Swedish Full Body Massage",
+  "fr": "Massage suédois corps entier"
+ },
+ "Zweedse Rug-Nek-Schouder Massage": {
+  "en": "Swedish Back, Neck & Shoulder Massage",
+  "fr": "Massage suédois dos, nuque et épaules"
+ },
+ "Zweedse Benen- & Voetenmassage": {
+  "en": "Swedish Leg & Foot Massage",
+  "fr": "Massage suédois jambes et pieds"
+ },
+ "Energetic Back Wrap": {
+  "en": "Energetic Back Wrap",
+  "fr": "Enveloppement énergisant du dos"
+ },
+ "Extended Manicure/Pedicure with SPA supplement": {
+  "en": "Extended Manicure/Pedicure with SPA supplement",
+  "fr": "Manucure/pédicure complète avec supplément SPA"
+ },
+ "Brow Lift": {
+  "en": "Brow Lift",
+  "fr": "Rehaussement des sourcils (brow lift)"
+ },
+ "Henna Brows": {
+  "en": "Henna Brows",
+  "fr": "Sourcils au henné"
+ },
+ "Lash Lift with Tint": {
+  "en": "Lash Lift with Tint",
+  "fr": "Rehaussement des cils avec teinture"
+ },
+ "Evening / Party Glam Makeup": {
+  "en": "Evening / Party Glam Makeup",
+  "fr": "Maquillage glamour de soirée / fête"
+ },
+ "Skin-Renewing Hydra Peeling pH": {
+  "en": "Skin-Renewing Hydra Peeling pH",
+  "fr": "Peeling hydratant rénovateur pH"
+ },
+ "Signature Facial Treatment": {
+  "en": "Signature Facial Treatment",
+  "fr": "Soin du visage Signature"
+ },
+ "Fill Me Micro Infusion Treatment": {
+  "en": "Fill Me Micro Infusion Treatment",
+  "fr": "Soin Fill Me par micro-infusion"
+ },
+ "Fruit Acid Peeling Dr. Renaud": {
+  "en": "Fruit Acid Peeling Dr. Renaud",
+  "fr": "Peeling aux acides de fruits Dr. Renaud"
+ },
+ "Zuiverende Rugverzorging": {
+  "en": "Purifying Back Treatment",
+  "fr": "Soin purifiant du dos"
+ },
+ "Botanische Anti-Age": {
+  "en": "Botanical Anti-Age Treatment",
+  "fr": "Soin anti-âge botanique"
+ },
+ "Harmoniserende Full Body Verzorging": {
+  "en": "Harmonising Full Body Treatment",
+  "fr": "Soin harmonisant corps entier"
+ },
+ "Energetische Full Body Pakking": {
+  "en": "Energising Full Body Wrap",
+  "fr": "Enveloppement énergisant corps entier"
+ },
+ "Beauty & Skincare Workshop – Make-up": {
+  "en": "Beauty & Skincare Workshop – Make-up",
+  "fr": "Atelier Beauty & Skincare – Maquillage"
+ },
+ "Beauty & Skincare Workshop – Gelaatsverzorging": {
+  "en": "Beauty & Skincare Workshop – Facial Care",
+  "fr": "Atelier Beauty & Skincare – Soin du visage"
+ },
+ "Coffee Tasting Basic": {
+  "en": "Coffee Tasting Basic",
+  "fr": "Dégustation de café – Base"
+ },
+ "Coffee Tasting Advanced": {
+  "en": "Coffee Tasting Advanced",
+  "fr": "Dégustation de café – Approfondie"
+ },
+ "Private Barista Workshop": {
+  "en": "Private Barista Workshop",
+  "fr": "Atelier barista privé"
+ },
+ "Extended Manicure": {
+  "en": "Extended Manicure",
+  "fr": "Manucure complète"
+ },
+ "Express Pedicure": {
+  "en": "Express Pedicure",
+  "fr": "Pédicure express"
+ },
+ "Extended Pedicure": {
+  "en": "Extended Pedicure",
+  "fr": "Pédicure complète"
+ },
+ "Afslankingsmassage": {
+  "en": "Slimming Massage",
+  "fr": "Massage amincissant"
+ },
+ "Okselontharing": {
+  "en": "Underarm Waxing",
+  "fr": "Épilation des aisselles"
+ },
+ "Beenontharing": {
+  "en": "Leg Waxing",
+  "fr": "Épilation des jambes"
+ },
+ "Rugontharing": {
+  "en": "Back Waxing",
+  "fr": "Épilation du dos"
+ },
+ "Buikontharing": {
+  "en": "Stomach Waxing",
+  "fr": "Épilation du ventre"
+ },
+ "Borstontharing": {
+  "en": "Chest Waxing",
+  "fr": "Épilation du torse"
+ },
+ "Express Gelaatsverzorging": {
+  "en": "Express Facial",
+  "fr": "Soin du visage express"
+ },
+ "Acnécontrole – Équilibre Pureté Citron Vert": {
+  "en": "Acne Control – Équilibre Pureté Citron Vert",
+  "fr": "Contrôle de l'acné – Équilibre Pureté Citron Vert"
+ },
+ "Bridal Proefmake-up": {
+  "en": "Bridal Trial Make-up",
+  "fr": "Essai maquillage de mariée"
+ },
+ "Bridal Proefmake-up & Bruidsmake-up": {
+  "en": "Bridal Trial & Wedding-Day Make-up",
+  "fr": "Essai et maquillage de mariée le jour J"
+ },
+ "Huwelijksdag Make-up (per persoon)": {
+  "en": "Wedding-Day Make-up (per person)",
+  "fr": "Maquillage le jour du mariage (par personne)"
+ },
+ "Brow Tinting": {
+  "en": "Brow Tinting",
+  "fr": "Teinture des sourcils"
+ },
+ "Brow Shaping (mappen & ontharen)": {
+  "en": "Brow Shaping (mapping & hair removal)",
+  "fr": "Mise en forme des sourcils (mapping et épilation)"
+ },
+ "Lash Tinting": {
+  "en": "Lash Tinting",
+  "fr": "Teinture des cils"
+ },
+ "Express Manicure": {
+  "en": "Express Manicure",
+  "fr": "Manucure express"
+ },
+ "Kinontharing": {
+  "en": "Chin Hair Removal",
+  "fr": "Épilation du menton"
+ },
+ "Bovenlipontharing": {
+  "en": "Upper Lip Hair Removal",
+  "fr": "Épilation de la lèvre supérieure"
+ },
+ "Wenkbrauwen opschonen (zonder mapping)": {
+  "en": "Brow Tidy-up (without mapping)",
+  "fr": "Nettoyage des sourcils (sans mapping)"
+ },
+ "Schouderontharing": {
+  "en": "Shoulder Waxing",
+  "fr": "Épilation des épaules"
+ },
+ "Borst- & Buikontharing": {
+  "en": "Chest & Stomach Waxing",
+  "fr": "Épilation du torse et du ventre"
+ },
+ "Volledige Beenontharing": {
+  "en": "Full Leg Waxing",
+  "fr": "Épilation des jambes complètes"
+ },
+ "Harmoniserende Rugverzorging": {
+  "en": "Harmonising Back Treatment",
+  "fr": "Soin harmonisant du dos"
+ },
+ "Teambuilding Beauty & Pamper Experience": {
+  "en": "Team Building Beauty & Pamper Experience",
+  "fr": "Team building Beauty & Pamper Experience"
+ },
+ "Teambuilding Specialty Coffee Experience": {
+  "en": "Team Building Specialty Coffee Experience",
+  "fr": "Team building Specialty Coffee Experience"
+ },
+ "Cat Eye & Magnetische Gellak Manicure Workshop": {
+  "en": "Cat Eye & Magnetic Gel Polish Manicure Workshop",
+  "fr": "Atelier manucure Cat Eye & vernis gel magnétique"
+ },
+ "Kindermanicure": {
+  "en": "Kids' Manicure",
+  "fr": "Manucure pour enfants"
+ },
+ "Gerlasan Handcrème (met Ureum)": {
+  "en": "Gerlasan Hand Cream (with urea)",
+  "fr": "Crème mains Gerlasan (à l'urée)"
+ },
+ "Gehwol Fusskraft Intensive Cream / Blauw (75 ml)": {
+  "en": "Gehwol Fusskraft Intensive Cream / Blue (75 ml)",
+  "fr": "Gehwol Fusskraft Intensive Cream / Bleu (75 ml)"
+ },
+ "Syndet zeepvrij": {
+  "en": "Syndet soap-free bar",
+  "fr": "Pain Syndet sans savon"
+ },
+ "Geitenmelkzeep": {
+  "en": "Goat milk soap",
+  "fr": "Savon au lait de chèvre"
+ },
+ "Aloë Vera zeep": {
+  "en": "Aloe vera soap",
+  "fr": "Savon à l'aloe vera"
+ },
+ "Komkommerzeep": {
+  "en": "Cucumber soap",
+  "fr": "Savon au concombre"
+ },
+ "Amandelmelkzeep": {
+  "en": "Almond milk soap",
+  "fr": "Savon au lait d'amande"
+ },
+ "Pale Ale zeep": {
+  "en": "Pale ale soap",
+  "fr": "Savon à la pale ale"
+ },
+ "Koffiezeep": {
+  "en": "Coffee soap",
+  "fr": "Savon au café"
+ },
+ "Matcha-mandarijnscrub": {
+  "en": "Matcha-mandarin scrub",
+  "fr": "Gommage matcha-mandarine"
+ },
+ "Hot Chocolate (Milk)": {
+  "nl": "Warme chocolademelk (melk)",
+  "fr": "Chocolat chaud (lait)"
+ },
+ "Hot Chocolate (White)": {
+  "nl": "Warme chocolademelk (wit)",
+  "fr": "Chocolat chaud (blanc)"
+ },
+ "Iced Coffee + Whipped Cream": {
+  "nl": "IJskoffie + slagroom",
+  "fr": "Café glacé + chantilly"
+ },
+ "Iced Latte + Choco + Whipped Cream + Biscoff Crumbs": {
+  "nl": "IJslatte + choco + slagroom + Biscoff-kruimels",
+  "fr": "Latte glacé + choco + chantilly + éclats de Biscoff"
+ },
+ "Dark chocolate, plum, honey": {
+  "nl": "Pure chocolade, pruim, honing",
+  "fr": "Chocolat noir, prune, miel"
+ },
+ "Nutty, cream, orange": {
+  "nl": "Nootachtig, room, sinaasappel",
+  "fr": "Noisette, crème, orange"
+ },
+ "Milk chocolate, caramel, honey": {
+  "nl": "Melkchocolade, karamel, honing",
+  "fr": "Chocolat au lait, caramel, miel"
+ },
+ "Hazelnut, maple": {
+  "nl": "Hazelnoot, ahorn",
+  "fr": "Noisette, érable"
+ },
+ "2 scoops vanilla ice cream": {
+  "nl": "2 bolletjes vanille-ijs",
+  "fr": "2 boules de glace vanille"
+ }
+};
+function trName(s, lang){
+  if (!s || typeof s !== "string") return s;
+  const e = NAME_I18N[s];
+  return (e && e[lang]) || s;
+}
+
+/* ============================================================
    PRODUCT CATALOG — home-care recommendations
    inStock is a per-category (and per-soap) toggle so the app
    never advises something that's currently sold out in Wix.
@@ -273,7 +580,7 @@ function resolveHomecareText(pick, lang){
   if (!cat) return null;
   const product = cat.products.find(p => p.id === pick.productId);
   if (!product) return null;
-  return { categoryLabel: cat.label[lang], productName: product.name, usage: product.usage[lang] };
+  return { categoryLabel: cat.label[lang], productName: trName(product.name, lang), usage: product.usage[lang] };
 }
 
 /* Secondary soap suggestion — surfaces the dry/sensitive-skin artisan soaps
@@ -935,7 +1242,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v28 · 01/10/2026";
+const APP_VERSION = "v29 · 01/10/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".

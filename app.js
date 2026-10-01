@@ -929,8 +929,8 @@
       drinkFull = drinkDef.name[state.lang];
       drinkNotes = null;
     } else {
-      drinkFull = m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
-      drinkNotes = m.drink.notes;
+      drinkFull = m.drink.origin ? [m.drink.origin, trName(m.drink.name, state.lang)].join(" — ") : trName(m.drink.name, state.lang);
+      drinkNotes = trName(m.drink.notes, state.lang);
     }
 
     const milkLabel = m.milkId && m.milkId !== "none" ? t(`milk.${m.milkId}`, state.lang) : null;
@@ -954,7 +954,7 @@
         <span class="result-row__icon">✨</span>
         <div>
           <div class="result-row__label">${t("treatment_label", state.lang)}</div>
-          <div class="result-row__value">${m.treatment.name}</div>
+          <div class="result-row__value">${trName(m.treatment.name, state.lang)}</div>
         </div>
       </div>`;
 
@@ -972,7 +972,7 @@
       const d = KIDS_DRINKS.find(x => x.id === m.drinkId) || KIDS_DRINKS[0];
       return d.name[state.lang];
     }
-    return m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name;
+    return m.drink.origin ? [m.drink.origin, trName(m.drink.name, state.lang)].join(" — ") : trName(m.drink.name, state.lang);
   }
 
   function slotsText(){
@@ -991,7 +991,7 @@
     if (emailLink){
       const subject = t("book_email_subject", state.lang);
       const body = t("book_email_body", state.lang)
-        .replace("{treatment}", m.treatment.name)
+        .replace("{treatment}", trName(m.treatment.name, state.lang))
         .replace("{drink}", drinkFull || "")
         .replace("{slots}", slots);
       emailLink.href = `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -999,7 +999,7 @@
     const waLink = $("#bookWhatsappCta");
     if (waLink){
       const waText = t("book_whatsapp_text", state.lang)
-        .replace("{treatment}", m.treatment.name)
+        .replace("{treatment}", trName(m.treatment.name, state.lang))
         .replace("{drink}", drinkFull || "")
         .replace("{slots}", slots)
         .trim();
@@ -1039,7 +1039,7 @@
     return (localData.favorites || []).some(f => f.key === favKey(m));
   }
   function favBookHref(f){
-    const text = t("fav_book_text", state.lang).replace("{treatment}", f.tname).replace("{drink}", f.drink).trim();
+    const text = t("fav_book_text", state.lang).replace("{treatment}", trName(f.tname, state.lang)).replace("{drink}", f.drink).trim();
     return `https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(text)}`;
   }
 
@@ -1624,7 +1624,7 @@
     if (m){
       const drinkFull = m.isKid
         ? (KIDS_DRINKS.find(d => d.id === m.drinkId) || KIDS_DRINKS[0]).name[state.lang]
-        : (m.drink.origin ? [m.drink.origin, m.drink.name].join(" — ") : m.drink.name);
+        : (m.drink.origin ? [m.drink.origin, trName(m.drink.name, state.lang)].join(" — ") : trName(m.drink.name, state.lang));
       const pad = 44;
       let y = H - 300;
 
@@ -1643,7 +1643,7 @@
       ctx.font = "500 30px Jost, Arial, sans-serif";
        const treatName = typeof m.treatment.name === "object" 
   ? (m.treatment.name[state.lang] || m.treatment.name.nl) 
-  : m.treatment.name;
+  : trName(m.treatment.name, state.lang);
        const treatLine = t("overlay_treatment_prefix", state.lang) + treatName;
        wrapText(ctx, treatLine, pad, y, W-pad*2, 38);
     }
@@ -1974,7 +1974,7 @@
       <p class="returning-user__title returning-user__title--fav">${t("fav_title", state.lang)}</p>
       <ul class="fav-list">
         ${favs.map((f, i) => `<li class="fav-item">
-          <div class="fav-item__text"><strong>${f.tname}</strong><span>☕ ${f.drink}</span></div>
+          <div class="fav-item__text"><strong>${trName(f.tname, state.lang)}</strong><span>☕ ${f.drink}</span></div>
           <div class="fav-item__actions">
             <a class="fav-item__book" href="${favBookHref(f)}" target="_blank" rel="noopener">${t("fav_book", state.lang)}</a>
             <button type="button" class="fav-item__remove" data-action="remove-fav" data-fav-index="${i}">${t("fav_remove", state.lang)}</button>
@@ -2313,7 +2313,7 @@
     const end = new Date(start.getTime() + 30 * 60 * 1000);
 
     const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    const title = state.match && !state.match.isKid ? state.match.treatment.name : t("reminder_ics_title", state.lang);
+    const title = state.match && !state.match.isKid ? trName(state.match.treatment.name, state.lang) : t("reminder_ics_title", state.lang);
 
     // UID, DTSTAMP and PRODID are required by the calendar standard (RFC 5545);
     // without them some calendar apps (e.g. Outlook, older iPhones) refuse the file.
