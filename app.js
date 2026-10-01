@@ -1887,24 +1887,65 @@
       const cached = JSON.parse(localStorage.getItem(NEWS_CACHE_KEY) || "null");
       if (cached && Array.isArray(cached.posts)) { news.posts = cached.posts; renderNewsCard(); }
     } catch(e){}
-    let api = "https://public-api.wordpress.com/rest/v1.1/sites/" + encodeURIComponent(site) +
-      "/posts/?number=" + count + "&status=publish&fields=title,URL,date,excerpt,featured_image";
-    if (cfg.category) api += "&category=" + encodeURIComponent(cfg.category);
-    fetch(api, { cache:"no-cache" })
-      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(data => {
-        const posts = (data && Array.isArray(data.posts) ? data.posts : []).map(p => ({
-          title: newsText(p.title),
-          url: newsSafeUrl(p.URL),
-          date: p.date || "",
-          excerpt: newsShorten(newsText(p.excerpt), 140),
-          img: newsSafeUrl(p.featured_image) ? newsSafeUrl(p.featured_image).split("?")[0] + "?w=200&h=200&crop=1" : ""
-        })).filter(p => p.title && p.url);
+    // Two routes to the same posts: if a browser/ad blocker stops the first,
+    // the second (the site's own address) usually still gets through.
+    const cat = cfg.category ? encodeURIComponent(cfg.category) : "";
+    const routes = [
+      { name: "wpcom-v1.1",
+        url: "https://public-api.wordpress.com/rest/v1.1/sites/" + encodeURIComponent(site) +
+             "/posts/?number=" + count + (cat ? "&category=" + cat : ""),
+        parse: data => (data && Array.isArray(data.posts) ? data.posts : []).map(p => ({
+          title: p.title, url: p.URL, date: p.date, excerpt: p.excerpt, img: p.featured_image })) },
+      { name: "site-wp-v2",
+        url: "https://" + site + "/wp-json/wp/v2/posts?per_page=" + count +
+             "&_fields=title,link,date,excerpt,jetpack_featured_media_url",
+        parse: data => (Array.isArray(data) ? data : []).map(p => ({
+          title: p.title && p.title.rendered, url: p.link, date: p.date,
+          excerpt: p.excerpt && p.excerpt.rendered, img: p.jetpack_featured_media_url })) }
+    ];
+    if (cat) routes.pop();   // the second route can't filter by category name: then only use the first
+    const errors = [];
+    const tryRoute = i => {
+      if (i >= routes.length) return Promise.reject(new Error(errors.join(" | ")));
+      const r = routes[i];
+      return fetch(r.url, { cache:"no-cache" })
+        .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+        .then(data => {
+          const list = r.parse(data);
+          if (!list.length) throw new Error("0 posts");
+          return list;
+        })
+        .catch(err => { errors.push(r.name + ": " + (err && err.message || err)); return tryRoute(i + 1); });
+    };
+    tryRoute(0)
+      .then(list => {
+        const posts = list.map(p => {
+          const img = newsSafeUrl(p.img);
+          return {
+            title: newsText(p.title),
+            url: newsSafeUrl(p.url),
+            date: p.date || "",
+            excerpt: newsShorten(newsText(p.excerpt), 140),
+            img: img ? img.split("?")[0] + "?w=200&h=200&crop=1" : ""
+          };
+        }).filter(p => p.title && p.url).slice(0, count);
         news.posts = posts; news.offline = false;
         try { localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), posts })); } catch(e){}
         renderNewsCard();
       })
-      .catch(() => { if (news.posts && news.posts.length){ news.offline = !navigator.onLine; renderNewsCard(); } });
+      .catch(err => {
+        if (news.posts && news.posts.length){ news.offline = !navigator.onLine; renderNewsCard(); }
+        // Diagnose: open the app with #newsdebug at the end of the address
+        // to see why the posts could not be loaded.
+        if (/newsdebug/.test(location.hash)){
+          const card = $("#newsCard"), list = $("#newsList");
+          if (card && list){
+            const p = document.createElement("p"); p.className = "news-card__note";
+            p.textContent = "News debug — " + (err && err.message || err);
+            list.appendChild(p); card.hidden = false;
+          }
+        }
+      });
   }
 
   /* ---------------- newsletter signup (mailto — no backend) ---------------- */
