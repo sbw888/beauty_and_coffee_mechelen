@@ -1220,7 +1220,17 @@
     body.innerHTML = `
       ${routeMapHtml(lang)}
       <a class="btn btn--primary btn--wide findme-route" href="${ROUTE_URL}" target="_blank" rel="noopener">${t("practical_info_route", lang)}</a>
-      <ul class="rules-list findme-list">${items.map(it => `<li>${it[lang]}</li>`).join("")}</ul>`;
+      <ul class="rules-list findme-list">${items.map(it => `<li>${it[lang]}</li>`).join("")}</ul>
+      <div class="findme-contact">
+        <p class="price-contact__title">${t("contact_title", lang)}</p>
+        <p class="price-contact__hint">${t("contact_hint", lang)}</p>
+        <div class="findme-contact__buttons">
+          <a class="btn btn--primary" href="tel:+${BOOKING_WHATSAPP}" data-contact="call">${t("contact_call", lang)}</a>
+          <a class="btn btn--outline" href="https://wa.me/${BOOKING_WHATSAPP}?text=${encodeURIComponent(t("contact_wa_text", lang))}" target="_blank" rel="noopener" data-contact="whatsapp">${t("contact_whatsapp", lang)}</a>
+          <a class="btn btn--outline" href="mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(t("contact_mail_subject", lang))}" data-contact="mail">${t("contact_mail", lang)}</a>
+        </div>
+      </div>`;
+    body.querySelectorAll("[data-contact]").forEach(a => a.addEventListener("click", () => trackEvent("contact-" + a.dataset.contact)));
   }
 
   function renderHouseRules(){

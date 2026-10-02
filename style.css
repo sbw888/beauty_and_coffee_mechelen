@@ -757,3 +757,7 @@ body{
 .findme-route{ display:flex; justify-content:center; text-decoration:none; margin:6px 0 14px; }
 .findme-list{ margin-top:4px; }
 .price-section .route-map{ margin:12px 0 4px; }
+
+.findme-contact{ margin:22px 0 6px; padding:16px; background:#fff; border-radius:var(--radius-m); box-shadow:var(--shadow-card); text-align:center; }
+.findme-contact__buttons{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.findme-contact__buttons .btn{ width:100%; text-decoration:none; justify-content:center; white-space:nowrap; }
