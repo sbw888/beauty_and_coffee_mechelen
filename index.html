@@ -355,7 +355,11 @@
       <p class="practical-info__title" data-i18n="practical_info_title">📍 Praktisch om te weten</p>
       <p data-i18n="practical_info_hours">Momenteel enkel bereikbaar in het weekend, ook 's avonds — geen afspraken op weekdagen en (tijdelijk) geen huisbezoeken, wegens avondopleiding.</p>
       <p data-i18n="practical_info_parking"></p>
-      <a class="btn btn--outline practical-info__route" href="https://www.google.com/maps/search/?api=1&amp;query=Beauty%20%26%20Coffee%20Barbarastraat" target="_blank" rel="noopener" data-i18n="practical_info_route">🗺️ Route in Google Maps</a>
+      <a class="route-map" href="https://www.google.com/maps/dir/?api=1&amp;destination=Beauty%20%26%20Coffee%2C%20Barbarastraat" target="_blank" rel="noopener" data-action-track="route">
+        <img src="assets/route-map.svg" alt="" width="789" height="626" loading="lazy">
+        <span class="route-map__caption" data-i18n="route_map_caption">Tik op het kaartje voor de route in Google Maps.</span>
+      </a>
+      <a class="btn btn--outline practical-info__route" href="https://www.google.com/maps/dir/?api=1&amp;destination=Beauty%20%26%20Coffee%2C%20Barbarastraat" target="_blank" rel="noopener" data-i18n="practical_info_route">🗺️ Route in Google Maps</a>
     </div>
 
     <div class="social-links social-links--result" id="socialLinksResult"></div>
@@ -395,6 +399,13 @@
       <p class="step__hint" data-i18n="houserules_intro">Zodat we samen zorgen voor een aangename en professionele afspraak.</p>
     </div>
     <div id="houseRulesBody" class="price-list"></div>
+    <div class="route-map-block">
+      <p class="price-contact__title" data-i18n="route_map_title">📍 Zo vind je me</p>
+      <a class="route-map route-map--rules" href="https://www.google.com/maps/dir/?api=1&amp;destination=Beauty%20%26%20Coffee%2C%20Barbarastraat" target="_blank" rel="noopener" data-action-track="route">
+        <img src="assets/route-map.svg" alt="" width="789" height="626" loading="lazy">
+        <span class="route-map__caption" data-i18n="route_map_caption">Tik op het kaartje voor de route in Google Maps.</span>
+      </a>
+    </div>
     <div class="price-contact">
       <p class="price-contact__title" data-i18n="houserules_cancel_title">Annuleren of verplaatsen?</p>
       <p class="price-contact__hint" data-i18n="houserules_cancel_text">Bel of sms uiterlijk 1 uur voor je afspraak:</p>
@@ -429,6 +440,12 @@
 
 </main>
 
+<section class="news-card" id="newsCard" hidden aria-live="polite">
+  <p class="news-card__title" data-i18n="news_title">📰 Nieuw op de blog</p>
+  <div class="news-card__list" id="newsList"></div>
+  <a class="btn btn--text news-card__all" id="newsAllLink" href="#" target="_blank" rel="noopener" data-i18n="news_all">Alle berichten op de website</a>
+</section>
+
 <section class="newsletter-card" id="newsletterCard">
   <p class="newsletter-card__title" data-i18n="newsletter_title">☕ Blijf op de hoogte</p>
   <p class="newsletter-card__sub" data-i18n="newsletter_sub">Nieuwe behandelingen, acties zoals de grabbelton, en workshop-data — af en toe een mailtje, nooit spam.</p>
@@ -450,6 +467,7 @@
     <p data-i18n="privacy_p3"></p>
     <p data-i18n="privacy_p4"></p>
     <p data-i18n="privacy_p5"></p>
+    <p data-i18n="privacy_p6"></p>
   </details>
   <div class="social-links" id="socialLinks"></div>
   <button type="button" class="footer-reset-btn" data-action="reset-local-data" data-i18n="footer_reset_button">Wis mijn lokale gegevens</button>

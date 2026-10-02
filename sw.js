@@ -2,9 +2,10 @@
    Network-first for the app's own files: online users always get the
    latest version right after a deploy (no cache clearing needed); offline
    users fall back to what was cached last, so the app keeps working.
-   Requests to other sites (GoatCounter statistics, Google Fonts) are left
+   Requests to other sites (GoatCounter statistics, Google Fonts, the
+   WordPress.com news feed) are left
    alone: they go straight to the network and are never cached here. */
-const CACHE_NAME = "beauty-coffee-v33";
+const CACHE_NAME = "beauty-coffee-v36";
 const ASSETS = [
   "./",
   "./index.html",
@@ -17,7 +18,8 @@ const ASSETS = [
   "./assets/icon-192.png",
   "./assets/icon-512.png",
   "./assets/logo-transparent.png",
-  "./assets/lib/qr-encoder.js"
+  "./assets/lib/qr-encoder.js",
+  "./assets/route-map.svg"
 ];
 
 self.addEventListener("install", event => {
