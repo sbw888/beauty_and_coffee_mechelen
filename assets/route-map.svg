@@ -33,6 +33,9 @@
   </g>
   <!-- walking time -->
   <g transform="translate(155,267)" font-family="Jost, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">
+    <rect x="-72" y="-22" width="144" height="40" rx="20" fill="#fff" stroke="#2C1E16" stroke-width="2"/><text y="7" fill="#2C1E16">🚶 ± 5 min</text>
+  </g>
+  <g transform="translate(118,418)" font-family="Jost, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">
     <rect x="-58" y="-22" width="116" height="40" rx="20" fill="#fff" stroke="#2C1E16" stroke-width="2"/><text y="7" fill="#2C1E16">🚶 2 min</text>
   </g>
   <!-- Beauty & Coffee pin -->
