@@ -190,7 +190,7 @@
   "newsletter_sent_toast": "Presque fini — envoyez l'e-mail qui vient de s'ouvrir.",
   "practical_info_title": "📍 Bon à savoir",
   "practical_info_hours": "Actuellement disponible uniquement le week-end, y compris en soirée — pas de rendez-vous en semaine et (temporairement) pas de visites à domicile, en raison de cours du soir.",
-  "practical_info_parking": "🚗 En voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons — pas jusqu'aux maisons, il n'y a pas de place pour les visiteurs. De là, 2 minutes à pied. Vélo ou vélo cargo ? Attachez-le avec les vélos.",
+  "practical_info_parking": "🚗 En voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons — pas jusqu'aux maisons, il n'y a pas de place pour les visiteurs. De là, 2 minutes à pied (depuis la Jubellaan, environ 5 minutes). Vélo ou vélo cargo ? Attachez-le avec les vélos.",
   "practical_info_route": "🗺️ Itinéraire dans Google Maps",
   "route_map_title": "📍 Comment me trouver",
   "route_map_caption": "🅿️ Garez-vous sur la Jubellaan ou à l'entrée de la Barbarastraat, pas près des maisons (en rouge). Touchez la carte pour l'itinéraire dans Google Maps.",
@@ -1221,7 +1221,7 @@
      "items": [
       "Vous venez en voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons.",
       "Merci de ne pas rouler jusqu'aux maisons : il n'y a pas de stationnement pour les visiteurs dans ce cul-de-sac.",
-      "Depuis le parking, il n'y a que 2 minutes à pied jusqu'à chez moi.",
+      "Depuis le parking de la Barbarastraat, il n'y a que 2 minutes à pied jusqu'à chez moi ; depuis la Jubellaan, environ 5 minutes.",
       "Vous venez à vélo ou en vélo cargo ? Vous pouvez l'attacher avec les vélos.",
       "Besoin de l'itinéraire ? Cherchez « Beauty & Coffee » dans Google Maps, ou touchez « Itinéraire dans Google Maps » sous votre match."
      ]
