@@ -752,3 +752,8 @@ body{
 .news-item__more{ font-size:12px; color:var(--gold-ink); font-weight:600; }
 .news-card__note{ font-size:11px; color:var(--espresso-60); text-align:center; margin:8px 0 0; }
 .news-card__all{ display:block; text-align:center; margin:8px auto 0; }
+
+.welcome-findme{ margin-top:10px; }
+.findme-route{ display:flex; justify-content:center; text-decoration:none; margin:6px 0 14px; }
+.findme-list{ margin-top:4px; }
+.price-section .route-map{ margin:12px 0 4px; }

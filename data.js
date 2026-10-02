@@ -1242,7 +1242,7 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v38 · 02/10/2026";
+const APP_VERSION = "v39 · 02/10/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".
@@ -1441,7 +1441,7 @@ const HOUSE_RULES = [
       R("Rij niet door tot aan de woonhuizen: in dat doodlopende stukje is geen parkeerplaats voor bezoekers.","Please don't drive on to the houses: there is no visitor parking in that dead-end stretch."),
       R("Vanaf de parkeerstrook in de Barbarastraat is het maar 2 minuten stappen tot bij mij; vanaf de Jubellaan ongeveer 5 minuten.","From the parking strip in the Barbarastraat it's only a 2-minute walk to my place; from the Jubellaan about 5 minutes."),
       R("Kom je met de fiets of bakfiets? Die mag je vastzetten bij de fietsen.","Coming by bike or cargo bike? You can lock it up with the bikes."),
-      R("Route nodig? Zoek ‘Beauty & Coffee’ in Google Maps, of tik op ‘Route in Google Maps’ onder je match.","Need directions? Search for ‘Beauty & Coffee’ in Google Maps, or tap ‘Directions in Google Maps’ below your match.")
+      R("Route nodig? Tik op het kaartje hieronder: Google Maps opent met de route naar mij.","Need directions? Tap the map below: Google Maps opens with directions to me.")
     ]}] },
   { id:"hygiene", icon:"🧼", title:R("Hygiëne en verzorging","Hygiene and care"),
     intro:R("Voor een aangename en professionele behandeling verwacht ik van elke klant het volgende:","For a pleasant and professional treatment I expect the following from every client:"), outro:null,

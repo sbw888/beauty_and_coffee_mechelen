@@ -196,6 +196,8 @@ const I18N = {
     practical_info_parking: "🚗 Met de auto? Parkeer op de Jubellaan of op de parkeerplaatsen vooraan in de Barbarastraat, nog vóór je indraait naar de woonhuizen — niet tot aan de huizen, daar is geen plaats voor bezoekers. Vanaf de parkeerstrook is het 2 minuten stappen, vanaf de Jubellaan ongeveer 5 minuten. Met de (bak)fiets? Die mag je vastzetten bij de fietsen.",
     practical_info_route: "🗺️ Route in Google Maps",
     route_map_title: "📍 Zo vind je me",
+    findme_button: "📍 Zo vind je me & parkeren",
+    findme_title: "Zo vind je me",
     route_map_caption: "🅿️ Parkeer op de Jubellaan of vooraan in de Barbarastraat, niet bij de huizen (rood). Tik op het kaartje voor de route in Google Maps.",
     restart_button: "Opnieuw beginnen",
 
@@ -509,6 +511,8 @@ const I18N = {
     practical_info_parking: "🚗 Coming by car? Park on the Jubellaan or in the spaces at the front of the Barbarastraat, before you turn in toward the houses — not by the houses, there is no visitor parking there. From the parking strip it's a 2-minute walk, from the Jubellaan about 5 minutes. By (cargo) bike? You can lock it up with the bikes.",
     practical_info_route: "🗺️ Directions in Google Maps",
     route_map_title: "📍 How to find me",
+    findme_button: "📍 How to find me & parking",
+    findme_title: "How to find me",
     route_map_caption: "🅿️ Park on the Jubellaan or at the front of the Barbarastraat, not by the houses (red). Tap the map for directions in Google Maps.",
     restart_button: "Start over",
 

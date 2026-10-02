@@ -88,6 +88,7 @@
     if (typeof PRICE_LIST !== "undefined" && $('[data-step="pricelist"]').classList.contains("is-active")) renderPriceList();
     renderSunFact();
     if (typeof HOUSE_RULES !== "undefined" && $('[data-step="houserules"]').classList.contains("is-active")) renderHouseRules();
+    if ($('[data-step="findme"]') && $('[data-step="findme"]').classList.contains("is-active")) renderFindMe();
     if (typeof localData !== "undefined") renderReturningUserBlock();
     renderSocialLinks();
     renderActions();
@@ -103,7 +104,7 @@
   function updateProgress(name){
     const w = STEP_WEIGHTS[name] ?? 0;
     $("#progressFill").style.width = w + "%";
-    $(".progress").style.visibility = (name==="welcome" || name==="pricelist" || name==="houserules" || name==="stampcard") ? "hidden" : "visible";
+    $(".progress").style.visibility = (name==="welcome" || name==="pricelist" || name==="houserules" || name==="stampcard" || name==="findme") ? "hidden" : "visible";
   }
 
   function showStep(name){
@@ -119,6 +120,9 @@
     }
     if (name === "stampcard") {
       renderLoyaltyBlock();
+    }
+    if (name === "findme") {
+      renderFindMe();
     }
     if (name === "sunCheck") {
       state.sunFact = randomFactCode(SKIN_FACT_POOLS.sun);
@@ -1197,6 +1201,28 @@
       <button type="button" class="rules-teaser__more" data-action="open-houserules">${t("houserules_teaser_more", lang)}</button>`;
   }
 
+  /* Parking + map, shown in three places: the "Zo vind je me" screen, the
+     parking section of the house rules (map right under the explanation)
+     and "Praktisch om te weten" on the result screen. */
+  const ROUTE_URL = "https://www.google.com/maps/dir/?api=1&destination=Beauty%20%26%20Coffee%2C%20Barbarastraat";
+  function routeMapHtml(lang){
+    return `<a class="route-map" href="${ROUTE_URL}" target="_blank" rel="noopener">
+        <img src="assets/route-map.svg" alt="" width="789" height="658" loading="lazy">
+        <span class="route-map__caption">${t("route_map_caption", lang)}</span>
+      </a>`;
+  }
+  function renderFindMe(){
+    const body = $("#findMeBody");
+    if (!body || typeof HOUSE_RULES === "undefined") return;
+    const lang = state.lang;
+    const sec = HOUSE_RULES.find(s => s.id === "parking");
+    const items = sec ? sec.groups[0].items.slice(0, -1) : [];   // last item points to the map itself
+    body.innerHTML = `
+      ${routeMapHtml(lang)}
+      <a class="btn btn--primary btn--wide findme-route" href="${ROUTE_URL}" target="_blank" rel="noopener">${t("practical_info_route", lang)}</a>
+      <ul class="rules-list findme-list">${items.map(it => `<li>${it[lang]}</li>`).join("")}</ul>`;
+  }
+
   function renderHouseRules(){
     const body = $("#houseRulesBody");
     if (!body || typeof HOUSE_RULES === "undefined") return;
@@ -1213,6 +1239,7 @@
           ${g.title ? `<h3 class="rules-group">${g.title[lang]}</h3>` : ""}
           <ul class="rules-list">${g.items.map(it => `<li>${it[lang]}</li>`).join("")}</ul>`).join("")}
         ${sec.outro ? `<p class="rules-intro rules-outro">${sec.outro[lang]}</p>` : ""}
+        ${sec.id === "parking" ? routeMapHtml(lang) : ""}
       </details>`;
     }).join("");
   }
@@ -2440,6 +2467,10 @@
     if (location.hash === "#salon") openSalonMode();
     // direct link to the stamp card, e.g. a QR poster in the salon:
     // https://sbw888.github.io/beauty_and_coffee_mechelen/#stempelkaart
+    else if (location.hash === "#route" || location.hash === "#parkeren"){
+      window.history.replaceState(null, "", location.pathname + location.search);
+      goTo("findme");
+    }
     else if (location.hash === "#stempelkaart" || location.hash === "#stamps"){
       window.history.replaceState(null, "", location.pathname + location.search);
       goTo("stampcard");
@@ -2562,6 +2593,7 @@
       if (action === "open-pricelist") goTo("pricelist");
       if (action === "open-houserules") goTo("houserules");
       if (action === "open-stampcard") goTo("stampcard");
+      if (action === "open-findme") goTo("findme");
       if (action === "another-fact") anotherFact();
       if (action === "install-app") installApp();
       if (action === "dismiss-install") dismissInstallBanner();

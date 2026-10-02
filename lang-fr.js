@@ -193,6 +193,8 @@
   "practical_info_parking": "🚗 En voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons — pas jusqu'aux maisons, il n'y a pas de place pour les visiteurs. De là, 2 minutes à pied (depuis la Jubellaan, environ 5 minutes). Vélo ou vélo cargo ? Attachez-le avec les vélos.",
   "practical_info_route": "🗺️ Itinéraire dans Google Maps",
   "route_map_title": "📍 Comment me trouver",
+  "findme_button": "📍 Accès & stationnement",
+  "findme_title": "Comment me trouver",
   "route_map_caption": "🅿️ Garez-vous sur la Jubellaan ou à l'entrée de la Barbarastraat, pas près des maisons (en rouge). Touchez la carte pour l'itinéraire dans Google Maps.",
   "restart_button": "Recommencer",
   "footer_privacy": "Vos photos restent toujours sur votre appareil — 100 % privé.",
@@ -1223,7 +1225,7 @@
       "Merci de ne pas rouler jusqu'aux maisons : il n'y a pas de stationnement pour les visiteurs dans ce cul-de-sac.",
       "Depuis le parking de la Barbarastraat, il n'y a que 2 minutes à pied jusqu'à chez moi ; depuis la Jubellaan, environ 5 minutes.",
       "Vous venez à vélo ou en vélo cargo ? Vous pouvez l'attacher avec les vélos.",
-      "Besoin de l'itinéraire ? Cherchez « Beauty & Coffee » dans Google Maps, ou touchez « Itinéraire dans Google Maps » sous votre match."
+      "Besoin de l'itinéraire ? Touchez la carte ci-dessous : Google Maps s'ouvre avec l'itinéraire jusqu'à chez moi."
      ]
     }
    ]
