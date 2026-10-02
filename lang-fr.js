@@ -173,11 +173,6 @@
   "install_banner_sub": "Ajoutez l'app à votre écran d'accueil — pas besoin d'App Store.",
   "install_banner_ios_sub": "Appuyez sur ⬆️ Partager, puis « Sur l'écran d'accueil ».",
   "install_banner_button": "Installer",
-  "news_title": "📰 Nouveau sur le blog",
-  "news_read_more": "Lire la suite",
-  "news_all": "Tous les articles sur le site",
-  "news_offline": "Vous êtes hors ligne — voici les articles de votre dernière visite.",
-  "privacy_p6": "La rubrique actualités charge les derniers articles du blog depuis WordPress.com, qui héberge mon site. Comme tout site web, WordPress.com voit votre adresse IP. Aucune de vos réponses ni photo n'est envoyée.",
   "newsletter_title": "☕ Restez informé·e",
   "newsletter_sub": "Nouveaux soins, promotions comme le tonneau à surprises, et dates d'ateliers — un e-mail de temps en temps, jamais de spam.",
   "newsletter_placeholder": "vous@exemple.be",
@@ -190,7 +185,8 @@
   "newsletter_sent_toast": "Presque fini — envoyez l'e-mail qui vient de s'ouvrir.",
   "practical_info_title": "📍 Bon à savoir",
   "practical_info_hours": "Actuellement disponible uniquement le week-end, y compris en soirée — pas de rendez-vous en semaine et (temporairement) pas de visites à domicile, en raison de cours du soir.",
-  "practical_info_parking": "Stationnement : il y a des places au début de la rue (juste avant de tourner à gauche vers les maisons) — de là, il n'y a que 2 minutes à pied jusqu'à chez moi. Vous venez en vélo cargo ? Vous pouvez l'attacher avec les vélos.",
+  "practical_info_parking": "🚗 En voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons — pas jusqu'aux maisons, il n'y a pas de place pour les visiteurs. De là, 2 minutes à pied. Vélo ou vélo cargo ? Attachez-le avec les vélos.",
+  "practical_info_route": "🗺️ Itinéraire dans Google Maps",
   "restart_button": "Recommencer",
   "footer_privacy": "Vos photos restent toujours sur votre appareil — 100 % privé.",
   "footer_reset_button": "Effacer mes données locales",
@@ -1208,6 +1204,23 @@
   }
  },
  "houseRules": {
+  "parking": {
+   "title": "Accès et stationnement",
+   "intro": null,
+   "outro": null,
+   "groups": [
+    {
+     "title": null,
+     "items": [
+      "Vous venez en voiture ? Garez-vous sur la Jubellaan ou sur les places à l'entrée de la Barbarastraat, avant de tourner vers les maisons.",
+      "Merci de ne pas rouler jusqu'aux maisons : il n'y a pas de stationnement pour les visiteurs dans ce cul-de-sac.",
+      "Depuis le parking, il n'y a que 2 minutes à pied jusqu'à chez moi.",
+      "Vous venez à vélo ou en vélo cargo ? Vous pouvez l'attacher avec les vélos.",
+      "Besoin de l'itinéraire ? Cherchez « Beauty & Coffee » dans Google Maps, ou touchez « Itinéraire dans Google Maps » sous votre match."
+     ]
+    }
+   ]
+  },
   "appointments": {
    "title": "Rendez-vous et annulations",
    "intro": null,

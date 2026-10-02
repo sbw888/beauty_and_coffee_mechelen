@@ -1242,26 +1242,13 @@ const BOOKING_SLOTS = [
    CACHE_NAME in sw.js too).
    SOCIAL_LINKS: leave a link "" to hide that button.
    ============================================================ */
-const APP_VERSION = "v35 · 01/10/2026";
+const APP_VERSION = "v33 · 01/10/2026";
 /* Newsletter: paste the address of the newsletter page on the WordPress
    site (the page with the Subscribe block), e.g.
    "https://sanmakeupstudio.wordpress.com/nieuwsbrief/".
    Filled in → the app sends people to that page (WordPress newsletter,
    they confirm by email). Left "" → old behaviour: a ready-made email. */
 const NEWSLETTER_URL = "https://sanmakeupstudio.wordpress.com/nieuwsbrief/";
-/* News card: shows the latest posts from the WordPress site in the app.
-   site:     the WordPress.com address (no https://).
-   category: "" = all posts; or a category slug, e.g. "weetjes".
-   count:    how many posts to show (1–5).
-   allUrl:   where "Alle berichten op de website" goes. The homepage is a
-             static page, so this points to the overview of all posts.
-   Set site to "" to hide the news card completely. */
-const NEWS_FEED = {
-  site: "sanmakeupstudio.wordpress.com",
-  category: "",
-  count: 3,
-  allUrl: "https://sanmakeupstudio.wordpress.com/author/beautyglowbysandra/"
-};
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/beauty_and_coffee_mechelen/",
   facebook: "https://www.facebook.com/profile.php?id=100071510416360"   // zakelijke pagina (niet het privéprofiel)
@@ -1434,6 +1421,14 @@ const HOUSE_RULES = [
       R("Bij ziekte: verwittig zo snel mogelijk. Annuleer je minstens 1 uur vóór de afspraak, dan worden er geen kosten aangerekend. Bij laattijdige annulatie geldt de 50%-regel.","In case of illness: let me know as soon as possible. If you cancel at least 1 hour before the appointment, no costs are charged. For late cancellations the 50% rule applies."),
       R("Kom op tijd. Te laat? Verwittig meteen per telefoon of sms. Bij meer dan 15 minuten vertraging kan de behandeling ingekort of geannuleerd worden tegen de annulatiekost.","Please be on time. Running late? Let me know immediately by phone or text. With more than 15 minutes delay the treatment may be shortened or cancelled, subject to the cancellation fee."),
       R("Bij wanbetaling is het niet meer mogelijk om een afspraak te maken bij Beauty & Coffee.","In case of non-payment it is no longer possible to make an appointment at Beauty & Coffee.")
+    ]}] },
+  { id:"parking", icon:"🚗", title:R("Bereikbaarheid en parkeren","Getting here and parking"), intro:null, outro:null,
+    groups:[{ title:null, items:[
+      R("Kom je met de auto? Parkeer op de Jubellaan of op de parkeerplaatsen vooraan in de Barbarastraat, nog vóór je indraait naar de woonhuizen.","Coming by car? Park on the Jubellaan or in the parking spaces at the front of the Barbarastraat, before you turn in toward the houses."),
+      R("Rij niet door tot aan de woonhuizen: in dat doodlopende stukje is geen parkeerplaats voor bezoekers.","Please don't drive on to the houses: there is no visitor parking in that dead-end stretch."),
+      R("Vanaf de parkeerplaats is het maar 2 minuten stappen tot bij mij.","From the parking spaces it's only a 2-minute walk to my place."),
+      R("Kom je met de fiets of bakfiets? Die mag je vastzetten bij de fietsen.","Coming by bike or cargo bike? You can lock it up with the bikes."),
+      R("Route nodig? Zoek ‘Beauty & Coffee’ in Google Maps, of tik op ‘Route in Google Maps’ onder je match.","Need directions? Search for ‘Beauty & Coffee’ in Google Maps, or tap ‘Directions in Google Maps’ below your match.")
     ]}] },
   { id:"hygiene", icon:"🧼", title:R("Hygiëne en verzorging","Hygiene and care"),
     intro:R("Voor een aangename en professionele behandeling verwacht ik van elke klant het volgende:","For a pleasant and professional treatment I expect the following from every client:"), outro:null,

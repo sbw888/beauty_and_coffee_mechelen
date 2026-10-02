@@ -91,7 +91,6 @@
     if (typeof localData !== "undefined") renderReturningUserBlock();
     renderSocialLinks();
     renderActions();
-    if (typeof news !== "undefined" && news.posts) renderNewsCard();
   }
 
   function setLang(lang){
@@ -1810,145 +1809,6 @@
     if (note) note.setAttribute("data-i18n", "newsletter_web_note");
     link.addEventListener("click", () => trackEvent("newsletter-web"));
   }
-  /* ---------------- news card (latest WordPress posts) ----------------
-     Reads the public WordPress.com REST API straight from the browser
-     (no backend, no key). The last result is kept in localStorage so the
-     card still shows something offline. Any error → card stays hidden. */
-  const NEWS_CACHE_KEY = "bc_news_cache_v1";
-  const news = { posts: null, offline: false };
-
-  function newsText(html){
-    // titles/excerpts come as HTML: turn them into plain text (no markup is ever injected)
-    const doc = new DOMParser().parseFromString(String(html || ""), "text/html");
-    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
-  }
-  function newsShorten(txt, max){
-    if (txt.length <= max) return txt;
-    const cut = txt.slice(0, max);
-    return cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 20)).replace(/[\s,.;:–-]+$/, "") + "…";
-  }
-  function newsSafeUrl(u){
-    try { const url = new URL(u); return url.protocol === "https:" ? url.href : ""; } catch(e){ return ""; }
-  }
-  function renderNewsCard(){
-    const card = $("#newsCard"), list = $("#newsList");
-    if (!card || !list) return;
-    const posts = news.posts || [];
-    if (!posts.length){ card.hidden = true; return; }
-    const locale = { nl:"nl-BE", en:"en-GB", fr:"fr-BE" }[state.lang] || "nl-BE";
-    list.textContent = "";
-    posts.forEach(p => {
-      const a = document.createElement("a");
-      a.className = "news-item"; a.href = p.url; a.target = "_blank"; a.rel = "noopener";
-      a.addEventListener("click", () => trackEvent("news-open"));
-      if (p.img){
-        const img = document.createElement("img");
-        img.className = "news-item__img"; img.src = p.img; img.alt = ""; img.loading = "lazy";
-        img.addEventListener("error", () => img.remove());
-        a.appendChild(img);
-      }
-      const body = document.createElement("div"); body.className = "news-item__body";
-      const d = new Date(p.date);
-      if (!isNaN(d)){
-        const date = document.createElement("p"); date.className = "news-item__date";
-        date.textContent = d.toLocaleDateString(locale, { day:"numeric", month:"long", year:"numeric" });
-        body.appendChild(date);
-      }
-      const title = document.createElement("p"); title.className = "news-item__title"; title.textContent = p.title;
-      body.appendChild(title);
-      if (p.excerpt){
-        const ex = document.createElement("p"); ex.className = "news-item__excerpt"; ex.textContent = p.excerpt;
-        body.appendChild(ex);
-      }
-      const more = document.createElement("span"); more.className = "news-item__more";
-      more.textContent = (t("news_read_more", state.lang) || "Lees meer") + " →";
-      body.appendChild(more);
-      a.appendChild(body);
-      list.appendChild(a);
-    });
-    if (news.offline){
-      const n = document.createElement("p"); n.className = "news-card__note";
-      n.textContent = t("news_offline", state.lang) || "";
-      list.appendChild(n);
-    }
-    card.hidden = false;
-  }
-  function setupNewsCard(){
-    const cfg = (typeof NEWS_FEED === "object" && NEWS_FEED) ? NEWS_FEED : null;
-    if (!cfg || !cfg.site || !$("#newsCard")) return;
-    const site = String(cfg.site).replace(/^https?:\/\//, "").replace(/\/+$/, "");
-    const count = Math.min(5, Math.max(1, parseInt(cfg.count, 10) || 3));
-    const all = $("#newsAllLink");
-    if (all){
-      const own = newsSafeUrl(cfg.allUrl || "");
-      all.href = own || ("https://" + site + "/" + (cfg.category ? "category/" + encodeURIComponent(cfg.category) + "/" : ""));
-      all.addEventListener("click", () => trackEvent("news-all"));
-    }
-    try {
-      const cached = JSON.parse(localStorage.getItem(NEWS_CACHE_KEY) || "null");
-      if (cached && Array.isArray(cached.posts)) { news.posts = cached.posts; renderNewsCard(); }
-    } catch(e){}
-    // Two routes to the same posts: if a browser/ad blocker stops the first,
-    // the second (the site's own address) usually still gets through.
-    const cat = cfg.category ? encodeURIComponent(cfg.category) : "";
-    const routes = [
-      { name: "wpcom-v1.1",
-        url: "https://public-api.wordpress.com/rest/v1.1/sites/" + encodeURIComponent(site) +
-             "/posts/?number=" + count + (cat ? "&category=" + cat : ""),
-        parse: data => (data && Array.isArray(data.posts) ? data.posts : []).map(p => ({
-          title: p.title, url: p.URL, date: p.date, excerpt: p.excerpt, img: p.featured_image })) },
-      { name: "site-wp-v2",
-        url: "https://" + site + "/wp-json/wp/v2/posts?per_page=" + count +
-             "&_fields=title,link,date,excerpt,jetpack_featured_media_url",
-        parse: data => (Array.isArray(data) ? data : []).map(p => ({
-          title: p.title && p.title.rendered, url: p.link, date: p.date,
-          excerpt: p.excerpt && p.excerpt.rendered, img: p.jetpack_featured_media_url })) }
-    ];
-    if (cat) routes.pop();   // the second route can't filter by category name: then only use the first
-    const errors = [];
-    const tryRoute = i => {
-      if (i >= routes.length) return Promise.reject(new Error(errors.join(" | ")));
-      const r = routes[i];
-      return fetch(r.url, { cache:"no-cache" })
-        .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
-        .then(data => {
-          const list = r.parse(data);
-          if (!list.length) throw new Error("0 posts");
-          return list;
-        })
-        .catch(err => { errors.push(r.name + ": " + (err && err.message || err)); return tryRoute(i + 1); });
-    };
-    tryRoute(0)
-      .then(list => {
-        const posts = list.map(p => {
-          const img = newsSafeUrl(p.img);
-          return {
-            title: newsText(p.title),
-            url: newsSafeUrl(p.url),
-            date: p.date || "",
-            excerpt: newsShorten(newsText(p.excerpt), 140),
-            img: img ? img.split("?")[0] + "?w=200&h=200&crop=1" : ""
-          };
-        }).filter(p => p.title && p.url).slice(0, count);
-        news.posts = posts; news.offline = false;
-        try { localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), posts })); } catch(e){}
-        renderNewsCard();
-      })
-      .catch(err => {
-        if (news.posts && news.posts.length){ news.offline = !navigator.onLine; renderNewsCard(); }
-        // Diagnose: open the app with #newsdebug at the end of the address
-        // to see why the posts could not be loaded.
-        if (/newsdebug/.test(location.hash)){
-          const card = $("#newsCard"), list = $("#newsList");
-          if (card && list){
-            const p = document.createElement("p"); p.className = "news-card__note";
-            p.textContent = "News debug — " + (err && err.message || err);
-            list.appendChild(p); card.hidden = false;
-          }
-        }
-      });
-  }
-
   /* ---------------- newsletter signup (mailto — no backend) ---------------- */
   function submitNewsletter(e){
     e.preventDefault();
@@ -2509,7 +2369,6 @@
     const newsletterForm = $("#newsletterForm");
     if (newsletterForm) newsletterForm.addEventListener("submit", submitNewsletter);
     setupNewsletterCard();
-    setupNewsCard();
     applyI18n();
     setTimeout(maybeShowInstallBanner, 2500); // give the page a moment to settle first
     checkSalonHash();                                   // salon mode: open the app with #salon
